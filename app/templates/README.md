@@ -9,14 +9,14 @@ Die Inhalte dieses Repositories sollten auf die oberste des TYPO3-Projekts extra
 Inhalt
 ----------
 
-*   [.sass](fileadmin/templates/.sass): Verzeichniss für Sass-Resourcen
-*   [.templaVoila](fileadmin/templates/.templaVoila): Verzeichniss für TemplaVoila!-Resourcen
-*   [.ts](fileadmin/templates/.ts): Verzeichniss für TypoScript-Resourcen
-*   [css](fileadmin/templates/css): Verzeichniss für CSS-Resourcen inkl. Webfonts & CSS-Bilder
-*   [html](fileadmin/templates/html): Verzeichniss für HTML-Resourcen (Extensions & TemplaVoila!-Templates)
-*   [js](fileadmin/templates/js): Verzeichniss für JavaScript-Resourcen
-*   [lang](fileadmin/templates/lang): Verzeichniss für Lokalisierungs-Resourcen
-*   [res](fileadmin/templates/res): Verzeichniss für sonstige Resourcen
+*   [.sass](fileadmin/.templates/.sass): Verzeichniss für Sass-Resourcen
+*   [.templaVoila](fileadmin/.templates/.templaVoila): Verzeichniss für TemplaVoila!-Resourcen
+*   [.ts](fileadmin/.templates/&t): Verzeichniss für TypoScript-Resourcen
+*   [css](fileadmin/.templates/css): Verzeichniss für CSS-Resourcen inkl. Webfonts & CSS-Bilder
+*   [html](fileadmin/.templates/html): Verzeichniss für HTML-Resourcen (Extensions & TemplaVoila!-Templates)
+*   [js](fileadmin/.templates/js): Verzeichniss für JavaScript-Resourcen
+*   [lang](fileadmin/.templates/lang): Verzeichniss für Lokalisierungs-Resourcen
+*   [res](fileadmin/.templates/res): Verzeichniss für sonstige Resourcen
 
 TypoScript
 ----------
@@ -26,17 +26,17 @@ Um die TypoScript-Dateien des typo3-skeleton-Pakets ins Projekt zu integrieren, 
 1.  Die folgenden Zeilen müssen ins TypoScript-Root-Template unter
     **Setup** aufgenommen werden:
 
-        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/templates/.ts/plugins.ts">
-        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/templates/.ts/lib.ts">
-        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/templates/.ts/page.ts">
+        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/.templates/ts/plugins.ts">
+        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/.templates/ts/lib.ts">
+        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/.templates/ts/page.ts">
     
 2.  Die folgende Zeile muss ins **pageTSconfig** der Startseite aufgenommen werden (`Seiteneigenschaften > Ressourcen > TypoScript-Konfiguration`):
     
-        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/templates/.ts/TSconfig/page.ts">
+        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/.templates/ts/TSconfig/page.ts">
 
 3.  Die folgende Zeile muss ggf. ins **userTSconfig** von Benutzern aufgenommen werden, die gezielt beeinflusst werden sollen:
     
-        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/templates/.ts/TSconfig/user.ts">
+        <INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/.templates/ts/TSconfig/user.ts">
         
 4.  Die folgenden **Konstanten** werden benötigt und müssen manuell im TypoScript-Root-Template angelegt werden:
 
