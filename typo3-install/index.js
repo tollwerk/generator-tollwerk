@@ -7,7 +7,7 @@ yeoman				= require('yeoman-generator'),
 chalk				= require('chalk'),
 http				= require('http');
 
-var TollwerkInstallGenerator = module.exports = function TollwerkInstallGenerator(args, options, config) {
+var TollwerkTypo3InstallGenerator = module.exports = function TollwerkTypo3InstallGenerator(args, options, config) {
 	var that		= this;
 
 	yeoman.generators.Base.apply(this, arguments);
@@ -16,21 +16,26 @@ var TollwerkInstallGenerator = module.exports = function TollwerkInstallGenerato
 	this.pkg		= JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
-util.inherits(TollwerkInstallGenerator, yeoman.generators.Base);
+util.inherits(TollwerkTypo3InstallGenerator, yeoman.generators.Base);
 
-TollwerkInstallGenerator.prototype.askFor = function() {
+/**
+ * Generator dialog
+ * 
+ * @return {void}
+ */
+TollwerkTypo3InstallGenerator.prototype.askFor = function() {
 	var done		= this.async();
 	
 	if (!this.options.nested) {
 		this.log(this.yeoman);
-		this.log(chalk.magenta('You\'re using the fantastic tollwerk TYPO3 project kickstarter.'));
+		this.log(chalk.magenta('You\'re about installing a TYPO3 instance.'));
 	}
 	this.log();
 	
 	var prompts 	= [{
 		type		: 'list',
 		name		: 'method',
-		message		: 'Where to get the TYPO3 sources from?',
+		message		: 'Which TYPO3 sources should I use?',
 		choices		: [{name: 'Download from http://get.typo3.org', value: 'dl'}, {name: 'Link to a local distribution', value: 'link'}],
 		default		: 'dl'
 	}];
@@ -50,14 +55,19 @@ TollwerkInstallGenerator.prototype.askFor = function() {
 				done();
 		 	}.bind(this));
 		 	
-		// Else: Download the current TYPO3 distribution 
+		// Else: Download the most recent TYPO3 distribution from http://get.typo3.org
 	 	} else {
 	 		done();
 	 	}
 	}.bind(this));
 }
-  
-TollwerkInstallGenerator.prototype.sources = function() {
+
+/**
+ * TYPO3 source installation
+ * 
+ * @return {void}
+ */
+TollwerkTypo3InstallGenerator.prototype.sources = function() {
 	try {
 		var src				= fs.lstatSync('typo3_src').isSymbolicLink();
 	} catch (error) {
@@ -79,7 +89,8 @@ TollwerkInstallGenerator.prototype.sources = function() {
 			if (link) {
 				fs.symlinkSync(this.target, 'typo3_src');
 			} else {
-				console.log(chalk.red('"%s" doesn\'t seem to be a valid local TYPO3 distribution path'), this.target);
+				console.log(chalk.red('"Oh! %s" doesn\'t seem to be a valid local TYPO3 distribution path'), this.target);
+				console.log();
 			}
 			
 		// Else: Download the current TYPO3 distribution
@@ -115,7 +126,8 @@ TollwerkInstallGenerator.prototype.sources = function() {
 								
 								// If an error occured
 							    if (error) {
-							        console.log(chalk.red('Couldn\'t extract the TYPO3 sources (%s)'), error);
+							        console.log(chalk.red('Oh! Couldn\'t extract the TYPO3 sources (%s)'), error);
+							        console.log();
 							        done();
 							        
 								// Else
@@ -126,36 +138,46 @@ TollwerkInstallGenerator.prototype.sources = function() {
 							});
 					    });
 					}).on('error', function(error) {
-						console.log(chalk.red('Couldn\'t download TYPO3 distribution (%s)'), error);
+						console.log(chalk.red('Oh! Couldn\'t download TYPO3 distribution (%s)'), error);
+						console.log();
 						done();
 					});
 			    });
 			}).on('error', function(error) {
-				console.log(chalk.red('Couldn\'t get TYPO3 versions from ' + versionUrl + ' (%s)'), error);
+				console.log(chalk.red('Oh! Couldn\'t get TYPO3 versions from ' + versionUrl + ' (%s)'), error);
+				console.log();
 				done();
 			});
 		}
 	}
 }
 
-TollwerkInstallGenerator.prototype.symlinks = function() {
+/**
+ * TYPO3 source symlinking
+ * 
+ * @return {void}
+ */
+TollwerkTypo3InstallGenerator.prototype.symlinks = function() {
 	try {
 		var src				= fs.lstatSync('typo3_src').isSymbolicLink();
 	} catch (error) {
-		console.log(chalk.red('The TYPO3 sources couldn\'t be found (%s)'), error);
+		console.log(chalk.red('Oh! The TYPO3 sources couldn\'t be found (%s)'), error);
+		console.log();
 		return;
 	}
 	
 	try {
 		fs.symlinkSync('typo3_src/typo3', 'typo3');
-		fs.symlinkSync('typo3/index.php', 'index.php');
+		fs.symlinkSync('typo3_src/index.php', 'index.php');
 	} catch(error) {
-		console.log(chalk.red('A symbolic link couldn\'t be established (%s)'), error);
+		console.log(chalk.red('Oh! A symbolic link couldn\'t be established (%s)'), error);
+		console.log();
 		return;
 	}
 	
 	fs.openSync('FIRST_INSTALL', 'w');
 	
-	console.log(chalk.green('\nTYPO3 has been prepared successfully!'));
+	console.log(chalk.green('\nGreat! The TYPO3 sources have been prepared successfully!'));
 	console.log('As a next step, please run the TYPO3 install tool in your browser and re-run this Yeoman generator afterwards.');
+	console.log();
 }
