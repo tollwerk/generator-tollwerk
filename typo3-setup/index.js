@@ -3,21 +3,34 @@
 var util		= require('util'),
 path			= require('path'),
 yeoman			= require('yeoman-generator'),
-chalk			= require('chalk');
+chalk			= require('chalk'),
+sys				= require('sys'),
+exec			= require('child_process').exec;
 
 var TollwerkTypo3SetupGenerator = module.exports = function TollwerkTypo3SetupGenerator(args, options, config) {
 	var self	= this;
 
 	yeoman.generators.Base.apply(this, arguments);
 
-	this.on('end', function() {
-		this.installDependencies({ skipInstall: options['skip-install'] });
-	});
-
 	this.pkg	= JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
 util.inherits(TollwerkTypo3SetupGenerator, yeoman.generators.Base);
+
+/**
+ * Install a TYPO3 extension
+ * 
+ * @param {TollwerkTypo3SetupGenerator} generator		Generator reference
+ * @param {String} extension							Extension key
+ * @param {Function} callback							Callback
+ * @return {void}
+ */
+function installExtension(generator, extension, callback) {
+	exec("./typo3/cli_dispatch.phpsh extbase extension:install " + extension, function (error, stdout, stderr) {
+		generator.log(stdout);
+		callback(error);
+	});
+}
 
 /**
  * Generator dialog
@@ -41,43 +54,71 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		name	: 'templating',
 		message	: 'Which templating system are you going to use?',
 		choices	: [{name: 'FluidTYPO3', value: 'ft3'}, {name: 'TemplaVoila!', value: 'tv'}, {name: 'None', value: 'none'}],
-		default	: 'ft3'
+		'default'	: 'ft3'
 	},{
 		type	: 'confirm',
 		name	: 'sass',
 		message	: 'Would you like to use Sass?',
-		default	: true
+		'default'	: true
 	},{
 		type	: 'confirm',
 		name	: 'iconizr',
 		message	: 'Would you like to use iconizr?',
-		default	: true
+		'default'	: true
 	},{
 		type	: 'confirm',
 		name	: 'favicon',
 		message	: 'Would you like to include favicon / touch icon support?',
-		default	: true
+		'default'	: true
+	},{
+		type	: 'confirm',
+		name	: 'ga',
+		message	: 'Would you like to install the Google Analytics extension (tw_googleanalytics)?',
+		'default'	: true
 	},{
 		type	: 'confirm',
 		name	: 'squeezr',
-		message	: 'Would you like to install the squeezr extension?',
-		default	: true
+		message	: 'Would you like to install the squeezr extension (squeezr)?',
+		'default'	: true
 	},{
 		type	: 'confirm',
 		name	: 'defr',
 		message	: 'Would you like to install the defr extension?',
-		default	: true
+		'default'	: true
 	}];
 
 	this.prompt(prompts, function(props) {
+		
+		// TODO: What happens if no project name is given?
 	 	this.project		= props.project;
+	 	
 		this.templating		= props.templating;
 		this.sass			= props.sass;
 		this.iconizr		= props.iconizr;
 		this.favicon		= props.favicon;
+		this.ga				= props.ga;
+		this.squeezr		= props.squeezr;
+		this.defr			= props.defr;
 		
-		// TODO: What happens if no project name is given?
-
+		this.deps			= {};
+		if (this.templating == 'ft3') {
+			// Activate as soon as the FluidTYPO3 extensions are officially registered 
+			// this.deps.flux					= 'fluidtypo3-flux#latest';
+			// this.deps.fluidpages				= 'fluidtypo3-fluidpages#latest';
+			// this.deps.fluidcontent			= 'fluidtypo3-fluidcontent#latest';
+			// this.deps.vhs					= 'fluidtypo3-vhs#latest';
+		}
+		if (this.ga) {
+			this.deps.tw_googleanalytics		= 'googleanalytics-typo3#latest';
+		}
+		if (this.squeezr) {
+			this.deps.squeezr					= 'squeezr-typo3#latest';
+		}
+		if (this.defr) {
+			// TODO: Create TYPO3 extension for defr
+			// this.deps.defr						= 'defr-typo3#latest';
+		}
+		
 		done();
 	}.bind(this));
 }
@@ -100,6 +141,7 @@ TollwerkTypo3SetupGenerator.prototype.app = function() {
 TollwerkTypo3SetupGenerator.prototype.projectfiles = function() {
 	this.copy('editorconfig', '.editorconfig');
 	this.copy('jshintrc', '.jshintrc');
+	this.copy('bowerrc', '.bowerrc');
 	this.template('Gruntfile.js', 'Gruntfile.js');
 }
 
@@ -161,13 +203,49 @@ TollwerkTypo3SetupGenerator.prototype.iconizr = function() {
 }
 
 /**
+ * Favicon / touch icon installation
+ * 
+ * @return {void}
+ */
+TollwerkTypo3SetupGenerator.prototype.favicon = function() {
+	if (this.favicon) {
+		this.directory('options/favicon/fileadmin', 'fileadmin/' + this.project);
+		this.mkdir('fileadmin/' + this.project + '/favicons');
+	}
+}
+
+/**
+ * Pull in dependencies
+ * 
+ * @return {void}
+ */
+TollwerkTypo3SetupGenerator.prototype.dependencies = function() {
+	this.installDependencies({ skipInstall: this.options['skip-install']});
+}
+
+/**
+ * Install the Google Analytics extension
+ * 
+ * @return {void}
+ */
+TollwerkTypo3SetupGenerator.prototype.googleanalytics = function() {
+	if (this.googleanalytics) {
+		installExtension(this, 'tw_googleanalytics', this.async());
+		
+		// TODO: Add TypoScript
+	}
+}
+
+/**
  * Install the squeezr extension
  * 
  * @return {void}
  */
 TollwerkTypo3SetupGenerator.prototype.squeezr = function() {
 	if (this.squeezr) {
-		// TODO: Put a .bowerrc file into the GitHub squeerz extension, defining typo3conf/ext as the install directory. Then, install the extension via bower (see http://bower.io/#custom-install-directory)
+		installExtension(this, 'squeezr', this.async());
+		
+		// TODO: Run update script or add a user hint
 	}
 }
 
@@ -178,17 +256,6 @@ TollwerkTypo3SetupGenerator.prototype.squeezr = function() {
  */
 TollwerkTypo3SetupGenerator.prototype.defr = function() {
 	if (this.defr) {
-	}
-}
-
-/**
- * Favicon / touch icon installation
- * 
- * @return {void}
- */
-TollwerkTypo3SetupGenerator.prototype.favicon = function() {
-	if (this.favicon) {
-		this.directory('options/favicon/fileadmin', 'fileadmin/' + this.project);
-		this.mkdir('fileadmin/' + this.project + '/favicons');
+		// TODO: Create TYPO3 extension for defr
 	}
 }

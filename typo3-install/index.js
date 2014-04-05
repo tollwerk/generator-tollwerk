@@ -37,7 +37,7 @@ TollwerkTypo3InstallGenerator.prototype.askFor = function() {
 		name		: 'method',
 		message		: 'Which TYPO3 sources should I use?',
 		choices		: [{name: 'Download from http://get.typo3.org', value: 'dl'}, {name: 'Link to a local distribution', value: 'link'}],
-		default		: 'dl'
+		'default'	: 'dl'
 	}];
 
 	this.prompt(prompts, function(props) {
@@ -48,10 +48,9 @@ TollwerkTypo3InstallGenerator.prototype.askFor = function() {
 			this.prompt([{
 				name			: 'target',
 				message			: 'Path to local TYPO3 distribution',
-				default			: '/www/htdocs/typo3/typo3_src.6_2'
+				'default'		: '/www/htdocs/typo3/typo3_src.6_2'
 			}], function(props) {
 		 		this.target		= props.target || '';
-		 		
 				done();
 		 	}.bind(this));
 		 	
@@ -60,7 +59,7 @@ TollwerkTypo3InstallGenerator.prototype.askFor = function() {
 	 		done();
 	 	}
 	}.bind(this));
-}
+};
 
 /**
  * TYPO3 source installation
@@ -89,15 +88,15 @@ TollwerkTypo3InstallGenerator.prototype.sources = function() {
 			if (link) {
 				fs.symlinkSync(this.target, 'typo3_src');
 			} else {
-				console.log(chalk.red('"Oh! %s" doesn\'t seem to be a valid local TYPO3 distribution path'), this.target);
-				console.log();
+				this.log.error('Oh! "%s" doesn\'t seem to be a valid local TYPO3 distribution path', this.target);
+				this.log();
 			}
 			
 		// Else: Download the current TYPO3 distribution
 		} else {
 			
 			// Determine the latest stable TYPO3 version
-			this.log('\nDetermining latest stable TYPO3 version ...');
+			this.log.ok('Determining latest stable TYPO3 version ...');
 			var that			= this,
 			done				= this.async(),
 			versionUrl			= 'http://get.typo3.org/json';
@@ -120,14 +119,14 @@ TollwerkTypo3InstallGenerator.prototype.sources = function() {
 							archive.close();
 							
 							// Extract the TYPO3 sources
-							that.log('Extracting TYPO3 %s ...', latest);
+							that.log.ok('Extracting TYPO3 %s ...', latest);
 							var targz		= require('tar.gz'),
 							compress		= new targz().extract(archiveName, '.', function(error){
 								
 								// If an error occured
 							    if (error) {
-							        console.log(chalk.red('Oh! Couldn\'t extract the TYPO3 sources (%s)'), error);
-							        console.log();
+							        that.log.error('Oh! Couldn\'t extract the TYPO3 sources (%s)', error);
+							        that.log();
 							        done();
 							        
 								// Else
@@ -138,19 +137,19 @@ TollwerkTypo3InstallGenerator.prototype.sources = function() {
 							});
 					    });
 					}).on('error', function(error) {
-						console.log(chalk.red('Oh! Couldn\'t download TYPO3 distribution (%s)'), error);
-						console.log();
+						that.log.error('Oh! Couldn\'t download TYPO3 distribution (%s)', error);
+						that.log();
 						done();
 					});
 			    });
 			}).on('error', function(error) {
-				console.log(chalk.red('Oh! Couldn\'t get TYPO3 versions from ' + versionUrl + ' (%s)'), error);
-				console.log();
+				that.log.error('Oh! Couldn\'t get TYPO3 versions from ' + versionUrl + ' (%s)', error);
+				that.log();
 				done();
 			});
 		}
 	}
-}
+};
 
 /**
  * TYPO3 source symlinking
@@ -161,8 +160,8 @@ TollwerkTypo3InstallGenerator.prototype.symlinks = function() {
 	try {
 		var src				= fs.lstatSync('typo3_src').isSymbolicLink();
 	} catch (error) {
-		console.log(chalk.red('Oh! The TYPO3 sources couldn\'t be found (%s)'), error);
-		console.log();
+		that.log.error('Oh! The TYPO3 sources couldn\'t be found (%s)', error);
+		that.log();
 		return;
 	}
 	
@@ -170,14 +169,30 @@ TollwerkTypo3InstallGenerator.prototype.symlinks = function() {
 		fs.symlinkSync('typo3_src/typo3', 'typo3');
 		fs.symlinkSync('typo3_src/index.php', 'index.php');
 	} catch(error) {
-		console.log(chalk.red('Oh! A symbolic link couldn\'t be established (%s)'), error);
-		console.log();
+		that.log.error(chalk.red('Oh! A symbolic link couldn\'t be established (%s)'), error);
+		that.log();
 		return;
 	}
 	
 	fs.openSync('FIRST_INSTALL', 'w');
-	
-	console.log(chalk.green('\nGreat! The TYPO3 sources have been prepared successfully!'));
-	console.log('As a next step, please run the TYPO3 install tool in your browser and re-run this Yeoman generator afterwards.');
-	console.log();
-}
+};
+
+/**
+ * Static data installation
+ * 
+ * @return {void}
+ */
+TollwerkTypo3InstallGenerator.prototype.staticdata = function() {
+	this.copy('cli_lowlevel.sql', 'typo3/sysext/extbase/ext_tables_static+adt.sql');
+};
+
+/**
+ * Finalization
+ * 
+ * @return {void}
+ */
+TollwerkTypo3InstallGenerator.prototype.finalize = function() {
+	this.log.ok('Great! The TYPO3 sources have been prepared successfully!');
+	this.log('As a next step, please run the TYPO3 install tool in your browser and re-run this Yeoman generator afterwards.');
+	this.log();
+};

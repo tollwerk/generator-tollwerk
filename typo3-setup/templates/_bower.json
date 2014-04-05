@@ -1,5 +1,6 @@
 {
-  "name": "<%= _.slugify(project) %>",
-  "version": "0.0.0",
-  "dependencies": {}
+	"name": "<%= _.slugify(project) %>",
+	"version": "0.0.0",
+	"dependencies": <%= JSON.stringify(deps) %>,
+	"directory": "typo3conf/ext"
 }
