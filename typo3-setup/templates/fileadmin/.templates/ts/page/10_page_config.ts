@@ -6,12 +6,14 @@ config.doctype                            = html5
 config.metaCharset                        = utf-8
 config.renderCharset                      = utf-8
  
-#COOLURI
-[globalString = ENV:HTTP_HOST=baseURL]
-  config.baseURL                          = http://baseURL
+#URLS<% if(sbaseurl && baseurl) { %>
+[globalString = ENV:HTTP_HOST=<%= sbaseurl.split('://').pop().split('/').shift() %>]
+  config.baseURL                          = <%= sbaseurl %>
 [ELSE]
   config.baseURL                          = {$baseURL}
-[GLOBAL]
+[GLOBAL]<% } else if (sbaseurl) { %>
+config.baseURL                          	= <%= sbaseurl %><% } else if (baseurl) { %>
+config.baseURL                          	= {$baseURL}<% } %>
 config.simulateStaticDocuments						= 0
 config.tx_realurl_enable                  = 0
 config.tx_cooluri_enable                  = 0

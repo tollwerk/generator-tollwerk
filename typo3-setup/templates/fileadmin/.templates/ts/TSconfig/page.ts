@@ -1,4 +1,4 @@
-# NUR BEI MEHR ALS 1 SPRACHE BENÖTIGT
+# NEEDED IN CASE OF MORE THAN 1 LANGUAGE
 # mod.SHARED {
 #   defaultLanguageFlag = gb
 #   defaultLanguageLabel = English

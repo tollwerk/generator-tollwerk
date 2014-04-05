@@ -50,6 +50,15 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		name	: 'project',
 		message	: 'How should this project be called?'
 	},{
+		name	: 'baseurl',
+		message	: 'What is the base URL of the site?'
+	},{
+		name	: 'sbaseurl',
+		message	: 'What is the staging site base URL?'
+	},{
+		name	: 'author',
+		message	: 'What is the site author\'s name?'
+	},{
 		type	: 'list',
 		name	: 'templating',
 		message	: 'Which templating system are you going to use?',
@@ -92,6 +101,11 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		// TODO: What happens if no project name is given?
 	 	this.project		= props.project;
 	 	
+	 	this.baseurl		= props.baseurl.length ? ((props.baseurl.toLowerCase().indexOf('http') !== 0) ? ('http://' + props.baseurl) : props.baseurl) : '';
+	 	this.baseurl		= this.baseurl.length ? (this.baseurl + ((this.baseurl.lastIndexOf('/') == (this.baseurl.length - 1)) ? '' : '/')) : ''; 
+	 	this.sbaseurl		= props.sbaseurl.length ? ((props.sbaseurl.toLowerCase().indexOf('http') !== 0) ? ('http://' + props.sbaseurl) : props.sbaseurl) : '';
+	 	this.sbaseurl		= this.sbaseurl.length ? (this.sbaseurl + ((this.sbaseurl.lastIndexOf('/') == (this.sbaseurl.length - 1)) ? '' : '/')) : '';
+		this.author			= props.author;
 		this.templating		= props.templating;
 		this.sass			= props.sass;
 		this.iconizr		= props.iconizr;
@@ -168,6 +182,10 @@ TollwerkTypo3SetupGenerator.prototype.baseresources = function() {
  			this.directory('options/tv/fileadmin', 'fileadmin/' + this.project);
  			break;
  	}
+ 	
+ 	// Page configuration
+ 	this.template('fileadmin/.templates/ts/page/10_page_config.ts', 'fileadmin/' + this.project + '/.templates/ts/page/10_page_config.ts');
+ 	this.template('fileadmin/.templates/ts/page/30_page_head.ts', 'fileadmin/' + this.project + '/.templates/ts/page/30_page_head.ts');
 }
 
 /**

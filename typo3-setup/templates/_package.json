@@ -17,6 +17,7 @@
     "grunt-iconizr": "~0.1.1",<% } if(sass) {%>
     "grunt-sass": "~0.12.1",<% } if(favicon) {%>
     "grunt-favicons": "~0.6.3",
+    "grunt-text-replace": "~0.3.11",
     "grunt-contrib-copy": "~0.5.0",<% } %>
     "grunt-notify": "~0.2.20",
     "matchdep": "~0.1.2"

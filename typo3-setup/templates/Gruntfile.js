@@ -95,6 +95,22 @@ module.exports = function(grunt) {
 			<% } %>
 		},
 		
+		replace					: {
+			<% if(favicon) { %>
+			favicon: {
+				src				: ['fileadmin/<%= _.slugify(project) %>/favicons/favicons.html'],
+				overwrite		: true,
+				replacements	: [{
+					from		: /[\t\r\n]+/g,
+					to			: ''
+			    }, {
+					from		: /<link rel="shortcut icon".*/g,
+					to			: '<link rel="shortcut icon" href="<%= baseurl %>favicon.ico" type="image/x-icon"/><link rel="icon" href="<%= baseurl %>favicon.ico" type="image/x-icon"/>'
+			    }]
+			}
+			<% } %>
+		},
+		
 		autoprefixer			: {
 			options				: {
 				browsers		: ['last 3 versions', 'ie 8']
@@ -261,6 +277,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('js', ['uglify']);
 	grunt.registerTask('icons', ['iconizr']);
 	<% if(favicon) { %>
-	grunt.registerTask('favicon', ['clean:favicon', 'favicons', 'copy:favicon']);
+	grunt.registerTask('favicon', ['clean:favicon', 'favicons', 'copy:favicon', 'replace:favicon']);
 	<% } %>
 };
