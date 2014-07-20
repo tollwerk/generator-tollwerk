@@ -116,11 +116,10 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		
 		this.deps			= {};
 		if (this.templating == 'ft3') {
-			// Activate as soon as the FluidTYPO3 extensions are officially registered 
-			// this.deps.flux					= 'fluidtypo3-flux#latest';
-			// this.deps.fluidpages				= 'fluidtypo3-fluidpages#latest';
-			// this.deps.fluidcontent			= 'fluidtypo3-fluidcontent#latest';
-			// this.deps.vhs					= 'fluidtypo3-vhs#latest';
+			this.deps.flux						= 'fluidtypo3-flux#latest';
+			this.deps.fluidpages				= 'fluidtypo3-fluidpages#latest';
+			this.deps.fluidcontent				= 'fluidtypo3-fluidcontent#latest';
+			this.deps.vhs						= 'fluidtypo3-vhs#latest';
 		}
 		if (this.ga) {
 			this.deps.tw_googleanalytics		= 'googleanalytics-typo3#latest';
@@ -189,26 +188,6 @@ TollwerkTypo3SetupGenerator.prototype.baseresources = function() {
 }
 
 /**
- * Install the templating extensions
- * 
- * @return {void}
- */
-TollwerkTypo3SetupGenerator.prototype.templating = function() {
-	switch (this.templating) {
-		
-		// FluidTYPO3
-		case 'ft3':
-			
-			break;
-			
-		// TemplaVoila!
-		case 'tv':
-		
-			break;
-	}
-}
-
-/**
  * iconizr installation
  * 
  * @return {void}
@@ -248,12 +227,39 @@ TollwerkTypo3SetupGenerator.prototype.dependencies = function() {
 }
 
 /**
+ * Install the templating extensions
+ * 
+ * @return {void}
+ */
+TollwerkTypo3SetupGenerator.prototype.templating = function() {
+	switch (this.templating) {
+		
+		// FluidTYPO3
+		case 'ft3':
+			var that		= this;
+			installExtension(that, 'flux', function() {
+				installExtension(that, 'fluidpages', function() {
+					installExtension(that, 'fluidcontent', function() {
+						installExtension(that, 'vhs', that.async());
+					});
+				});
+			});
+			break;
+			
+		// TemplaVoila!
+		case 'tv':
+			installExtension(this, 'templavoila', this.async());
+			break;
+	}
+}
+
+/**
  * Install the Google Analytics extension
  * 
  * @return {void}
  */
 TollwerkTypo3SetupGenerator.prototype.googleanalytics = function() {
-	if (this.googleanalytics) {
+	if (this.ga) {
 		installExtension(this, 'tw_googleanalytics', this.async());
 		
 		// TODO: Add TypoScript
