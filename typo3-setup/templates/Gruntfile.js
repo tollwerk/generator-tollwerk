@@ -53,10 +53,10 @@ module.exports = function(grunt) {
 				options : {<% if(sass) { %>
 					render		: {
 						css		: false,
-						scss	: '../.templates/sass/noconcat/icons'
+						scss	: '../.templates/sass/noconcat/icon'
 					},<% } else { %>
 					render		: {
-						css		: 'icons'
+						css		: 'icon'
 					},<% } %>
 					spritedir	: 'icons',
 					prefix		: 'icon',
@@ -131,7 +131,7 @@ module.exports = function(grunt) {
 				dest			: 'fileadmin/<%= _.slugify(project) %>/css/'
 			}<% if(iconizr && !sass) { %>,
 			iconizr				: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/css/icons-*.css', '!fileadmin/<%= _.slugify(project) %>/css/icons-*.min.css']
+				src				: ['fileadmin/<%= _.slugify(project) %>/css/icon-*.css', '!fileadmin/<%= _.slugify(project) %>/css/icon-*.min.css']
 			}<% } %>
 		},
 		
@@ -166,7 +166,7 @@ module.exports = function(grunt) {
 			iconizr				: {
 				expand			: true,
 				cwd				: 'fileadmin/<%= _.slugify(project) %>/css/',
-				src				: ['icons-{svg,png}-{sprite,data}.css'],
+				src				: ['icon-{svg,png}-{sprite,data}.css'],
 				dest			: 'fileadmin/<%= _.slugify(project) %>/css/',
 				ext				: '.min.css'
 			}<% } %>
