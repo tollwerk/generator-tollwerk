@@ -99,7 +99,7 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 	this.prompt(prompts, function(props) {
 		
 		// TODO: What happens if no project name is given?
-	 	this.project		= props.project;
+	 	this.project		= props.project.toLowerCase();
 	 	
 	 	this.baseurl		= props.baseurl.length ? ((props.baseurl.toLowerCase().indexOf('http') !== 0) ? ('http://' + props.baseurl) : props.baseurl) : '';
 	 	this.baseurl		= this.baseurl.length ? (this.baseurl + ((this.baseurl.lastIndexOf('/') == (this.baseurl.length - 1)) ? '' : '/')) : ''; 
