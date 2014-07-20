@@ -3,3 +3,9 @@ temp/
 /.settings
 /.buildpath
 /.project
+**/*.md.html
+*.md.html
+*/*.md.html
+*/*/*.md.html
+*/*/*/*.md.html
+*/*/*/*/*.md.html

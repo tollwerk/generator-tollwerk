@@ -14,7 +14,7 @@
     "grunt-contrib-uglify": "~0.2.7",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-autoprefixer": "~0.7.2",<% if(iconizr) {%>
-    "grunt-iconizr": "~0.1.1",<% } if(sass) {%>
+    "grunt-iconizr": "~0.2.2",<% } if(sass) {%>
     "grunt-sass": "~0.12.1",<% } if(favicon) {%>
     "grunt-favicons": "~0.6.3",
     "grunt-text-replace": "~0.3.11",
