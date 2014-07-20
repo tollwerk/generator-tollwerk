@@ -115,11 +115,17 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		this.defr			= props.defr;
 		
 		this.deps			= {};
-		if (this.templating == 'ft3') {
-			this.deps.flux						= 'fluidtypo3-flux#latest';
-			this.deps.fluidpages				= 'fluidtypo3-fluidpages#latest';
-			this.deps.fluidcontent				= 'fluidtypo3-fluidcontent#latest';
-			this.deps.vhs						= 'fluidtypo3-vhs#latest';
+		switch(this.templating) {
+			case 'ft3':
+				this.deps.flux					= 'fluidtypo3-flux#latest';
+				this.deps.fluidpages			= 'fluidtypo3-fluidpages#latest';
+				this.deps.fluidcontent			= 'fluidtypo3-fluidcontent#latest';
+				this.deps.vhs					= 'fluidtypo3-vhs#latest';
+				break;
+			case 'tv':
+//				TODO: Activate once the TemplaVoila Git repository contains a bower.json file
+//				this.deps.templavoila			= 'templavoila#latest';
+				break;
 		}
 		if (this.ga) {
 			this.deps.tw_googleanalytics		= 'googleanalytics-typo3#latest';
@@ -248,7 +254,8 @@ TollwerkTypo3SetupGenerator.prototype.templating = function() {
 			
 		// TemplaVoila!
 		case 'tv':
-			installExtension(this, 'templavoila', this.async());
+//			TODO: Activate once the TemplaVoila Git repository contains a bower.json file
+//			installExtension(this, 'templavoila', this.async());
 			break;
 	}
 }
