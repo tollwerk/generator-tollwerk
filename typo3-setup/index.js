@@ -238,7 +238,13 @@ TollwerkTypo3SetupGenerator.prototype.favicon = function() {
  * @return {void}
  */
 TollwerkTypo3SetupGenerator.prototype.dependencies = function() {
-	this.installDependencies({ skipInstall: this.options['skip-install']});
+	var done		= this.async();
+	this.installDependencies({
+		skipInstall: this.options['skip-install'],
+        callback: function() {
+            done();
+        }.bind(this)
+	});
 }
 
 /**
@@ -276,4 +282,13 @@ TollwerkTypo3SetupGenerator.prototype.defr = function() {
 	if (this.defr) {
 		// TODO: Create TYPO3 extension for defr
 	}
+}
+
+/**
+ * Running the setup Grunt task
+ * 
+ * @return {void}
+ */
+TollwerkTypo3SetupGenerator.prototype.grunt = function() {
+	this.log('run grunt');
 }
