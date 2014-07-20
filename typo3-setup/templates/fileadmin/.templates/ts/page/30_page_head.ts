@@ -1,6 +1,10 @@
-<% if(favicon) { %>#FAVICON / TOUCH ICONS
-page.headerData.600							= FILE
-page.headerData.600.file				= fileadmin/<%= project %>/favicons/favicons.html
+<% if(iconizr) { %>#ICONIZR
+page.headerData.100							= FILE
+page.headerData.100.file				= fileadmin/<%= project %>/css/icon-loader-fragment.html
+ 
+<% } %><% if(favicon) { %>#FAVICON / TOUCH ICONS
+page.headerData.200							= FILE
+page.headerData.200.file				= fileadmin/<%= project %>/favicons/favicons.html
  
 <% } %>#META
 page.meta.author								= <%= author %>
