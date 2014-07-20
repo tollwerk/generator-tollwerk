@@ -216,15 +216,15 @@ module.exports = function(grunt) {
 		watch : {
 			<% if(sass) {%>// Watch Sass resource changes
 			sassAbove : {
-				files : 'fileadmin/<%= _.slugify(project) %>/.templates/sass/above/**/*.scss',
+				files : ['fileadmin/<%= _.slugify(project) %>/.templates/sass/above/**/*.scss', 'fileadmin/<%= _.slugify(project) %>/.templates/sass/common/**/*.scss'],
 				tasks : ['sass:above']
 			},
 			sassBelow : {
-				files : 'fileadmin/<%= _.slugify(project) %>/.templates/sass/below/**/*.scss',
+				files : ['fileadmin/<%= _.slugify(project) %>/.templates/sass/below/**/*.scss', 'fileadmin/<%= _.slugify(project) %>/.templates/sass/common/**/*.scss'],
 				tasks : ['sass:below']
 			},
 			sassNoconcat : {
-				files : 'fileadmin/<%= _.slugify(project) %>/.templates/sass/noconcat/**/*.scss',
+				files : ['fileadmin/<%= _.slugify(project) %>/.templates/sass/noconcat/**/*.scss', 'fileadmin/<%= _.slugify(project) %>/.templates/sass/common/**/*.scss'],
 				tasks : ['sass:noconcat']
 			},<% } %>
 			
