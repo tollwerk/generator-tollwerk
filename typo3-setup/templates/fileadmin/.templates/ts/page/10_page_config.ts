@@ -14,6 +14,7 @@ config.renderCharset                      = utf-8
 [GLOBAL]<% } else if (sbaseurl) { %>
 config.baseURL                          	= <%= sbaseurl %><% } else if (baseurl) { %>
 config.baseURL                          	= {$baseURL}<% } %>
+config.absRefPrefix												= /
 config.simulateStaticDocuments						= 0
 config.tx_realurl_enable                  = 0
 config.tx_cooluri_enable                  = 0
