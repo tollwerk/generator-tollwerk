@@ -153,10 +153,15 @@ module.exports = function(grunt) {
 			},
 			noconcat			: {
 				expand			: true,
-				cwd				: 'fileadmin/<%= _.slugify(project) %>/css/',
-				src				: ['*.css', '!*.min.css', '!<%= _.slugify(project) %>.css', '!<%= _.slugify(project) %>-above.css', '!<%= _.slugify(project) %>-below.css'],
-				dest			: 'fileadmin/<%= _.slugify(project) %>/css/',
-				ext				: '.min.css'
+				cwd				: 'fileadmin/<%= _.slugify(project) %>/css',
+				src				: ['**/*.css', '!**/*.min.css', '!<%= _.slugify(project) %>.css', '!<%= _.slugify(project) %>-above.css', '!<%= _.slugify(project) %>-below.css'],
+				dest			: 'fileadmin/<%= _.slugify(project) %>/css',
+				rename          : function (dest, src) {
+					var folder  = src.substring(0, src.lastIndexOf('/')),
+					filename    = src.substring(src.lastIndexOf('/'), src.length);
+					filename    = filename.substring(0, filename.lastIndexOf('.'));
+					return dest + '/' + folder + filename + '.min.css';
+				}
 			}<% if(iconizr && !sass) { %>,
 			iconizr				: {
 				expand			: true,
@@ -187,12 +192,17 @@ module.exports = function(grunt) {
 		},
 
 		uglify : {
-			javascript			: {
-				expand			: true,
-				cwd				: 'fileadmin/<%= _.slugify(project) %>/js',
-				src				: ['*.js', '!*.min.js'],
-				dest			: 'fileadmin/<%= _.slugify(project) %>/js',
-				ext				: '.min.js'
+			javascript          : {
+				expand          : true,
+				cwd             : 'fileadmin/<%= _.slugify(project) %>/js',
+				src             : ['**/*.js', '!**/*.min.js'],
+				dest            : 'fileadmin/<%= _.slugify(project) %>/js',
+				rename          : function (dest, src) {
+					var folder  = src.substring(0, src.lastIndexOf('/')),
+					filename    = src.substring(src.lastIndexOf('/'), src.length);
+					filename    = filename.substring(0, filename.lastIndexOf('.'));
+					return dest + '/' + folder + filename + '.min.js';
+				}
 			}
 		},
 
