@@ -7,8 +7,6 @@ yeoman				= require('yeoman-generator'),
 chalk				= require('chalk');
 
 var TollwerkGenerator = module.exports = function TollwerkGenerator(args, options, config) {
-	var that		= this;
-
 	yeoman.generators.Base.apply(this, arguments);
 	this.pkg		= JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
@@ -31,7 +29,7 @@ TollwerkGenerator.prototype.askFor = function() {
 		name		: 'type',
 		message		: 'What type of project do you want to create?',
 		choices		: [{name: 'TYPO3 project', value: 'typo3'}],
-		default		: 'typo3'
+		'default'	: 'typo3'
 	}];
 
 	this.prompt(prompts, function(props) {

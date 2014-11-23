@@ -183,6 +183,7 @@ TollwerkTypo3InstallGenerator.prototype.symlinks = function() {
  * @return {void}
  */
 TollwerkTypo3InstallGenerator.prototype.staticdata = function() {
+	fs.unlinkSync(path.join(this.destinationRoot(), 'typo3/sysext/extbase/ext_tables_static+adt.sql'));
 	this.copy('cli_lowlevel.sql', 'typo3/sysext/extbase/ext_tables_static+adt.sql');
 };
 

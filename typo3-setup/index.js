@@ -33,6 +33,21 @@ function installExtension(generator, extension, callback) {
 }
 
 /**
+ * Uninstall a TYPO3 extension
+ * 
+ * @param {TollwerkTypo3SetupGenerator} generator		Generator reference
+ * @param {String} extension							Extension key
+ * @param {Function} callback							Callback
+ * @return {void}
+ */
+function uninstallExtension(generator, extension, callback) {
+	exec("./typo3/cli_dispatch.phpsh extbase extension:uninstall " + extension, function (error, stdout, stderr) {
+		generator.log(stdout);
+		callback(error);
+	});
+}
+
+/**
  * Generator dialog
  * 
  * @return {void}
@@ -94,6 +109,11 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		name	: 'defr',
 		message	: 'Would you like to install the defr extension?',
 		'default'	: true
+	},{
+		type	: 'confirm',
+		name	: 'git',
+		message	: 'Would you like initialize a Git repository?',
+		'default'	: true
 	}];
 
 	this.prompt(prompts, function(props) {
@@ -113,6 +133,7 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		this.ga				= props.ga;
 		this.squeezr		= props.squeezr;
 		this.defr			= props.defr;
+		this.git			= props.git;
 		
 		this.deps			= {};
 		switch(this.templating) {
@@ -123,8 +144,7 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 				this.deps.vhs					= 'fluidtypo3-vhs#latest';
 				break;
 			case 'tv':
-//				TODO: Activate once the TemplaVoila Git repository contains a bower.json file
-//				this.deps.templavoila			= 'templavoila#latest';
+				this.deps.templavoila			= 'templavoila#latest';
 				break;
 		}
 		if (this.ga) {
@@ -161,6 +181,7 @@ TollwerkTypo3SetupGenerator.prototype.projectfiles = function() {
 	this.copy('editorconfig', '.editorconfig');
 	this.copy('jshintrc', '.jshintrc');
 	this.copy('bowerrc', '.bowerrc');
+	this.copy('robots.txt', 'robots.txt');
 	this.template('Gruntfile.js', 'Gruntfile.js');
 }
 
@@ -170,11 +191,13 @@ TollwerkTypo3SetupGenerator.prototype.projectfiles = function() {
  * @return {void}
  */
 TollwerkTypo3SetupGenerator.prototype.baseresources = function() {
-	this.copy('README.md', 'fileadmin/' + this.project + '/README.md');
 
 	// Create the fileadmin directory structure
 	this.directory('fileadmin', 'fileadmin/' + this.project);
 
+	// Copy the general READMY
+	this.copy('README.md', 'fileadmin/' + this.project + '/README.md');
+	
  	// Create Sass directory (if needed)
  	if (this.sass) {
  		this.directory('options/sass/fileadmin', 'fileadmin/' + this.project);
@@ -191,6 +214,9 @@ TollwerkTypo3SetupGenerator.prototype.baseresources = function() {
  	// Page configuration
  	this.template('fileadmin/.templates/ts/page/10_page_config.ts', 'fileadmin/' + this.project + '/.templates/ts/page/10_page_config.ts');
  	this.template('fileadmin/.templates/ts/page/30_page_head.ts', 'fileadmin/' + this.project + '/.templates/ts/page/30_page_head.ts');
+ 	
+ 	// Create the init scripts
+	this.directory('typo3conf', 'typo3conf');
 }
 
 /**
@@ -254,8 +280,7 @@ TollwerkTypo3SetupGenerator.prototype.templating = function() {
 			
 		// TemplaVoila!
 		case 'tv':
-//			TODO: Activate once the TemplaVoila Git repository contains a bower.json file
-//			installExtension(this, 'templavoila', this.async());
+			installExtension(this, 'templavoila', this.async());
 			break;
 	}
 }
@@ -268,8 +293,6 @@ TollwerkTypo3SetupGenerator.prototype.templating = function() {
 TollwerkTypo3SetupGenerator.prototype.googleanalytics = function() {
 	if (this.ga) {
 		installExtension(this, 'tw_googleanalytics', this.async());
-		
-		// TODO: Add TypoScript
 	}
 }
 
@@ -295,6 +318,19 @@ TollwerkTypo3SetupGenerator.prototype.defr = function() {
 	if (this.defr) {
 		// TODO: Create TYPO3 extension for defr
 	}
+}
+
+/**
+ * Install and uninstall the installer extension
+ * 
+ * @return {void}
+ */
+TollwerkTypo3SetupGenerator.prototype.yo = function() {
+	var that = this;
+	exec("`which php` ./typo3conf/init.php", function (error, stdout, stderr) {
+		that.log(stdout);
+		that.async(error);
+	});
 }
 
 /**
