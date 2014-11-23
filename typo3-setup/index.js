@@ -290,7 +290,7 @@ TollwerkTypo3SetupGenerator.prototype.templating = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.googleanalytics = function() {
+TollwerkTypo3SetupGenerator.prototype.installGoogleanalytics = function() {
 	if (this.ga) {
 		installExtension(this, 'tw_googleanalytics', this.async());
 	}
@@ -301,7 +301,7 @@ TollwerkTypo3SetupGenerator.prototype.googleanalytics = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.squeezr = function() {
+TollwerkTypo3SetupGenerator.prototype.installSqueezr = function() {
 	if (this.squeezr) {
 		installExtension(this, 'squeezr', this.async());
 		
@@ -314,23 +314,47 @@ TollwerkTypo3SetupGenerator.prototype.squeezr = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.defr = function() {
+TollwerkTypo3SetupGenerator.prototype.installDefr = function() {
 	if (this.defr) {
 		// TODO: Create TYPO3 extension for defr
 	}
 }
 
 /**
- * Install and uninstall the installer extension
+ * Additional database setup
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.yo = function() {
+TollwerkTypo3SetupGenerator.prototype.database = function() {
 	var that = this;
 	exec("`which php` ./typo3conf/init.php", function (error, stdout, stderr) {
 		that.log(stdout);
 		that.async(error);
 	});
+}
+
+/**
+ * .htaccess setup
+ * 
+ * @return {void}
+ */
+TollwerkTypo3SetupGenerator.prototype.installHtaccess = function() {
+	var htaccess		= [];
+	
+	// Get .htaccess base including caching headers
+	if (this.squeezr) {
+		htaccess.push(this.read(path.join(this.destinationRoot(), 'typo3conf/ext/squeezr/Resources/Private/Squeezr/.htaccess')).split('squeezr/cache').join('typo3temp/squeezr/cache'));
+	} else {
+		htaccess.push(this.read(path.join(this.sourceRoot(), 'options/htaccess/01_deflate_expires')));
+	}
+	
+	// Add gzip compression and ETag optimization
+	htaccess.push(this.read(path.join(this.sourceRoot(), 'options/htaccess/02_etag_gzip')));
+	
+	// Add TYPO3 specifics
+	htaccess.push(this.read(path.join(this.sourceRoot(), 'options/htaccess/03_typo3')));
+	
+	this.write(path.join(this.destinationRoot(), '.htaccess'), htaccess.join("\n\n"));
 }
 
 /**
