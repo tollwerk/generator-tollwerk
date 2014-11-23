@@ -363,5 +363,24 @@ TollwerkTypo3SetupGenerator.prototype.installHtaccess = function() {
  * @return {void}
  */
 TollwerkTypo3SetupGenerator.prototype.grunt = function() {
-	this.log('run grunt');
+//	this.log('run grunt');
+}
+
+/**
+ * Running the setup Grunt task
+ * 
+ * @return {void}
+ */
+TollwerkTypo3SetupGenerator.prototype.finish = function() {
+	this.log();
+	this.log(chalk.green.bold('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'));
+	this.log(chalk.green.bold('Congratulations — the tollwerk project kickstarter finished successfully!'));
+	this.log(chalk.green.bold('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'));
+	
+	if (this.squeezr) {
+		this.log();
+		this.log(chalk.red.bold('Please remember to follow these steps to activate the squeezr extension:'));
+		this.log(chalk.yellow('1.) Visit the TYPO3 extension manager (EM) and run the squeezr update script. Repeat this each time you modify the extension\'s configuration.'));
+		this.log(chalk.yellow('2.) In the constant editor, define some image breakpoints and enable squeezr.'));
+	}
 }
