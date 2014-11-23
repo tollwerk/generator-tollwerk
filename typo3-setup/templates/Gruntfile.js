@@ -1,5 +1,6 @@
 /* global module:false */
 module.exports = function(grunt) {
+	var fs						= require('fs');
 	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
 	grunt.initConfig({
@@ -173,6 +174,9 @@ module.exports = function(grunt) {
 		},
 
 		concat					: {
+			options: {
+	          sourceMap			: true
+	        },
 			general 			: {
 				src				: ['fileadmin/<%= _.slugify(project) %>/.templates/css/*.css'],
 				dest			: 'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>.css'
@@ -186,23 +190,32 @@ module.exports = function(grunt) {
 				dest			: 'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-below.css'
 			},
 			javascript			: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/.templates/js/*.js'],
-				dest			: 'fileadmin/<%= _.slugify(project) %>/js/<%= _.slugify(project) %>.js'
+				expand			: true,
+				cwd				: 'fileadmin/<%= _.slugify(project) %>/.templates/js/',
+				src				: ['**/*.js'],
+				dest			: 'fileadmin/<%= _.slugify(project) %>/js',
+				ext				: '.js',
+				extDot			: 'last',
+				rename          : function (dest, src) {
+					return dest + '/' + ((src.indexOf('/') >= 0) ? (src.substring(0, src.indexOf('/'))  + '.js') : src);
+				}
 			}
 		},
 
 		uglify : {
+			options: {
+	          sourceMap			: true,
+	          sourceMapIn		: function(input) {
+	          	return fs.existsSync(input + '.map') ? (input + '.map') : null;
+	          }
+	        },
 			javascript          : {
 				expand          : true,
-				cwd             : 'fileadmin/<%= _.slugify(project) %>/js',
+				cwd             : 'fileadmin/<%= _.slugify(project) %>/js/',
 				src             : ['**/*.js', '!**/*.min.js'],
-				dest            : 'fileadmin/<%= _.slugify(project) %>/js',
-				rename          : function (dest, src) {
-					var folder  = src.substring(0, src.lastIndexOf('/')),
-					filename    = src.substring(src.lastIndexOf('/'), src.length);
-					filename    = filename.substring(0, filename.lastIndexOf('.'));
-					return dest + '/' + folder + filename + '.min.js';
-				}
+				dest            : 'fileadmin/<%= _.slugify(project) %>/js/',
+				ext				: '.min.js',
+				extDot			: 'last'
 			}
 		},
 
@@ -269,8 +282,8 @@ module.exports = function(grunt) {
 			
 			// Watch & uglify changing JavaScript resources
 			javascript : {
-				files : ['fileadmin/<%= _.slugify(project) %>/js/*.js', '!fileadmin/<%= _.slugify(project) %>/js/*.min.js'],
-				tasks : ['uglify'],
+				files : ['fileadmin/<%= _.slugify(project) %>/.templates/js/**/*.js'],
+				tasks : ['concat:javascript', 'uglify'],
 				options : {
 					spawn : true
 				}
@@ -279,14 +292,13 @@ module.exports = function(grunt) {
 	});
 
 	// Default task.
-	grunt.registerTask('default', ['iconizr', 'sass', 'css', 'js']);
+	grunt.registerTask('default', [<% if(iconizr) {%>'iconizr', <% } %>'sass', 'css', 'js']);
 	grunt.registerTask('css', ['clean:general', 'clean:above', 'clean:below',
 								'concat:general', 'concat:above', 'concat:below',
 								'autoprefixer',
 								'cssmin']);
-	grunt.registerTask('js', ['uglify']);
-	grunt.registerTask('icons', ['iconizr']);
-	<% if(favicon) { %>
+	grunt.registerTask('js', ['uglify']);<% if(iconizr) {%>
+	grunt.registerTask('icons', ['iconizr']);<% } %><% if(favicon) { %>
 	grunt.registerTask('favicon', ['clean:favicon', 'favicons', 'copy:favicon', 'replace:favicon']);
 	<% } %>
 };

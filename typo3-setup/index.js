@@ -374,7 +374,7 @@ TollwerkTypo3SetupGenerator.prototype.grunt = function() {
 TollwerkTypo3SetupGenerator.prototype.finish = function() {
 	this.log();
 	this.log(chalk.green.bold('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'));
-	this.log(chalk.green.bold('Congratulations — the tollwerk project kickstarter finished successfully!'));
+	this.log(chalk.green.bold('Congratulations - the tollwerk project kickstarter finished successfully!'));
 	this.log(chalk.green.bold('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'));
 	
 	if (this.squeezr) {
