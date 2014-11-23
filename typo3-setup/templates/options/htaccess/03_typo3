@@ -1,0 +1,41 @@
+<IfModule mod_rewrite.c>
+	Options +FollowSymlinks
+	
+	RewriteEngine On
+	RewriteBase /
+	
+    ###########################################################################
+    # Forbid access to dot files and folders
+    ###########################################################################
+    RewriteRule ^fileadmin/(.*/)?\. - [F]
+    
+    ###########################################################################
+    # Disable compressed resources for clients not accepting gzip encoding
+    ###########################################################################
+    RewriteCond %{HTTP:accept-encoding} !gzip [NC]
+	RewriteRule ^typo3temp/scriptmerger/compressed/(.+)\.gz\.(js|css) typo3temp/scriptmerger/uncompressed/$1.$2 [L,NC]
+	
+	###########################################################################
+    # Redirects for XML sitemaps
+    ###########################################################################
+#	RewriteRule ^sitemap.xml$ index.php?type=1210 [R,L]
+#	RewriteRule ^sitemap.xml.gz$ index.php?type=1211 [R,L]	
+	
+	###########################################################################
+    # Default TYPO3 redirects
+    ###########################################################################
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.+)\.(\d+)\.(php|js|css|png|jpg|gif|gzip)$ $1.$3 [L]
+	
+	RewriteRule ^fileadmin/(.*/)?_recycler_/ - [F]
+	RewriteRule ^fileadmin/templates/.*(\.txt|\.ts)$ - [F]
+	RewriteRule ^typo3conf/ext/[^/]+/Resources/Private/ - [F]
+	RewriteRule ^(typo3/|t3lib/|fileadmin/|typo3conf/|typo3temp/|uploads/|favicon\.ico) - [L]
+	RewriteRule ^typo3$ typo3/index_re.php [L]
+	
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-l
+	RewriteRule .* index.php [L]
+</IfModule>
