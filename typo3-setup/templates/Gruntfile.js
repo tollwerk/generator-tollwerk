@@ -6,6 +6,9 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		<% if(sass) { %>
 		sass					: {
+			options				: {
+				sourceMap		: true
+			},
 			above				: {
 				files			: [{
 					expand		: true,
@@ -114,7 +117,8 @@ module.exports = function(grunt) {
 		
 		autoprefixer			: {
 			options				: {
-				browsers		: ['last 3 versions', 'ie 8']
+				browsers		: ['last 3 versions', 'ie 8'],
+				map				: true
 			},
 			general				: {
 				src				: ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>.css']
@@ -173,9 +177,9 @@ module.exports = function(grunt) {
 			}<% } %>
 		},
 
-		concat					: {
+		concat_sourcemap		: {
 			options: {
-	          sourceMap			: true
+	          sourceRoot		: '/'
 	        },
 			general 			: {
 				src				: ['fileadmin/<%= _.slugify(project) %>/.templates/css/*.css'],
@@ -244,21 +248,21 @@ module.exports = function(grunt) {
 			// Watch changing CSS resources
 			cssGeneral : {
 				files : ['fileadmin/<%= _.slugify(project) %>/.templates/css/*.css'],
-				tasks : ['clean:general', 'concat:general', 'autoprefixer:general', 'cssmin:general'],
+				tasks : ['clean:general', 'concat_sourcemap:general', 'autoprefixer:general', 'cssmin:general'],
 				options : {
 					spawn : true
 				}
 			},
 			cssAbove : {
 				files : ['fileadmin/<%= _.slugify(project) %>/.templates/css/above/*.css'],
-				tasks : ['clean:above', 'concat:above', 'autoprefixer:above', 'cssmin:above'],
+				tasks : ['clean:above', 'concat_sourcemap:above', 'autoprefixer:above', 'cssmin:above'],
 				options : {
 					spawn : true
 				}
 			},
 			cssBelow : {
 				files : ['fileadmin/<%= _.slugify(project) %>/.templates/css/below/*.css'],
-				tasks : ['clean:below', 'concat:below', 'autoprefixer:below', 'cssmin:below'],
+				tasks : ['clean:below', 'concat_sourcemap:below', 'autoprefixer:below', 'cssmin:below'],
 				options : {
 					spawn : true
 				}
@@ -283,7 +287,7 @@ module.exports = function(grunt) {
 			// Watch & uglify changing JavaScript resources
 			javascript : {
 				files : ['fileadmin/<%= _.slugify(project) %>/.templates/js/**/*.js'],
-				tasks : ['concat:javascript', 'uglify'],
+				tasks : ['concat_sourcemap:javascript', 'uglify'],
 				options : {
 					spawn : true
 				}
@@ -294,10 +298,10 @@ module.exports = function(grunt) {
 	// Default task.
 	grunt.registerTask('default', [<% if(iconizr) {%>'iconizr', <% } %>'sass', 'css', 'js']);
 	grunt.registerTask('css', ['clean:general', 'clean:above', 'clean:below',
-								'concat:general', 'concat:above', 'concat:below',
+								'concat_sourcemap:general', 'concat_sourcemap:above', 'concat_sourcemap:below',
 								'autoprefixer',
 								'cssmin']);
-	grunt.registerTask('js', ['uglify']);<% if(iconizr) {%>
+	grunt.registerTask('js', ['concat_sourcemap:javascript', 'uglify']);<% if(iconizr) {%>
 	grunt.registerTask('icons', ['iconizr']);<% } %><% if(favicon) { %>
 	grunt.registerTask('favicon', ['clean:favicon', 'favicons', 'copy:favicon', 'replace:favicon']);
 	<% } %>
