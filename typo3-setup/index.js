@@ -62,63 +62,63 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 	this.log();
 
 	var prompts = [{
-		name	: 'project',
-		message	: 'How should this project be called?'
+		name		: 'project',
+		message		: 'How should this project be called?',
+		validate	: function(name) {
+			return ('' + name).length ? true : 'The project name cannot be empty!';
+		}
 	},{
-		name	: 'baseurl',
-		message	: 'What is the base URL of the site?'
+		name		: 'baseurl',
+		message		: 'What is the base URL of the site?'
 	},{
-		name	: 'sbaseurl',
-		message	: 'What is the staging site base URL?'
+		name		: 'sbaseurl',
+		message		: 'What is the staging site base URL?'
 	},{
-		name	: 'author',
-		message	: 'What is the site author\'s name?'
+		name		: 'author',
+		message		: 'What is the site author\'s name?'
 	},{
-		type	: 'list',
-		name	: 'templating',
-		message	: 'Which templating system are you going to use?',
-		choices	: [{name: 'FluidTYPO3', value: 'ft3'}, {name: 'TemplaVoila!', value: 'tv'}, {name: 'None', value: 'none'}],
-		'default'	: 'ft3'
+		type		: 'list',
+		name		: 'templating',
+		message		: 'Which templating system are you going to use?',
+		choices		: [{name: 'None', value: 'none'}, {name: 'TemplaVoila!', value: 'tv'}, {name: 'FluidTYPO3', value: 'ft3'}],
+		'default'	: 'none'
 	},{
-		type	: 'confirm',
-		name	: 'sass',
-		message	: 'Would you like to use Sass?',
+		type		: 'confirm',
+		name		: 'sass',
+		message		: 'Would you like to use Sass?',
 		'default'	: true
 	},{
-		type	: 'confirm',
-		name	: 'iconizr',
-		message	: 'Would you like to use iconizr?',
+		type		: 'confirm',
+		name		: 'iconizr',
+		message		: 'Would you like to use iconizr?',
 		'default'	: true
 	},{
-		type	: 'confirm',
-		name	: 'favicon',
-		message	: 'Would you like to include favicon / touch icon support?',
+		type		: 'confirm',
+		name		: 'favicon',
+		message		: 'Would you like to include favicon / touch icon support?',
 		'default'	: true
 	},{
-		type	: 'confirm',
-		name	: 'ga',
-		message	: 'Would you like to install the Google Analytics extension (tw_googleanalytics)?',
+		type		: 'confirm',
+		name		: 'ga',
+		message		: 'Would you like to install the Google Analytics extension (tw_googleanalytics)?',
 		'default'	: true
 	},{
-		type	: 'confirm',
-		name	: 'squeezr',
-		message	: 'Would you like to install the squeezr extension (squeezr)?',
-		'default'	: true
+		type		: 'confirm',
+		name		: 'squeezr',
+		message		: 'Would you like to install the squeezr extension (squeezr)?',
+		'default'	: false
 	},{
-		type	: 'confirm',
-		name	: 'defr',
-		message	: 'Would you like to install the defr extension?',
-		'default'	: true
+		type		: 'confirm',
+		name		: 'defr',
+		message		: 'Would you like to install the defr extension?',
+		'default'	: false
 	},{
-		name	: 'git',
-		message	: 'Associate with Git repository (git)?'
+		name		: 'git',
+		message		: 'Associate with Git repository (git)?'
 	}];
 
 	this.prompt(prompts, function(props) {
-		
-		// TODO: What happens if no project name is given?
 	 	this.project		= props.project.toLowerCase();
-	 	
 	 	this.baseurl		= props.baseurl.length ? ((props.baseurl.toLowerCase().indexOf('http') !== 0) ? ('http://' + props.baseurl) : props.baseurl) : '';
 	 	this.baseurl		= this.baseurl.length ? (this.baseurl + ((this.baseurl.lastIndexOf('/') == (this.baseurl.length - 1)) ? '' : '/')) : ''; 
 	 	this.sbaseurl		= props.sbaseurl.length ? ((props.sbaseurl.toLowerCase().indexOf('http') !== 0) ? ('http://' + props.sbaseurl) : props.sbaseurl) : '';
