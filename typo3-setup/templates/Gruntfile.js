@@ -291,6 +291,13 @@ module.exports = function(grunt) {
 				options : {
 					spawn : true
 				}
+			},
+			
+			grunt: {
+				files: ['Gruntfile.js'],
+			    options: {
+			      reload: true
+			    }
 			}
 		}
 	});
