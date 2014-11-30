@@ -1,0 +1,21 @@
+*
+!.gitignore
+
+!/fileadmin
+!/fileadmin/<%= project %>/
+!/fileadmin/<%= project %>/**
+
+!/typo3conf/ext
+!/typo3conf/ext/tw_<%= project %>/
+!/typo3conf/ext/tw_<%= project %>/**
+
+!/typo3conf
+!/typo3conf/CoolUriConf.xml
+!/typo3conf/LocalConfiguration.php
+!/typo3conf/PackageStates.php
+
+!.htaccess
+!google*.html
+!Gruntfile.js
+!robots.txt
+!favicon.ico

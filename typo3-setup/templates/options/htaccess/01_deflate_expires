@@ -7,7 +7,7 @@
     AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css text/javascript text/json text/x-json text/x-json-stream application/x-javascript application/json application/x-json application/x-json-stream application/.*xml.* multipart/x-json-stream multipart/x-mixed-replace image/svg+xml
 </IfModule>
 
-# Various expiration headers for proper file caching (not required for squeezr, but recommended anyway)
+# Various expiration headers for proper file caching
 <IfModule mod_expires.c>
 
     ExpiresActive on

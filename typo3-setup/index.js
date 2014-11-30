@@ -110,10 +110,8 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		message	: 'Would you like to install the defr extension?',
 		'default'	: true
 	},{
-		type	: 'confirm',
 		name	: 'git',
-		message	: 'Would you like initialize a Git repository?',
-		'default'	: true
+		message	: 'Associate with Git repository (git)?'
 	}];
 
 	this.prompt(prompts, function(props) {
@@ -167,7 +165,7 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.app = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareAppFiles = function() {
 	this.template('_package.json', 'package.json');
 	this.template('_bower.json', 'bower.json');
 }
@@ -177,7 +175,7 @@ TollwerkTypo3SetupGenerator.prototype.app = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.projectfiles = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareProjectFiles = function() {
 	this.copy('editorconfig', '.editorconfig');
 	this.copy('jshintrc', '.jshintrc');
 	this.copy('bowerrc', '.bowerrc');
@@ -190,7 +188,7 @@ TollwerkTypo3SetupGenerator.prototype.projectfiles = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.baseresources = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareBaseResources = function() {
 
 	// Create the fileadmin directory structure
 	this.directory('fileadmin', 'fileadmin/' + this.project);
@@ -224,7 +222,7 @@ TollwerkTypo3SetupGenerator.prototype.baseresources = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.iconizr = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareIconizr = function() {
 	if (this.iconizr) {
 		this.mkdir('fileadmin/' + this.project + '/.templates/icons');
 		this.mkdir('fileadmin/' + this.project + '/css/icons');
@@ -236,7 +234,7 @@ TollwerkTypo3SetupGenerator.prototype.iconizr = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.favicon = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareFavicon = function() {
 	if (this.favicon) {
 		this.directory('options/favicon/fileadmin', 'fileadmin/' + this.project);
 		this.mkdir('fileadmin/' + this.project + '/favicons');
@@ -248,7 +246,7 @@ TollwerkTypo3SetupGenerator.prototype.favicon = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.dependencies = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareDependencies = function() {
 	var done		= this.async();
 	this.installDependencies({
 		skipInstall: this.options['skip-install'],
@@ -263,7 +261,7 @@ TollwerkTypo3SetupGenerator.prototype.dependencies = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.templating = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareTemplating = function() {
 	switch (this.templating) {
 		
 		// FluidTYPO3
@@ -290,7 +288,7 @@ TollwerkTypo3SetupGenerator.prototype.templating = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.installGoogleanalytics = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareGoogleanalytics = function() {
 	if (this.ga) {
 		installExtension(this, 'tw_googleanalytics', this.async());
 	}
@@ -301,7 +299,7 @@ TollwerkTypo3SetupGenerator.prototype.installGoogleanalytics = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.installSqueezr = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareSqueezr = function() {
 	if (this.squeezr) {
 		installExtension(this, 'squeezr', this.async());
 		
@@ -314,7 +312,7 @@ TollwerkTypo3SetupGenerator.prototype.installSqueezr = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.installDefr = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareDefr = function() {
 	if (this.defr) {
 		// TODO: Create TYPO3 extension for defr
 	}
@@ -325,7 +323,7 @@ TollwerkTypo3SetupGenerator.prototype.installDefr = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.database = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareDatabase = function() {
 	var that = this;
 	exec("`which php` ./typo3conf/init.php", function (error, stdout, stderr) {
 		that.log(stdout);
@@ -338,7 +336,7 @@ TollwerkTypo3SetupGenerator.prototype.database = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.installHtaccess = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareHtaccess = function() {
 	var htaccess		= [];
 	
 	// Get .htaccess base including caching headers
@@ -358,11 +356,78 @@ TollwerkTypo3SetupGenerator.prototype.installHtaccess = function() {
 }
 
 /**
+ * Initialize a git repository
+ * 
+ * @return {void}
+ */
+TollwerkTypo3SetupGenerator.prototype.prepareGit = function() {
+	if (this.git) {
+		this.template('options/git/_gitignore', '.gitignore');
+		
+		var that = this;
+		
+		// (Re)Initialize the Git repository 
+		exec("`which git` init", function (error, stdout, stderr) {
+			if (!error) {
+				
+				var setupGit = function() {
+					exec("`which git` remote add origin \"" + that.git + "\"", function (error, stdout, stderr) {
+						that.async(error);
+					});
+				};
+				
+				// Look for existing origin entries
+				exec("`which git` remote -v", function (error, stdout, stderr) {
+					if (!error) {
+						if (stdout.length) {
+							for (var l = 0, lines = stdout.split("\n"), removeOrigin = false; l < lines.length; ++l) {
+								if (lines[l].indexOf('origin') == 0) {
+									removeOrigin = true;
+									break;
+								}
+							}
+							
+							// If there's anonter origin entry: Remove it before setting up the repo
+							if (removeOrigin) {
+								exec("`which git` remote rm origin", function (error, stdout, stderr) {
+									if (error) {
+										that.async(error);
+									} else {
+										
+										// Setup the repo
+										setupGit();
+									}
+								});
+								
+							} else {
+								
+								// Setup the repo
+								setupGit();
+							}
+							
+						} else {
+							// Setup the repo
+							setupGit();
+						}
+						
+					} else {
+						that.async(error);
+					}
+				});
+				
+			} else {
+				that.async(error);
+			}
+		});
+	}
+}
+
+/**
  * Running the setup Grunt task
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.grunt = function() {
+TollwerkTypo3SetupGenerator.prototype.prepareGrunt = function() {
 //	this.log('run grunt');
 }
 
@@ -371,7 +436,7 @@ TollwerkTypo3SetupGenerator.prototype.grunt = function() {
  * 
  * @return {void}
  */
-TollwerkTypo3SetupGenerator.prototype.finish = function() {
+TollwerkTypo3SetupGenerator.prototype.zFinish = function() {
 	this.log();
 	this.log(chalk.green.bold('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'));
 	this.log(chalk.green.bold('Congratulations - the tollwerk project kickstarter finished successfully!'));
