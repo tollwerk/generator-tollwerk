@@ -371,7 +371,7 @@ TollwerkTypo3SetupGenerator.prototype.prepareGit = function() {
 			if (!error) {
 				
 				var setupGit = function() {
-					exec("`which git` remote add origin \"" + that.git + "\"", function (error, stdout, stderr) {
+					exec("`which git` remote add origin \"" + that.git + "\" && `which git` config core.filemode false", function (error, stdout, stderr) {
 						that.async(error);
 					});
 				};

@@ -9,7 +9,6 @@
 
 # Various expiration headers for proper file caching
 <IfModule mod_expires.c>
-
     ExpiresActive on
     
     # Images
