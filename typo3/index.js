@@ -4,6 +4,7 @@ var util			= require('util'),
 fs					= require('fs'),
 path				= require('path'),
 yeoman				= require('yeoman-generator'),
+yosay				= require('yosay'),
 chalk				= require('chalk');
 
 var TollwerkTypo3Generator = module.exports = function TollwerkTypo3Generator(args, options, config) {
@@ -22,8 +23,8 @@ util.inherits(TollwerkTypo3Generator, yeoman.generators.Base);
  */
 TollwerkTypo3Generator.prototype.main = function() {
 	if (!this.options.nested) {
-		this.log(this.yeoman);
-		this.log(chalk.magenta('You\'re using the fantastic tollwerk TYPO3 project kickstarter.\n'));
+		this.log(yosay('You\'re using the fantastic tollwerk TYPO3 project kickstarter.'));
+//		this.log(chalk.magenta('\n'));
 	}
 	this.log();
 	
@@ -40,9 +41,9 @@ TollwerkTypo3Generator.prototype.main = function() {
 		this.log(chalk.green('OK, we\'ll begin with installing TYPO3 ...'));
 		this.invoke("tollwerk:typo3-install", {options: {nested: true}}, this.async());
 		
-	// Else: If the TYPO3 install tool has not yet been run
+	// Else: If the TYPO3 install tool has not been run yet
 	} else if (!typo3conf) {
-		console.log(chalk.yellow('Ah, the TYPO3 have already been prepared!'));
+		console.log(chalk.yellow('Ah, the TYPO3 sources have already been prepared!'));
 		console.log('As a next step, please run the TYPO3 install tool in your browser and re-run this Yeoman generator afterwards.');
 		console.log();
 		
