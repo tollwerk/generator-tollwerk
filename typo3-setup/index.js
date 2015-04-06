@@ -68,12 +68,6 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 			return ('' + name).length ? true : 'The project name cannot be empty!';
 		}
 	},{
-		name		: 'baseurl',
-		message		: 'What is the base URL of the site?'
-	},{
-		name		: 'sbaseurl',
-		message		: 'What is the staging site base URL?'
-	},{
 		name		: 'author',
 		message		: 'What is the site author\'s name?'
 	},{
@@ -119,10 +113,6 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 
 	this.prompt(prompts, function(props) {
 	 	this.project		= props.project.toLowerCase();
-	 	this.baseurl		= props.baseurl.length ? ((props.baseurl.toLowerCase().indexOf('http') !== 0) ? ('http://' + props.baseurl) : props.baseurl) : '';
-	 	this.baseurl		= this.baseurl.length ? (this.baseurl + ((this.baseurl.lastIndexOf('/') == (this.baseurl.length - 1)) ? '' : '/')) : ''; 
-	 	this.sbaseurl		= props.sbaseurl.length ? ((props.sbaseurl.toLowerCase().indexOf('http') !== 0) ? ('http://' + props.sbaseurl) : props.sbaseurl) : '';
-	 	this.sbaseurl		= this.sbaseurl.length ? (this.sbaseurl + ((this.sbaseurl.lastIndexOf('/') == (this.sbaseurl.length - 1)) ? '' : '/')) : '';
 		this.author			= props.author;
 		this.templating		= props.templating;
 		this.sass			= props.sass;

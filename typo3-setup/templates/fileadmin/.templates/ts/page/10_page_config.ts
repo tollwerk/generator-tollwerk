@@ -6,14 +6,7 @@ config.doctype                            = html5
 config.metaCharset                        = utf-8
 config.renderCharset                      = utf-8
  
-# URLS<% if(sbaseurl && baseurl) { %>
-[globalString = ENV:HTTP_HOST=<%= sbaseurl.split('://').pop().split('/').shift() %>]
-  config.baseURL                          = <%= sbaseurl %>
-[ELSE]
-  config.baseURL                          = {$baseURL}
-[GLOBAL]<% } else if (sbaseurl) { %>
-config.baseURL                          	= <%= sbaseurl %><% } else if (baseurl) { %>
-config.baseURL                          	= {$baseURL}<% } %>
+# URLS
 config.absRefPrefix												= /
 config.simulateStaticDocuments						= 0
 config.tx_realurl_enable                  = 0
@@ -27,11 +20,11 @@ config.uniqueLinkVars          						= 1
 config.sys_language_mode									= strict
 config.sys_language_overlay								= hideNonTranslated
 
-# SUCHE EINSCHALTEN
+# SEARCH
 config.index_enable                       = 1
 config.index_externals										= 1
  
-# EMAIL SPAMPROTECTION
+# EMAIL SPAM PROTECTION
 config.spamProtectEmailAddresses          = 1
 config.spamProtectEmailAddresses_atSubst  = (at)
 

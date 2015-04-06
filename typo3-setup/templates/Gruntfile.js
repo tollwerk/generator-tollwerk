@@ -109,7 +109,7 @@ module.exports = function(grunt) {
 					to			: ''
 			    }, {
 					from		: /<link rel="shortcut icon".*/g,
-					to			: '<link rel="shortcut icon" href="<%= baseurl %>favicon.ico" type="image/x-icon"/><link rel="icon" href="<%= baseurl %>favicon.ico" type="image/x-icon"/>'
+					to			: '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/><link rel="icon" href="/favicon.ico" type="image/x-icon"/>'
 			    }]
 			}
 			<% } %>
