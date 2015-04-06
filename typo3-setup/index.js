@@ -13,6 +13,7 @@ var TollwerkTypo3SetupGenerator = module.exports = function TollwerkTypo3SetupGe
 	yeoman.generators.Base.apply(this, arguments);
 
 	this.pkg	= JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+	this.config.save();
 };
 
 util.inherits(TollwerkTypo3SetupGenerator, yeoman.generators.Base);
@@ -101,11 +102,11 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		name		: 'squeezr',
 		message		: 'Would you like to install the squeezr extension (squeezr)?',
 		'default'	: false
-	},{
-		type		: 'confirm',
-		name		: 'defr',
-		message		: 'Would you like to install the defr extension?',
-		'default'	: false
+//	},{
+//		type		: 'confirm',
+//		name		: 'defr',
+//		message		: 'Would you like to install the defr extension?',
+//		'default'	: false
 	},{
 		name		: 'git',
 		message		: 'Associate with Git repository (git)?'
@@ -143,7 +144,7 @@ TollwerkTypo3SetupGenerator.prototype.askFor = function() {
 		}
 		if (this.defr) {
 			// TODO: Create TYPO3 extension for defr
-			// this.deps.defr						= 'defr-typo3#latest';
+			// this.deps.defr					= 'defr-typo3#latest';
 		}
 		
 		done();
@@ -237,12 +238,10 @@ TollwerkTypo3SetupGenerator.prototype.prepareFavicon = function() {
  * @return {void}
  */
 TollwerkTypo3SetupGenerator.prototype.prepareDependencies = function() {
-	var done		= this.async();
 	this.installDependencies({
 		skipInstall: this.options['skip-install'],
-        callback: function() {
-            done();
-        }.bind(this)
+		skipMessage: this.options['skip-message'],
+		callback: function(){}.bind(this)
 	});
 }
 

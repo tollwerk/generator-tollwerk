@@ -15,6 +15,7 @@
 !/typo3conf/PackageStates.php
 
 !.htaccess
+!.yo-rc.json
 !google*.html
 !Gruntfile.js
 !robots.txt
