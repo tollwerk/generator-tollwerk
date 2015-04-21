@@ -10,7 +10,7 @@
     "bower": "^1.4.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-contrib-cssmin": "^0.12.2",
-    "grunt-contrib-uglify": "^0.8.1",
+    "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-concat-sourcemap": "^0.4.3",
     "grunt-autoprefixer": "^3.0.0",<% if(iconizr) {%>
