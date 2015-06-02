@@ -58,7 +58,7 @@ module.exports = generators.Base.extend({
 					this.prompt([{
 						name			: 'target',
 						message			: 'Path to local TYPO3 distribution',
-						'default'		: '/www/htdocs/typo3/typo3_src.7_1'
+						'default'		: '/www/htdocs/typo3/typo3_src.7_2'
 					}], function(props) {
 				 		this.target		= props.target || '';
 						done();
