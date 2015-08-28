@@ -2,6 +2,7 @@ node_modules/
 temp/
 /.settings
 /.buildpath
+/.idea
 /.project
 **/*.md.html
 *.md.html
