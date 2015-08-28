@@ -23,10 +23,11 @@
     "yeoman-generator"
   ],
   "dependencies": {
-    "yeoman-generator": "^0.18.10",
-    "chalk": "^1.0.0",
-    "tar.gz": "^0.1.1",
-    "yosay": "^1.0.3"
+    "yeoman-generator": "^0.20.3",
+    "chalk": "^1.1.1",
+    "tar.gz": "^1.0.0",
+    "yosay": "^1.0.5",
+    "valid-url": "^1.0.9"
   },
   "devDependencies": {
     "mocha": "*"
