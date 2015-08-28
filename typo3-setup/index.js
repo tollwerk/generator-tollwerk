@@ -1,12 +1,14 @@
 'use strict';
 
-var util		= require('util'),
-path			= require('path'),
-generators		= require('yeoman-generator'),
-yosay			= require('yosay'),
-chalk			= require('chalk'),
-sys				= require('sys'),
-exec			= require('child_process').exec;
+var util		= require('util');
+var path		= require('path');
+var generators	= require('yeoman-generator');
+var yosay		= require('yosay');
+var chalk		= require('chalk');
+var validUrl	= require('valid-url');
+var sys			= require('sys');
+var exec		= require('child_process').exec;
+var _s			= require('underscore.string');
 
 /**
  * Install a TYPO3 extension
@@ -98,6 +100,9 @@ module.exports = generators.Base.extend({
 				message		: 'Would you like to use iconizr?',
 				'default'	: true
 			},{
+				name		: 'validation',
+				message		: 'Configure W3C validation for URL (none by default):',
+			},{
 				type		: 'confirm',
 				name		: 'favicon',
 				message		: 'Would you like to include favicon / touch icon support?',
@@ -119,15 +124,17 @@ module.exports = generators.Base.extend({
 //				'default'	: false
 			},{
 				name		: 'git',
-				message		: 'Associate with Git repository (git)?'
+				message		: 'Associate with Git repository URL (none by default):'
 			}];
 		
 			this.prompt(prompts, function(props) {
 			 	this.project		= props.project.toLowerCase();
+				this.projectname	= _s.slugify(this.project);
 				this.author			= props.author;
 				this.templating		= props.templating;
 				this.sass			= props.sass;
 				this.iconizr		= props.iconizr;
+				this.validation		= validUrl.isWebUri(props.validation) ? props.validation : false;
 				this.favicon		= props.favicon;
 				this.ga				= props.ga;
 				this.squeezr		= props.squeezr;
@@ -245,7 +252,19 @@ module.exports = generators.Base.extend({
 				this.mkdir('fileadmin/' + this.project + '/css/icons');
 			}
 		},
-		
+
+		/**
+		 * W3C validation installation
+		 *
+		 * @return {void}
+		 */
+		prepareValidation: function() {
+			if (this.validation) {
+				this.mkdir('.validation');
+				this.copy('options/validation/validation-files.json', '.validation/validation-files.json');
+			}
+		},
+
 		/**
 		 * Favicon / touch icon installation
 		 * 

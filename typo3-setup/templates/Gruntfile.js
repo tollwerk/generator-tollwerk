@@ -12,9 +12,9 @@ module.exports = function(grunt) {
 			above				: {
 				files			: [{
 					expand		: true,
-					cwd			: 'fileadmin/<%= _.slugify(project) %>/.templates/sass/above',
+					cwd			: 'fileadmin/<%= projectname %>/.templates/sass/above',
 		 			src			: ['**/*.scss'],
-					dest		: 'fileadmin/<%= _.slugify(project) %>/.templates/css/above',
+					dest		: 'fileadmin/<%= projectname %>/.templates/css/above',
 					ext			: '.css'
 				}],
 				options: {
@@ -25,9 +25,9 @@ module.exports = function(grunt) {
 			below				: {
 				files			: [{
 					expand		: true,
-					cwd			: 'fileadmin/<%= _.slugify(project) %>/.templates/sass/below',
+					cwd			: 'fileadmin/<%= projectname %>/.templates/sass/below',
 		 			src			: ['**/*.scss'],
-					dest		: 'fileadmin/<%= _.slugify(project) %>/.templates/css/below',
+					dest		: 'fileadmin/<%= projectname %>/.templates/css/below',
 					ext			: '.css'
 				}],
 				options: {
@@ -38,9 +38,9 @@ module.exports = function(grunt) {
 			noconcat			: {
 				files			: [{
 					expand		: true,
-					cwd			: 'fileadmin/<%= _.slugify(project) %>/.templates/sass/noconcat',
+					cwd			: 'fileadmin/<%= projectname %>/.templates/sass/noconcat',
 		 			src			: ['**/*.scss'],
-					dest		: 'fileadmin/<%= _.slugify(project) %>/.templates/css/noconcat',
+					dest		: 'fileadmin/<%= projectname %>/.templates/css/noconcat',
 					ext			: '.css'
 				}],
 				options: {
@@ -52,8 +52,8 @@ module.exports = function(grunt) {
 		<% } if(iconizr) { %>
 		iconizr : {
 			dist : {
-				src : ['fileadmin/<%= _.slugify(project) %>/.templates/icons'],
-				dest : ['fileadmin/<%= _.slugify(project) %>/css'],
+				src : ['fileadmin/<%= projectname %>/.templates/icons'],
+				dest : ['fileadmin/<%= projectname %>/css'],
 				options : {<% if(sass) { %>
 					render		: {
 						css		: false,
@@ -76,16 +76,16 @@ module.exports = function(grunt) {
 		<% } if(favicon) { %>
 		favicons				: {
 			options				: {
-				html			: 'fileadmin/<%= _.slugify(project) %>/favicons/favicons.html',
-				HTMLPrefix		: '/fileadmin/<%= _.slugify(project) %>/favicons/',
+				html			: 'fileadmin/<%= projectname %>/favicons/favicons.html',
+				HTMLPrefix		: '/fileadmin/<%= projectname %>/favicons/',
 				precomposed		: false,
 				firefox			: true,
-				firefoxManifest : 'fileadmin/<%= _.slugify(project) %>/favicons/<%= _.slugify(project) %>.webapp',
+				firefoxManifest : 'fileadmin/<%= projectname %>/favicons/<%= projectname %>.webapp',
 				appleTouchBackgroundColor : '#222222'
 			},
 			icons				: {
-				src				: 'fileadmin/<%= _.slugify(project) %>/.templates/favicon/favicon.png',
-				dest			: 'fileadmin/<%= _.slugify(project) %>/favicons'
+				src				: 'fileadmin/<%= projectname %>/.templates/favicon/favicon.png',
+				dest			: 'fileadmin/<%= projectname %>/favicons'
 		    }
 		},
 		<% } %>
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
 		copy					: {
 			<% if(favicon) { %>
 			favicon: {
-				src				: 'fileadmin/<%= _.slugify(project) %>/favicons/favicon.ico',
+				src				: 'fileadmin/<%= projectname %>/favicons/favicon.ico',
 				dest			: 'favicon.ico'
 			}
 			<% } %>
@@ -102,7 +102,7 @@ module.exports = function(grunt) {
 		replace					: {
 			<% if(favicon) { %>
 			favicon: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/favicons/favicons.html'],
+				src				: ['fileadmin/<%= projectname %>/favicons/favicons.html'],
 				overwrite		: true,
 				replacements	: [{
 					from		: /[\t\r\n]+/g,
@@ -121,46 +121,46 @@ module.exports = function(grunt) {
 				map				: true
 			},
 			general				: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>.css']
+				src				: ['fileadmin/<%= projectname %>/css/<%= projectname %>.css']
 			},
 			above				: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-above.css']
+				src				: ['fileadmin/<%= projectname %>/css/<%= projectname %>-above.css']
 			},
 			below				: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-below.css']
+				src				: ['fileadmin/<%= projectname %>/css/<%= projectname %>-below.css']
 			},
 			noconcat			: {
 				expand			: true,
       			flatten			: true,
-				src				: 'fileadmin/<%= _.slugify(project) %>/.templates/css/noconcat/*.css',
-				dest			: 'fileadmin/<%= _.slugify(project) %>/css/'
+				src				: 'fileadmin/<%= projectname %>/.templates/css/noconcat/*.css',
+				dest			: 'fileadmin/<%= projectname %>/css/'
 			}<% if(iconizr && !sass) { %>,
 			iconizr				: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/css/icon-*.css', '!fileadmin/<%= _.slugify(project) %>/css/icon-*.min.css']
+				src				: ['fileadmin/<%= projectname %>/css/icon-*.css', '!fileadmin/<%= projectname %>/css/icon-*.min.css']
 			}<% } %>
 		},
 		
 		cssmin					: {
 			general				: {
 				files			: {
-					'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>.min.css' : ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>.css']
+					'fileadmin/<%= projectname %>/css/<%= projectname %>.min.css' : ['fileadmin/<%= projectname %>/css/<%= projectname %>.css']
 				}
 			},
 			above				: {
 				files			: {
-					'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-above.min.css' : ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-above.css']
+					'fileadmin/<%= projectname %>/css/<%= projectname %>-above.min.css' : ['fileadmin/<%= projectname %>/css/<%= projectname %>-above.css']
 				}
 			},
 			below				: {
 				files			: {
-					'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-below.min.css' : ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-below.css']
+					'fileadmin/<%= projectname %>/css/<%= projectname %>-below.min.css' : ['fileadmin/<%= projectname %>/css/<%= projectname %>-below.css']
 				}
 			},
 			noconcat			: {
 				expand			: true,
-				cwd				: 'fileadmin/<%= _.slugify(project) %>/css',
-				src				: ['**/*.css', '!**/*.min.css', '!<%= _.slugify(project) %>.css', '!<%= _.slugify(project) %>-above.css', '!<%= _.slugify(project) %>-below.css'],
-				dest			: 'fileadmin/<%= _.slugify(project) %>/css',
+				cwd				: 'fileadmin/<%= projectname %>/css',
+				src				: ['**/*.css', '!**/*.min.css', '!<%= projectname %>.css', '!<%= projectname %>-above.css', '!<%= projectname %>-below.css'],
+				dest			: 'fileadmin/<%= projectname %>/css',
 				rename          : function (dest, src) {
 					var folder  = src.substring(0, src.lastIndexOf('/')),
 					filename    = src.substring(src.lastIndexOf('/'), src.length);
@@ -170,9 +170,9 @@ module.exports = function(grunt) {
 			}<% if(iconizr && !sass) { %>,
 			iconizr				: {
 				expand			: true,
-				cwd				: 'fileadmin/<%= _.slugify(project) %>/css/',
+				cwd				: 'fileadmin/<%= projectname %>/css/',
 				src				: ['icon-{svg,png}-{sprite,data}.css'],
-				dest			: 'fileadmin/<%= _.slugify(project) %>/css/',
+				dest			: 'fileadmin/<%= projectname %>/css/',
 				ext				: '.min.css'
 			}<% } %>
 		},
@@ -182,22 +182,22 @@ module.exports = function(grunt) {
 	          sourceRoot		: '/'
 	        },
 			general 			: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/.templates/css/*.css'],
-				dest			: 'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>.css'
+				src				: ['fileadmin/<%= projectname %>/.templates/css/*.css'],
+				dest			: 'fileadmin/<%= projectname %>/css/<%= projectname %>.css'
 			},
 			above				: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/.templates/css/above/*.css'],
-				dest			: 'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-above.css'
+				src				: ['fileadmin/<%= projectname %>/.templates/css/above/*.css'],
+				dest			: 'fileadmin/<%= projectname %>/css/<%= projectname %>-above.css'
 			},
 			below				: {
-				src				: ['fileadmin/<%= _.slugify(project) %>/.templates/css/below/*.css'],
-				dest			: 'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-below.css'
+				src				: ['fileadmin/<%= projectname %>/.templates/css/below/*.css'],
+				dest			: 'fileadmin/<%= projectname %>/css/<%= projectname %>-below.css'
 			},
 			javascript			: {
 				expand			: true,
-				cwd				: 'fileadmin/<%= _.slugify(project) %>/.templates/js/',
+				cwd				: 'fileadmin/<%= projectname %>/.templates/js/',
 				src				: ['**/*.js'],
-				dest			: 'fileadmin/<%= _.slugify(project) %>/js',
+				dest			: 'fileadmin/<%= projectname %>/js',
 				ext				: '.js',
 				extDot			: 'last',
 				rename          : function (dest, src) {
@@ -215,60 +215,77 @@ module.exports = function(grunt) {
 	        },
 			javascript          : {
 				expand          : true,
-				cwd             : 'fileadmin/<%= _.slugify(project) %>/js/',
+				cwd             : 'fileadmin/<%= projectname %>/js/',
 				src             : ['**/*.js', '!**/*.min.js'],
-				dest            : 'fileadmin/<%= _.slugify(project) %>/js/',
+				dest            : 'fileadmin/<%= projectname %>/js/',
 				ext				: '.min.js',
 				extDot			: 'last'
 			}
 		},
 
 		clean					: {
-			general				: ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>.css', 'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>.min.css'],
-			above				: ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-above.css', 'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-above.min.css'],
-			below				: ['fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-below.css', 'fileadmin/<%= _.slugify(project) %>/css/<%= _.slugify(project) %>-below.min.css']<% if(favicon) { %>,
+			general				: ['fileadmin/<%= projectname %>/css/<%= projectname %>.css', 'fileadmin/<%= projectname %>/css/<%= projectname %>.min.css'],
+			above				: ['fileadmin/<%= projectname %>/css/<%= projectname %>-above.css', 'fileadmin/<%= projectname %>/css/<%= projectname %>-above.min.css'],
+			below				: ['fileadmin/<%= projectname %>/css/<%= projectname %>-below.css', 'fileadmin/<%= projectname %>/css/<%= projectname %>-below.min.css']<% if(favicon) { %>,
 			favicon				: ['favicon.ico']<% } %>
 		},
-
+		<% if(validation) { %>
+		validation: {
+			options: {
+				reset					: grunt.option('reset') || false,
+					path				: '.validation/validation-status.json',
+					reportpath			: '.validation/validation-report.json',
+					stoponerror			: false,
+					remotePath			: '<%= validation %>',
+					remoteFiles			: '.validation/validation-files.json',
+					relaxerror			: ['Bad value X-UA-Compatible for attribute http-equiv on element meta.'],
+					generateReport		: true,
+					errorHTMLRootDir	: '.validation/errors'
+			},
+			files						: {
+				src						: ['*']
+			}
+		},
+		<% } %>
 		watch : {
 			<% if(sass) {%>// Watch Sass resource changes
 			sassAbove : {
-				files : ['fileadmin/<%= _.slugify(project) %>/.templates/sass/above/**/*.scss', 'fileadmin/<%= _.slugify(project) %>/.templates/sass/common/**/*.scss'],
+				files : ['fileadmin/<%= projectname %>/.templates/sass/above/**/*.scss', 'fileadmin/<%= projectname %>/.templates/sass/common/**/*.scss'],
 				tasks : ['sass:above']
 			},
 			sassBelow : {
-				files : ['fileadmin/<%= _.slugify(project) %>/.templates/sass/below/**/*.scss', 'fileadmin/<%= _.slugify(project) %>/.templates/sass/common/**/*.scss'],
+				files : ['fileadmin/<%= projectname %>/.templates/sass/below/**/*.scss', 'fileadmin/<%= projectname %>/.templates/sass/common/**/*.scss'],
 				tasks : ['sass:below']
 			},
 			sassNoconcat : {
-				files : ['fileadmin/<%= _.slugify(project) %>/.templates/sass/noconcat/**/*.scss', 'fileadmin/<%= _.slugify(project) %>/.templates/sass/common/**/*.scss'],
+				files : ['fileadmin/<%= projectname %>/.templates/sass/noconcat/**/*.scss', 'fileadmin/<%= projectname %>/.templates/sass/common/**/*.scss'],
 				tasks : ['sass:noconcat']
 			},<% } %>
 			
 			// Watch changing CSS resources
 			cssGeneral : {
-				files : ['fileadmin/<%= _.slugify(project) %>/.templates/css/*.css'],
+				files : ['fileadmin/<%= projectname %>/.templates/css/*.css'],
 				tasks : ['clean:general', 'concat_sourcemap:general', 'autoprefixer:general', 'cssmin:general'],
 				options : {
 					spawn : true
 				}
 			},
 			cssAbove : {
-				files : ['fileadmin/<%= _.slugify(project) %>/.templates/css/above/*.css'],
+				files : ['fileadmin/<%= projectname %>/.templates/css/above/*.css'],
 				tasks : ['clean:above', 'concat_sourcemap:above', 'autoprefixer:above', 'cssmin:above'],
 				options : {
 					spawn : true
 				}
 			},
 			cssBelow : {
-				files : ['fileadmin/<%= _.slugify(project) %>/.templates/css/below/*.css'],
+				files : ['fileadmin/<%= projectname %>/.templates/css/below/*.css'],
 				tasks : ['clean:below', 'concat_sourcemap:below', 'autoprefixer:below', 'cssmin:below'],
 				options : {
 					spawn : true
 				}
 			},
 			cssNoconcat : {
-				files : ['fileadmin/<%= _.slugify(project) %>/.templates/css/noconcat/*.css'],
+				files : ['fileadmin/<%= projectname %>/.templates/css/noconcat/*.css'],
 				tasks : ['autoprefixer:noconcat', 'cssmin:noconcat'],
 				options : {
 					spawn : true
@@ -277,7 +294,7 @@ module.exports = function(grunt) {
 			
 			<% if(iconizr) {%>// Watch SVG icon changes
 			iconizr : {
-				files : ['fileadmin/<%= _.slugify(project) %>/.templates/icons/**/*.svg'],
+				files : ['fileadmin/<%= projectname %>/.templates/icons/**/*.svg'],
 				tasks : ['iconizr'<% if(!sass) { %>, 'autoprefixer:iconizr', 'cssmin:iconizr'<% } %>],
 				options : {
 					spawn : true
@@ -286,7 +303,7 @@ module.exports = function(grunt) {
 			
 			// Watch & uglify changing JavaScript resources
 			javascript : {
-				files : ['fileadmin/<%= _.slugify(project) %>/.templates/js/**/*.js'],
+				files : ['fileadmin/<%= projectname %>/.templates/js/**/*.js'],
 				tasks : ['concat_sourcemap:javascript', 'uglify'],
 				options : {
 					spawn : true
