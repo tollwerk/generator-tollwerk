@@ -1,6 +1,7 @@
 /* global module:false */
 module.exports = function(grunt) {
-	var fs						= require('fs');
+	var fs						= require('fs');<% if(imagemin) { %>
+	var mozjpeg					= require('imagemin-mozjpeg');<% } %>
 	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
 	grunt.initConfig({
@@ -222,7 +223,29 @@ module.exports = function(grunt) {
 				extDot			: 'last'
 			}
 		},
-
+		<% if(imagemin) { %>
+		imageminbackup : {
+			images: {
+				options: {
+					optimizationLevel	: 3,
+						progressive		: true,
+						use				: [mozjpeg()],
+						backup			: '.backup'
+				},
+				files: [{
+					expand		: true,
+					cwd			: 'fileadmin/',
+					src			: ['**/*.{png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF}'],
+					dest		: 'fileadmin/'
+				}, {
+					expand		: true,
+					cwd			: 'uploads/',
+					src			: ['**/*.{png,PNG,jpg,JPG,jpeg,JPEG,gif,GIF}'],
+					dest		: 'uploads/'
+				}]
+			}
+		},
+		<% } %>
 		clean					: {
 			general				: ['fileadmin/<%= projectname %>/css/<%= projectname %>.css', 'fileadmin/<%= projectname %>/css/<%= projectname %>.min.css'],
 			above				: ['fileadmin/<%= projectname %>/css/<%= projectname %>-above.css', 'fileadmin/<%= projectname %>/css/<%= projectname %>-above.min.css'],

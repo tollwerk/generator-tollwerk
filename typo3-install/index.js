@@ -1,15 +1,16 @@
 'use strict';
 
-var util			= require('util'),
-path				= require('path'),
-fs					= require('fs'),
-generators			= require('yeoman-generator'),
-yosay				= require('yosay'),
-chalk				= require('chalk'),
-http				= require('http');
+var util			= require('util');
+var fs				= require('fs');
+var path			= require('path');
+var yeoman			= require('yeoman-generator');
+var yosay			= require('yosay');
+var wiring			= require('html-wiring');
+var chalk			= require('chalk');
+var http			= require('http');
 
 // Main module export
-module.exports = generators.Base.extend({
+module.exports = yeoman.Base.extend({
 
 	/**
 	 * Constructor
@@ -17,8 +18,8 @@ module.exports = generators.Base.extend({
 	 * @return {void}
 	 */
 	constructor: function() {
-		generators.Base.apply(this, arguments);
-		this.pkg	= JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+		yeoman.Base.apply(this, arguments);
+		this.pkg	= JSON.parse(wiring.readFileAsString(path.join(__dirname, '../package.json')));
 		this.config.save();
 	},
 	

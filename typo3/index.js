@@ -1,11 +1,12 @@
 'use strict';
 
-var util			= require('util'),
-fs					= require('fs'),
-path				= require('path'),
-generators			= require('yeoman-generator'),
-yosay				= require('yosay'),
-chalk				= require('chalk');
+var util			= require('util');
+var fs				= require('fs');
+var path			= require('path');
+var yeoman			= require('yeoman-generator');
+var yosay			= require('yosay');
+var wiring			= require('html-wiring');
+var chalk			= require('chalk');
 
 // Main module export
 module.exports = generators.Base.extend({
@@ -17,7 +18,7 @@ module.exports = generators.Base.extend({
 	 */
 	constructor: function() {
 		generators.Base.apply(this, arguments);
-		this.pkg	= JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+		this.pkg	= JSON.parse(wiring.readFileAsString(path.join(__dirname, '../package.json')));
 		this.config.save();
 	},
 	
@@ -51,7 +52,7 @@ module.exports = generators.Base.extend({
 			// If TYPO3 is not yet installed
 			if (!src) {
 				this.log(chalk.green('OK, we\'ll begin with installing TYPO3 ...'));
-				this.invoke("tollwerk:typo3-install", {options: {nested: true}}, this.async());
+				this.composeWith("tollwerk:typo3-install", {options: {nested: true}}, this.async());
 				
 			// Else: If the TYPO3 install tool has not been run yet
 			} else if (!typo3conf) {

@@ -1,3 +1,5 @@
+-- TYPO3 CMS 7.0.x
+
 INSERT INTO `pages` (`pid`, `tstamp`, `sorting`, `perms_userid`, `perms_groupid`, `perms_user`, `perms_group`, `perms_everybody`, `crdate`, `cruser_id`, `title`, `doktype`, `TSconfig`, `storage_pid`, `is_siteroot`, `urltype`, `shortcut`, `shortcut_mode`, `fe_group`, `media`, `SYS_LASTCHANGED`) VALUES
 	(0, UNIX_TIMESTAMP(), 256, 2, 0, 31, 27, 0, UNIX_TIMESTAMP(), 2, 'Start', 1, '<INCLUDE_TYPOSCRIPT: source="FILE: fileadmin/<%= project %>/.templates/ts/TSconfig/page.ts">', 2, 1, 1, 0, 0, '', '0', UNIX_TIMESTAMP()),
 	(1, UNIX_TIMESTAMP(), 256, 2, 0, 31, 27, 0, UNIX_TIMESTAMP(), 2, 'General record storage', 254, NULL, 0, 0, 1, 0, 0, '0', NULL, UNIX_TIMESTAMP());

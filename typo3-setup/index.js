@@ -1,14 +1,17 @@
 'use strict';
 
-var util		= require('util');
-var path		= require('path');
-var generators	= require('yeoman-generator');
-var yosay		= require('yosay');
-var chalk		= require('chalk');
-var validUrl	= require('valid-url');
-var sys			= require('sys');
-var exec		= require('child_process').exec;
-var _s			= require('underscore.string');
+var util			= require('util');
+var path			= require('path');
+var generators		= require('yeoman-generator');
+var yosay			= require('yosay');
+var wiring			= require('html-wiring');
+var chalk			= require('chalk');
+var validUrl		= require('valid-url');
+var sys				= require('sys');
+var exec			= require('child_process').exec;
+var _s				= require('underscore.string');
+var mkdirp			= require('mkdirp');
+var fs				= require('fs');
 
 /**
  * Install a TYPO3 extension
@@ -50,7 +53,7 @@ module.exports = generators.Base.extend({
 	 */
 	constructor: function() {
 		generators.Base.apply(this, arguments);
-		this.pkg	= JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+		this.pkg	= JSON.parse(wiring.readFileAsString(path.join(__dirname, '../package.json')));
 		this.config.save();
 	},
 	
@@ -100,8 +103,16 @@ module.exports = generators.Base.extend({
 				message		: 'Would you like to use iconizr?',
 				'default'	: true
 			},{
+				type		: 'confirm',
+				name		: 'imagemin',
+				message		: 'Would you like support for PNG & JPEG minification?',
+				'default'	: true
+			},{
 				name		: 'validation',
 				message		: 'Configure W3C validation for URL (none by default):',
+				validate	: function(url) {
+					return ('' + url).length ? (validUrl.isWebUri(url) ? true : 'Validation requires a valid URL!') : true;
+				}
 			},{
 				type		: 'confirm',
 				name		: 'favicon',
@@ -134,7 +145,8 @@ module.exports = generators.Base.extend({
 				this.templating		= props.templating;
 				this.sass			= props.sass;
 				this.iconizr		= props.iconizr;
-				this.validation		= validUrl.isWebUri(props.validation) ? props.validation : false;
+				this.imagemin		= props.imagemin;
+				this.validation		= props.validation;
 				this.favicon		= props.favicon;
 				this.ga				= props.ga;
 				this.squeezr		= props.squeezr;
@@ -238,7 +250,18 @@ module.exports = generators.Base.extend({
 		 	this.template('fileadmin/.templates/ts/page/30_page_head.ts', 'fileadmin/' + this.project + '/.templates/ts/page/30_page_head.ts');
 		 	
 		 	// Create the init scripts
-			this.directory('typo3conf', 'typo3conf');
+			mkdirp.sync('typo3conf');
+			this.copy('typo3conf/init.php', 'typo3conf/init.php');
+			var typo3DbInit			= 'typo3conf/init.sql';
+			var typo3Version		= require(this.destinationPath('typo3/sysext/core/composer.json')).version.split('.');
+			while (typo3Version.length) {
+				if (fs.existsSync(this.templatePath('typo3conf/init-' + typo3Version.join('_') + '.sql'))) {
+					typo3DbInit		= 'typo3conf/init-' + typo3Version.join('_') + '.sql';
+					break;
+				}
+				typo3Version.pop();
+			}
+			this.copy(typo3DbInit, 'typo3conf/init.sql');
 		},
 		
 		/**
@@ -248,8 +271,8 @@ module.exports = generators.Base.extend({
 		 */
 		prepareIconizr: function() {
 			if (this.iconizr) {
-				this.mkdir('fileadmin/' + this.project + '/.templates/icons');
-				this.mkdir('fileadmin/' + this.project + '/css/icons');
+				mkdirp.sync('fileadmin/' + this.project + '/.templates/icons');
+				mkdirp.sync('fileadmin/' + this.project + '/css/icons');
 			}
 		},
 
@@ -260,8 +283,19 @@ module.exports = generators.Base.extend({
 		 */
 		prepareValidation: function() {
 			if (this.validation) {
-				this.mkdir('.validation');
+				mkdirp.sync('.validation');
 				this.copy('options/validation/validation-files.json', '.validation/validation-files.json');
+			}
+		},
+
+		/**
+		 * Image minification
+		 *
+		 * @return {void}
+		 */
+		prepareImagemin: function() {
+			if (this.imagemin) {
+				mkdirp.sync('.backup');
 			}
 		},
 
@@ -273,23 +307,24 @@ module.exports = generators.Base.extend({
 		prepareFavicon: function() {
 			if (this.favicon) {
 				this.directory('options/favicon/fileadmin', 'fileadmin/' + this.project);
-				this.mkdir('fileadmin/' + this.project + '/favicons');
+				mkdirp.sync('fileadmin/' + this.project + '/favicons');
 			}
 		}
 	},
-	
+
+
 	/**
 	 * Pull in dependencies
-	 * 
+	 *
 	 * @return {void}
 	 */
 	install: function() {
 		this.installDependencies({
 			skipInstall: this.options['skip-install'],
-			skipMessage: this.options['skip-message']
+			skipMessage: this.options['skip-install-message']
 		});
 	},
-		
+
 	/**
 	 * Finalizing
 	 * 
@@ -365,9 +400,18 @@ module.exports = generators.Base.extend({
 		 */
 		prepareDatabase: function() {
 			var that = this;
+			var done = this.async();
 			exec("`which php` ./typo3conf/init.php", function (error, stdout, stderr) {
+				if (error) {
+					switch (error.code) {
+						case 1: console.error('Initialization script must be run via CLI sapi.'); break;
+						case 2: console.error('Local configuration could not be found.'); break;
+						case 3: console.error('Initialization SQL could not be found or is empty.'); break;
+						case 4: console.error('Database queries couldn\'t be performed.'); break;
+					}
+				}
 				that.log(stdout);
-				that.async(error);
+				done(error);
 			});
 		},
 		
