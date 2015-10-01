@@ -15,7 +15,7 @@
     "grunt-concat-sourcemap": "^0.4.3",
     "grunt-autoprefixer": "^3.0.3",<% if(iconizr) {%>
     "grunt-iconizr": "jkphl/grunt-iconizr#dev",<% } if(imagemin) {%>
-    "grunt-imagemin-backup": "jkphl/grunt-imagemin-backup",
+    "grunt-imagemin-backup": "^0.1.0",
     "imagemin-mozjpeg": "^5.1.0",<% } if(sass) {%>
     "grunt-sass": "^1.0.0",<% } if(favicon) {%>
     "grunt-favicons": "^0.7.0",

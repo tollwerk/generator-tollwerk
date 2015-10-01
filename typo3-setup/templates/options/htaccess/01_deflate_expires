@@ -22,6 +22,7 @@
     ExpiresByType text/css "access plus 35 days"
     ExpiresByType text/xml "access plus 35 days"
     ExpiresByType text/javascript "access plus 35 days"
+    ExpiresByType application/javascript  "access plus 35 days"
     ExpiresByType application/x-javascript  "access plus 35 days"
     ExpiresByType application/x-shockwave-flash "access plus 35 days"
     
