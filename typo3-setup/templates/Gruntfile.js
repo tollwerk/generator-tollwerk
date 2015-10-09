@@ -1,7 +1,13 @@
 /* global module:false */
 module.exports = function(grunt) {
 	var fs						= require('fs');<% if(imagemin) { %>
-	var mozjpeg					= require('imagemin-mozjpeg');<% } %>
+	var mozjpeg					= require('imagemin-mozjpeg');<% } %><% if(sass) { %>
+	var sassRename				= function (dest, src) {
+		var folder				= src.substring(0, src.lastIndexOf('/'));
+		var filename    		= src.substring(src.lastIndexOf('/'), src.length);
+		filename    			= filename.substring(0, filename.lastIndexOf('.'));
+		return dest + '/' + folder + filename + '.css';
+	};<% } %>
 	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
 	grunt.initConfig({
@@ -16,7 +22,7 @@ module.exports = function(grunt) {
 					cwd			: 'fileadmin/<%= projectname %>/.templates/sass/above',
 		 			src			: ['**/*.scss'],
 					dest		: 'fileadmin/<%= projectname %>/.templates/css/above',
-					ext			: '.css'
+					rename      : sassRename
 				}],
 				options: {
 					sourcemap	: true,
@@ -29,7 +35,7 @@ module.exports = function(grunt) {
 					cwd			: 'fileadmin/<%= projectname %>/.templates/sass/below',
 		 			src			: ['**/*.scss'],
 					dest		: 'fileadmin/<%= projectname %>/.templates/css/below',
-					ext			: '.css'
+					rename      : sassRename
 				}],
 				options: {
 					sourcemap	: true,
@@ -42,7 +48,7 @@ module.exports = function(grunt) {
 					cwd			: 'fileadmin/<%= projectname %>/.templates/sass/noconcat',
 		 			src			: ['**/*.scss'],
 					dest		: 'fileadmin/<%= projectname %>/.templates/css/noconcat',
-					ext			: '.css'
+					rename      : sassRename
 				}],
 				options: {
 					sourcemap	: true,
