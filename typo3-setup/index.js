@@ -9,6 +9,7 @@ var chalk			= require('chalk');
 var validUrl		= require('valid-url');
 var sys				= require('sys');
 var exec			= require('child_process').exec;
+var execSyncFile	= require('child_process').execFileSync;
 var _s				= require('underscore.string');
 var mkdirp			= require('mkdirp');
 var fs				= require('fs');
@@ -41,6 +42,23 @@ function uninstallExtension(generator, extension, callback) {
 		generator.log(stdout);
 		callback(error);
 	});
+}
+
+/**
+ * Extract the TYPO3 version
+ *
+ * @param {TollwerkTypo3SetupGenerator} generator		Generator reference
+ * @return {Array|Boolean}								Version
+ */
+function getTYPO3Version(generator) {
+	var version = [];
+	try {
+		var versionString = execSyncFile(generator.templatePath('version.phps'), [generator.destinationPath('./typo3/sysext/core/ext_emconf.php')]).toString();
+		if (versionString.length) {
+			version = versionString.split('.');
+		}
+	} catch(e) {}
+	return version;
 }
 
 // Main module export
@@ -206,6 +224,7 @@ module.exports = generators.Base.extend({
 		prepareProjectFiles: function() {
 			this.copy('editorconfig', '.editorconfig');
 			this.copy('jshintrc', '.jshintrc');
+			this.copy('gitattributes', '.gitattributes');
 			this.copy('bowerrc', '.bowerrc');
 			this.copy('robots.txt', 'robots.txt');
 			this.template('Gruntfile.js', 'Gruntfile.js');
@@ -253,7 +272,7 @@ module.exports = generators.Base.extend({
 			mkdirp.sync('typo3conf');
 			this.copy('typo3conf/init.php', 'typo3conf/init.php');
 			var typo3DbInit			= 'typo3conf/init.sql';
-			var typo3Version		= require(this.destinationPath('typo3/sysext/core/composer.json')).version.split('.');
+			var typo3Version		= getTYPO3Version(this);
 			while (typo3Version.length) {
 				if (fs.existsSync(this.templatePath('typo3conf/init-' + typo3Version.join('_') + '.sql'))) {
 					typo3DbInit		= 'typo3conf/init-' + typo3Version.join('_') + '.sql';
