@@ -16,3 +16,14 @@ FileETag MTime Size
 </FilesMatch>
 
 AddEncoding x-gzip .gz
+
+# Security headers (see https://securityheaders.io)
+<IfModule mod_headers.c>
+        Header append Content-Security-Policy "default-src https: data: 'unsafe-inline'"
+        Header append X-Frame-Options "SAMEORIGIN"
+        Header append X-XSS-Protection "1; mode=block"
+        Header append X-Content-Type-Options "nosniff"
+        # See https://scotthelme.co.uk/hpkp-http-public-key-pinning/ for HPKP instructions
+        # Get current certificate fingerprints from the results of a https://www.ssllabs.com/ssltest run
+        # Header append Public-Key-Pins 'pin-sha256="PUT_BASE64_FINGERPRINT_HERE"; pin-sha256="PUT_BASE64_FINGERPRINT_HERE"; max-age=10; includeSubdomains'
+</IfModule>
