@@ -21,7 +21,9 @@
   "homepage": "https://github.com/tollwerk/generator-tollwerk#readme",
   "files": [
     "generators/app",
-    "generators/typo3"
+    "generators/typo3-check",
+    "generators/typo3-install",
+    "generators/typo3-setup"
   ],
   "dependencies": {
     "chalk": "^1.1.3",
