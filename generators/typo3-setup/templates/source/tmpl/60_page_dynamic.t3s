@@ -1,0 +1,51 @@
+# Wenn die Seite zum ersten Mal aufgerufen wird / der Cookie noch nicht gesetzt wurde
+# - HEAD
+#   - Inlinen des Above-CSS
+# - FOOTER
+#   - Synchrones Laden von jQuery etc.
+#   - Asynchrones Laden des vollständigen CSS
+#   - Asynchrones Laden aller zusätzlichen Skripte
+#   - Bei komplettem Ladeabschluss: Initialisierung, Setzen des Cookies
+#   - Fallback wenn kein JavaScript: Synchrones Laden des vollständigen CSS
+# Ansonsten (Folgeaufruf)
+# - HEAD
+#   - Synchrones Laden von jQuery etc.
+#   - Synchrones Laden des vollständigen CSS
+#   - Synchrones Laden aller zusätzlichen Skripte
+#   - Initialisierung
+
+# If the client already loaded the most recent asset versions
+[globalString = _COOKIE|assets = @@metaHash]
+	page.headerData {
+		# Synchronous loading of JavaScript resources, the full CSS etc.
+		999 = TEXT
+		999.value (
+<script src="/fileadmin/fischer/js/fischer.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/fileadmin/fischer/css/fischer.min.css">
+		)
+	}
+
+	# Else: Inline the critical resource, load the full one at the end
+[else]
+	page.headerData {
+		# Inlining the critical CSS in the <head>
+		999 = FILE
+		999.file = fileadmin/fischer/css/critical.min.css
+		999.wrap = <style>|</style>
+	}
+
+	page.footerData {
+		# Synchronous loading of JavaScript resources
+		997 = TEXT
+		997.value = <script src="/fileadmin/fischer/js/fischer.min.js"></script>
+
+		# Inline loadCSS() and loadJS() functions, then asynchronously load the full CSS and additional JavaScript files
+		998 = FILE
+		998.file = fileadmin/facsimile/js/888_load.min.js
+		998.wrap = <script>Tollwerk.Async.setup(2,'@@metaHash');var req=function(){Tollwerk.Async.req()};|onloadCSS(loadCSS('/fileadmin/facsimile/css/facsimile.min.css'),req);loadJS('/fileadmin/facsimile/js/999_async.min.js',req);</script>
+
+		# Fallback for clients not supporting JavaScript (synchronously load the full CSS)
+		999 = TEXT
+		999.value = <noscript><link rel="stylesheet" type="text/css" href="/fileadmin/fischer/css/fischer.min.css"></noscript>
+	}
+[global]

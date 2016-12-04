@@ -1,0 +1,32 @@
+*
+!/.editorconfig
+!/.gitattributes
+!/.jshintrc
+!/.gitignore
+!/.yo-rc.json
+!/composer.json
+!/composer.lock
+!/package.json
+!/gulpfile.js
+
+!/source
+!/source/**
+
+!/web
+!/web/.htaccess
+!/web/google*.html
+!/web/robots.txt
+!/web/favicon.ico
+
+!/web/fileadmin
+!/web/fileadmin/<%= project %>/
+!/web/fileadmin/<%= project %>/**
+
+!/web/typo3conf
+!/web/typo3conf/ext
+!/web/typo3conf/ext/tw_<%= project %>/
+!/web/typo3conf/ext/tw_<%= project %>/**
+
+!/web/typo3conf/CoolUriConf.xml
+!/web/typo3conf/LocalConfiguration.php
+!/web/typo3conf/PackageStates.php

@@ -1,0 +1,17 @@
+{
+  "repositories": [
+    { "type": "composer", "url": "https://composer.typo3.org/" }
+  ],
+  "name": "tollwerk/<%= project %>",
+  "description" : "<%= title %>",
+  "license": "GPL-2.0+",
+  "require": {
+    "typo3/cms": "<%= t3version %>"
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": "web"
+    }
+  }
+}

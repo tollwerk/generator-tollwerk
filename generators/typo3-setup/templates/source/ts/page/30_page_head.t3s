@@ -1,0 +1,53 @@
+# ICONIZR
+page.headerData.100 = FILE
+page.headerData.100.file = fileadmin/<%= project %>/css/icon-loader-fragment.html
+
+# FAVICON / TOUCH ICONS
+page.headerData.200 = FILE
+page.headerData.200.file = fileadmin/<%= project %>/favicons/favicons.html
+
+# META
+page.meta.author = <%= author %>
+page.meta.robots = index,follow
+
+# CSS
+page.includeCSS {
+    # fonts = http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Serif:400,700,400italic
+    # fonts.external = 1
+}
+
+page.CSS_inlineStyle >
+config.inlineStyle2TempFile = 1
+
+# [browser = msie] && [version= <9]
+# page.includeCSS.ie8 = fileadmin/css/ie8.css
+# [global]
+
+# JAVASCRIPT
+page.includeJS {
+    html5 = https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js
+    html5 {
+        allWrap = <!--[if lt IE 9]>|<![endif]-->
+        external = 1
+        disableCompression = 1
+        forceOnTop = 1
+        excludeFromConcatenation = 1
+    }
+}
+
+page.includeJSFooter {
+    jquery = https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js
+    jquery {
+        external = 1
+        forceOnTop = 1
+        disableCompression = 1
+        excludeFromConcatenation = 1
+    }
+
+    jquery >
+}
+
+config.removeDefaultJS = external<% if(t3x_tw_googleanalytics) { %>
+
+# GOOGLE ANALYTICS TRACKING CODE PLUGIN
+page.headerData.9999 =< plugin.tx_twgoogleanalytics<% } %>

@@ -1,41 +1,39 @@
 {
   "name": "generator-tollwerk",
-  "version": "0.0.0",
-  "description": "Yeoman generator for typical tollwerk frontend projects",
-  "license": "MIT",
+  "version": "2.0.0",
+  "description": "Yeoman generator for tollwerk TYPO3 projects",
   "main": "app/index.js",
-  "repository": "tollwerk/generator-tollwerk",
-  "author": {
-    "name": "Joschi Kuphal",
-    "email": "joschi@kuphal.net",
-    "url": "https://github.com/tollwerk"
-  },
-  "engines": {
-    "node": ">=0.10.0"
-  },
   "scripts": {
-    "test": "mocha"
+    "test": "test"
   },
-  "files": [
-    "app"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tollwerk/generator-tollwerk.git"
+  },
   "keywords": [
     "yeoman-generator"
   ],
+  "author": "Joschi Kuphal <joschi@kuphal.net> (https://jkphl.is)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tollwerk/generator-tollwerk/issues"
+  },
+  "homepage": "https://github.com/tollwerk/generator-tollwerk#readme",
+  "files": [
+    "generators/app",
+    "generators/typo3"
+  ],
   "dependencies": {
-    "yeoman-generator": "^0.21.1",
-    "html-wiring": "^1.2.0",
-    "chalk": "^1.1.1",
-    "tar.gz": "^1.0.2",
-    "yosay": "^1.1.0",
-    "valid-url": "^1.0.9",
-    "underscore.string": "^3.2.2",
-    "mkdirp": "^0.5.1"
+    "chalk": "^1.1.3",
+    "mkdirp": "^0.5.1",
+    "request": "^2.79.0",
+    "yeoman-generator": "^0.24.1",
+    "yosay": "^1.2.1"
   },
   "devDependencies": {
     "mocha": "*"
   },
   "peerDependencies": {
-    "yo": "^1.5.0"
+    "yo": "^1.8.5"
   }
 }
