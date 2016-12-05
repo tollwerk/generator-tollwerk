@@ -1,6 +1,8 @@
+'use strict';
+
 /* PROJECT CONFIGURATION
  ===================================================================================================================== */
-const project = {
+var project = {
     key: '<%= project %>',
     description: '<%= title %>',
     author: {
@@ -17,26 +19,26 @@ const project = {
 
 /* GENERAL SETUP
  ===================================================================================================================== */
-const gulp = require('gulp');
-const gutil = require('gulp-util');
-const rename = require('gulp-rename');
-const clean = require('gulp-clean');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var rename = require('gulp-rename');
+var clean = require('gulp-clean');
 
-const src = './source/' + project.key + '/';
-const dist = './web/fileadmin/' + project.key + '/';
+var src = './source/' + project.key + '/';
+var dist = './web/fileadmin/' + project.key + '/';
 var watch = [];
 
 
 /* POSTCSS + PLUGINS
  ===================================================================================================================== */
-const postcss = require('gulp-postcss');
-const sourcemaps = require('gulp-sourcemaps');
-const cssnano = require('cssnano');
-const cssnext = require('postcss-cssnext');
-const atImport = require('postcss-import');
-const mqPacker = require('css-mqpacker');
-const critical = require('postcss-critical-css');
-const processors = [
+var postcss = require('gulp-postcss');
+var sourcemaps = require('gulp-sourcemaps');
+var cssnano = require('cssnano');
+var cssnext = require('postcss-cssnext');
+var atImport = require('postcss-import');
+var mqPacker = require('css-mqpacker');
+var critical = require('postcss-critical-css');
+var processors = [
     atImport(),
     cssnext({
         autoprefixer: {browsers: ['IE >= 10']}
@@ -60,17 +62,17 @@ watch.push([src + 'css/**/*.css', ['css']]);
 
 /* JAVASCRIPT
  ===================================================================================================================== */
-const uglify = require('gulp-uglify');
-const concatFlatten = require('gulp-concat-flatten');
-const sort = require('gulp-sort');
-const pump = require('pump');
+var uglify = require('gulp-uglify');
+var concatFlatten = require('gulp-concat-flatten');
+var sort = require('gulp-sort');
+var pump = require('pump');
 gulp.task('js', function (cb) {
     pump([
             gulp.src(src + 'js/**/*.js'),
             sort(),
             concatFlatten(src + 'js', 'js'),
             rename(function (path) { // Rename to minified file
-                if (path.dirname != '.') {
+                if (path.dirname !== '.') {
                     path.basename = path.dirname.split('/').shift();
                     path.dirname = '.';
                 }
@@ -87,7 +89,7 @@ watch.push([src + 'js/**/*.js', ['js']]);
 
 /* ICONS
  ===================================================================================================================== */
-const iconizr = require('gulp-iconizr');
+var iconizr = require('gulp-iconizr');
 gulp.task('iconizr', function () {
     return gulp.src('**/*.svg', {cwd: src + 'icons'})
         .pipe(iconizr({
@@ -127,7 +129,7 @@ gulp.task('cachebust:clean', function () {
     return gulp.src(['js/*.min.*.js', 'css/*.min.*.css'], {cwd: dist, read: false})
         .pipe(clean());
 });
-const cacheBustMeta = require('gulp-cache-bust-meta');
+var cacheBustMeta = require('gulp-cache-bust-meta');
 var templates = {};
 templates[src + 'tmpl/60_page_dynamic.t3s'] = '.source/ts/page/60_page_dynamic.t3s';
 gulp.task('cachebust', function () {
@@ -140,10 +142,10 @@ watch.push([[dist + 'js/*.min.js', dist + 'css/*.min.css'], ['cachebust:clean', 
 
 /* FAVICONS
  ===================================================================================================================== */
-const favicons = require('gulp-favicons');
-const filter = require('gulp-filter');
-const replace = require('gulp-string-replace');
-const ico = filter(['**/favicon.ico'], {restore: true});
+var favicons = require('gulp-favicons');
+var filter = require('gulp-filter');
+var replace = require('gulp-string-replace');
+var ico = filter(['**/favicon.ico'], {restore: true});
 gulp.task('favicons', function () {
     return gulp.src(src + 'favicon/logo.png').pipe(favicons({
         appName: project.author.name,
@@ -180,9 +182,9 @@ gulp.task('favicons', function () {
 
 /* W3C VALIDATION
  ===================================================================================================================== */
-const w3cjs = require('gulp-w3cjs');
-const download = require('gulp-download');
-const through2 = require('through2');
+var w3cjs = require('gulp-w3cjs');
+var download = require('gulp-download');
+var through2 = require('through2');
 gulp.task('validate', function () {
     download(project.validate)
         .pipe(w3cjs())

@@ -1,14 +1,14 @@
 'use strict';
 
-const generators = require('yeoman-generator');
-const yosay = require('yosay');
-const fs = require('fs');
-const path = require('path');
-const chalk = require('chalk');
-const request = require('request');
-const mkdirp = require('mkdirp');
-const exec = require('child_process').exec;
-const typo3versionsURL = 'https://get.typo3.org/json';
+var generators = require('yeoman-generator');
+var yosay = require('yosay');
+var fs = require('fs');
+var path = require('path');
+var chalk = require('chalk');
+var request = require('request');
+var mkdirp = require('mkdirp');
+var exec = require('child_process').exec;
+var typo3versionsURL = 'https://get.typo3.org/json';
 
 module.exports = generators.Base.extend({
     /**
@@ -64,7 +64,6 @@ module.exports = generators.Base.extend({
                 message: 'What\'s the Git repository URL for this project?'
             }];
 
-            var done = this.async();
             this.prompt(prompts).then(function (props) {
 
                 // Copy all properties to the configuration
@@ -183,7 +182,7 @@ module.exports = generators.Base.extend({
          *
          * @return {void}
          */
-        installSymlinks() {
+        installSymlinks: function () {
             var symlinks = {};
             symlinks['../../../../source/' + this.project + '/html'] = 'web/fileadmin/' + this.project + '/.source/html';
             symlinks['../../../../source/' + this.project + '/lang'] = 'web/fileadmin/' + this.project + '/.source/lang';
@@ -235,14 +234,17 @@ module.exports = generators.Base.extend({
                 'through2',
                 'vinyl-request'
             ], {'save': true}, function () {
-                exec("which paxctl", function (error, stdout, stderr) {
+                exec('which paxctl', function (error, stdout, stderr) {
                     if (error) {
                         that.log.error('Cannot set PhantomJS PAX headers. Skipping ...');
                     } else {
                         var paxctl = stdout.trim();
-                        ['node_modules/iconizr/node_modules/phantomjs/lib/phantom/bin/phantomjs', 'node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'].forEach((phamtomJS) = > {
+                        [
+                            'node_modules/iconizr/node_modules/phantomjs/lib/phantom/bin/phantomjs',
+                            'node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'
+                        ].forEach(function (phamtomJS) {
                             that.spawnCommandSync(paxctl, ['-cm', phamtomJS]);
-                    })
+                        })
                         ;
                     }
                 });
@@ -288,7 +290,7 @@ module.exports = generators.Base.extend({
         prepareDatabase: function () {
             var that = this;
             var done = this.async();
-            exec("`which php` ./web/typo3conf/init.php", function (error, stdout, stderr) {
+            exec('`which php` ./web/typo3conf/init.php', function (error, stdout, stderr) {
                 if (error) {
                     switch (error.code) {
                         case 1:
@@ -335,7 +337,7 @@ module.exports = generators.Base.extend({
             // Add TYPO3 specifics
             htaccess.push(this.read(path.join(this.sourceRoot(), 'htaccess/03_typo3')));
 
-            this.write(path.join(this.destinationRoot(), 'web/.htaccess'), htaccess.join("\n\n"));
+            this.write(path.join(this.destinationRoot(), 'web/.htaccess'), htaccess.join('\n\n'));
         },
 
         /**
@@ -351,21 +353,21 @@ module.exports = generators.Base.extend({
                 var done = this.async();
 
                 // (Re)Initialize the Git repository
-                exec("`which git` init", function (error, stdout, stderr) {
+                exec('`which git` init', function (error, stdout, stderr) {
                     if (!error) {
 
                         var setupGit = function () {
-                            exec("`which git` remote add origin \"" + that.git + "\" && `which git` config core.filemode false", function (error, stdout, stderr) {
+                            exec('`which git` remote add origin "' + that.git + '" && `which git` config core.filemode false', function (error, stdout, stderr) {
                                 done(error);
                             });
                         };
 
                         // Look for existing origin entries
-                        exec("`which git` remote -v", function (error, stdout, stderr) {
+                        exec('`which git` remote -v', function (error, stdout, stderr) {
                             if (!error) {
                                 if (stdout.length) {
-                                    for (var l = 0, lines = stdout.split("\n"), removeOrigin = false; l < lines.length; ++l) {
-                                        if (lines[l].indexOf('origin') == 0) {
+                                    for (var l = 0, lines = stdout.split('\n'), removeOrigin = false; l < lines.length; ++l) {
+                                        if (lines[l].indexOf('origin') === 0) {
                                             removeOrigin = true;
                                             break;
                                         }
@@ -373,7 +375,7 @@ module.exports = generators.Base.extend({
 
                                     // If there's another origin entry: Remove it before setting up the repo
                                     if (removeOrigin) {
-                                        exec("`which git` remote rm origin", function (error, stdout, stderr) {
+                                        exec('`which git` remote rm origin', function (error, stdout, stderr) {
                                             if (error) {
                                                 done(error);
                                             } else {

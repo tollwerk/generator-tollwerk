@@ -1,10 +1,10 @@
 'use strict';
 
-const generators = require('yeoman-generator');
-const yosay = require('yosay');
-const fs = require('fs');
-const path = require('path');
-const chalk = require('chalk');
+var generators = require('yeoman-generator');
+var yosay = require('yosay');
+var fs = require('fs');
+var path = require('path');
+var chalk = require('chalk');
 
 module.exports = generators.Base.extend({
 
@@ -30,17 +30,17 @@ module.exports = generators.Base.extend({
         // If TYPO3 is not yet installed
         if (!src) {
             this.log(chalk.green('OK, we\'ll begin with installing TYPO3 ...'));
-            this.composeWith("tollwerk:typo3-install", {options: {nested: true}});
+            this.composeWith('tollwerk:typo3-install', {options: {nested: true}});
 
             // Else: If the TYPO3 install tool has not been run yet
         } else if (!typo3conf) {
             this.log(chalk.yellow('Ah, the TYPO3 sources have already been prepared!'));
-            this.composeWith("tollwerk:typo3-check");
+            this.composeWith('tollwerk:typo3-check');
 
             // Else: Setup the components
         } else {
             this.log(chalk.green('Cool, TYPO3 seems to be properly installed! Let\'s move on ...'));
-            this.composeWith("tollwerk:typo3-setup");
+            this.composeWith('tollwerk:typo3-setup');
         }
     }
 });

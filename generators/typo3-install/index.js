@@ -1,12 +1,12 @@
 'use strict';
 
-const generators = require('yeoman-generator');
-const yosay = require('yosay');
-const fs = require('fs');
-const path = require('path');
-const chalk = require('chalk');
-const request = require('request');
-const typo3versionsURL = 'https://get.typo3.org/json';
+var generators = require('yeoman-generator');
+var yosay = require('yosay');
+var fs = require('fs');
+var path = require('path');
+var chalk = require('chalk');
+var request = require('request');
+var typo3versionsURL = 'https://get.typo3.org/json';
 
 module.exports = generators.Base.extend({
     /**
@@ -29,9 +29,9 @@ module.exports = generators.Base.extend({
             }
 
             var done = this.async();
-            request(typo3versionsURL, (error, response, body) => {
+            request(typo3versionsURL, function (error, response, body) {
                 if (!error && response.statusCode === 200) {
-                    const typo3versions = JSON.parse(body);
+                    var typo3versions = JSON.parse(body);
                     if (typo3versions && (typo3versions.constructor === Object)) {
                         var choices = [];
                         for (var majorminor in typo3versions) {
@@ -39,9 +39,9 @@ module.exports = generators.Base.extend({
                                 for (var release in typo3versions[majorminor].releases) {
                                     choices.push({
                                         name: typo3versions[majorminor].releases[release].version,
-                                        value: typo3versions[majorminor].releases[release].version + '|'
-                                        + typo3versions[majorminor].releases[release].url.tar + '|'
-                                        + typo3versions[majorminor].releases[release].checksums.tar.sha1
+                                        value: typo3versions[majorminor].releases[release].version + '|' +
+                                        typo3versions[majorminor].releases[release].url.tar + '|' +
+                                        typo3versions[majorminor].releases[release].checksums.tar.sha1
                                     });
                                 }
                             }
@@ -67,8 +67,8 @@ module.exports = generators.Base.extend({
                             type: 'list',
                             name: 'version',
                             message: 'Which TYPO3 version should I use?',
-                            choices: choices.sort((t3a, t3b) => {
-                                return (t3a.name > t3b.name) ? -1 : 1
+                            choices: choices.sort(function (t3a, t3b) {
+                                return (t3a.name > t3b.name) ? -1 : 1;
                             })
                         }];
 
@@ -168,7 +168,7 @@ module.exports = generators.Base.extend({
         finalize: function () {
             this.log();
             this.log(chalk.green('Great! The TYPO3 sources have been prepared successfully! Let\'s move on ...'));
-            this.composeWith("tollwerk:typo3-check");
+            this.composeWith('tollwerk:typo3-check');
         }
     }
 });

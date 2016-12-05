@@ -1,10 +1,10 @@
 'use strict';
 
-const generators = require('yeoman-generator');
-const yosay = require('yosay');
-const fs = require('fs');
-const path = require('path');
-const chalk = require('chalk');
+var generators = require('yeoman-generator');
+var yosay = require('yosay');
+var fs = require('fs');
+var path = require('path');
+var chalk = require('chalk');
 
 module.exports = generators.Base.extend({
     /**
@@ -64,13 +64,13 @@ module.exports = generators.Base.extend({
             this.log();
             if (!this.installer) {
                 this.log(chalk.red('Listen! Please follow my advise and you\'ll be finished shortly ...'));
-                this.composeWith("tollwerk:typo3-check", {options: {nested: true}});
+                this.composeWith('tollwerk:typo3-check', {options: {nested: true}});
             } else if (this.installed) {
                 this.log(chalk.green('Perfect! Let\'s move on configuring your project ...'));
-                this.composeWith("tollwerk:typo3-setup");
+                this.composeWith('tollwerk:typo3-setup');
             } else {
                 this.log(chalk.red('Are your really sure? Please double-check and try again ...'));
-                this.composeWith("tollwerk:typo3-check", {options: {nested: true}});
+                this.composeWith('tollwerk:typo3-check', {options: {nested: true}});
             }
         }
     }
