@@ -22,7 +22,7 @@ const gutil = require('gulp-util');
 const rename = require('gulp-rename');
 const clean = require('gulp-clean');
 
-const src = './source/';
+const src = './source/' + project.key + '/';
 const dist = './web/fileadmin/' + project.key + '/';
 var watch = [];
 
@@ -46,7 +46,7 @@ const processors = [
     cssnano({autoprefixer: false})
 ];
 gulp.task('css', function () {
-    return gulp.src('source/css/*.css')
+    return gulp.src(src + 'css/*.css')
         .pipe(sourcemaps.init()) // Initialize sourcemaps
         .pipe(postcss(processors)) // Run PostCSS processors
         .pipe(rename(function (path) { // Rename to minified file

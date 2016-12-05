@@ -148,16 +148,13 @@ module.exports = generators.Base.extend({
         prepareBaseResources: function () {
 
             // Create the source directory structure
-            this.directory('source', 'source');
+            this.directory('source', 'source/' + this.project);
 
             // Create the fileadmin directory structure
             this.directory('fileadmin', 'web/fileadmin/' + this.project);
 
-            // Copy the general README
-            this.copy('README.md', 'web/fileadmin/' + this.project + '/README.md');
-
             // Page configuration
-            this.template('source/ts/page/30_page_head.t3s', 'source/ts/page/30_page_head.t3s');
+            this.template('source/ts/page/30_page_head.t3s', 'source/' + this.project + '/ts/page/30_page_head.t3s');
 
             // // Create the database init script
             mkdirp.sync('web/typo3conf');
@@ -187,11 +184,11 @@ module.exports = generators.Base.extend({
          * @return {void}
          */
         installSymlinks() {
-            var symlinks = {
-                '../../../../source/html': 'web/fileadmin/' + this.project + '/.source/html',
-                '../../../../source/lang': 'web/fileadmin/' + this.project + '/.source/lang',
-                '../../../../source/ts': 'web/fileadmin/' + this.project + '/.source/ts'
-            };
+            var symlinks = {};
+            symlinks['../../../../source/' + this.project + '/html'] = 'web/fileadmin/' + this.project + '/.source/html';
+            symlinks['../../../../source/' + this.project + '/lang'] = 'web/fileadmin/' + this.project + '/.source/lang';
+            symlinks['../../../../source/' + this.project + '/ts'] = 'web/fileadmin/' + this.project + '/.source/ts';
+
             for (var target in symlinks) {
                 try {
                     if (fs.lstatSync(symlinks[target]).isSymbolicLink()) {
@@ -243,9 +240,10 @@ module.exports = generators.Base.extend({
                         that.log.error('Cannot set PhantomJS PAX headers. Skipping ...');
                     } else {
                         var paxctl = stdout.trim();
-                        ['node_modules/iconizr/node_modules/phantomjs/lib/phantom/bin/phantomjs', 'node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'].forEach((phamtomJS) => {
+                        ['node_modules/iconizr/node_modules/phantomjs/lib/phantom/bin/phantomjs', 'node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'].forEach((phamtomJS) = > {
                             that.spawnCommandSync(paxctl, ['-cm', phamtomJS]);
-                        });
+                    })
+                        ;
                     }
                 });
 
@@ -406,6 +404,6 @@ module.exports = generators.Base.extend({
                     }
                 });
             }
-        },
+        }
     }
 });
