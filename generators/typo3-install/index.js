@@ -28,7 +28,8 @@ module.exports = generators.Base.extend({
                 this.log(yosay('You\'re about installing a TYPO3 instance.'));
             }
 
-            var done = this.async();
+            var that = this;
+            var done = that.async();
             request(typo3versionsURL, function (error, response, body) {
                 if (!error && response.statusCode === 200) {
                     var typo3versions = JSON.parse(body);
@@ -72,7 +73,7 @@ module.exports = generators.Base.extend({
                             })
                         }];
 
-                        return this.prompt(prompts).then(function (props) {
+                        return that.prompt(prompts).then(function (props) {
                             var t3versionUrlChecksum = props.version.split('|');
                             this.config.set('project', props.project.toLowerCase());
                             this.config.set('title', props.title);
@@ -81,14 +82,14 @@ module.exports = generators.Base.extend({
                             this.config.set('t3url', t3versionUrlChecksum[1]);
                             this.config.set('t3sha1', t3versionUrlChecksum[2]);
                             done();
-                        }.bind(this));
+                        }.bind(that));
 
                     } else {
-                        this.log.error('Couldn\t fetch the list of available TYPO3 versions. Please try again later!');
+                        that.log.error('Couldn\t fetch the list of available TYPO3 versions. Please try again later!');
                         done();
                     }
                 } else {
-                    this.log.error('Couldn\t fetch the list of available TYPO3 versions. Please try again later!');
+                    that.log.error('Couldn\t fetch the list of available TYPO3 versions. Please try again later!');
                     done();
                 }
             });
