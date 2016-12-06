@@ -147,7 +147,7 @@ var filter = require('gulp-filter');
 var replace = require('gulp-string-replace');
 var ico = filter(['**/favicon.ico'], {restore: true});
 gulp.task('favicons', function () {
-    return gulp.src(src + 'favicon/logo.png').pipe(favicons({
+    return gulp.src(src + 'favicon/favicon.png').pipe(favicons({
         appName: project.author.name,
         appDescription: project.description,
         developerName: project.developer.name,
