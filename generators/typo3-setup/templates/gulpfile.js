@@ -168,7 +168,7 @@ gulp.task('favicons', function () {
         .on('error', gutil.log)
         .pipe(gulp.dest(dist + 'favicons'))
         .pipe(ico)
-        .pipe(gulp.dest('./'))
+        .pipe(gulp.dest('./web/'))
         .pipe(ico.restore)
         .pipe(filter(['**/index.html']))
         .pipe(
