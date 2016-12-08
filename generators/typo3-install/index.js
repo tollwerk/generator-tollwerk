@@ -132,6 +132,23 @@ module.exports = generators.Base.extend({
         },
 
         /**
+         * Prepare the installation for running tests
+         *
+         * @return {void}
+         */
+        autoloadDev: function() {
+            var composer = require(path.join(this.destinationRoot(), 'composer.json'));
+            composer['autoload-dev'] = require(path.join(this.destinationRoot(), 'vendor/typo3/cms/composer.json'))['autoload-dev'];
+            for (var ns in composer['autoload-dev']['psr-4']) {
+                composer['autoload-dev']['psr-4'][ns] = path.join('web', composer['autoload-dev']['psr-4'][ns]);
+            }
+            composer['autoload-dev'].classmap = composer['autoload-dev'].classmap.map(function (classmapPath) {
+                return path.join('web', classmapPath);
+            })
+            fs.writeFileSync(path.join(this.destinationRoot(), 'composer.json'), JSON.stringify(composer, null, 4));
+        },
+
+        /**
          * Trigger the installation wizard
          *
          * @return {void}
