@@ -229,7 +229,7 @@ module.exports = generators.Base.extend({
                 'gulp-watch',
                 'postcss-critical-css',
                 'postcss-cssnext',
-                'postcss-import',
+                'postcss-partial-import',
                 'pump',
                 'through2',
                 'vinyl-request'

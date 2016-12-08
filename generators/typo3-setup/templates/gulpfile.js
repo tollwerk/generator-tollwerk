@@ -35,11 +35,11 @@ var postcss = require('gulp-postcss');
 var sourcemaps = require('gulp-sourcemaps');
 var cssnano = require('cssnano');
 var cssnext = require('postcss-cssnext');
-var atImport = require('postcss-import');
+var partialImport = require('postcss-partial-import');
 var mqPacker = require('css-mqpacker');
 var critical = require('postcss-critical-css');
 var processors = [
-    atImport(),
+    partialImport(),
     cssnext({
         autoprefixer: {browsers: ['IE >= 10']}
     }),
