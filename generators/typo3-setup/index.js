@@ -221,6 +221,7 @@ module.exports = generators.Base.extend({
                 'jkphl/gulp-iconizr',
                 'gulp-postcss',
                 'gulp-rename',
+                'gulp-sequence',
                 'gulp-sort',
                 'gulp-sourcemaps',
                 'gulp-string-replace',

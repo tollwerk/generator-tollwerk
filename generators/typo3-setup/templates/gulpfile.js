@@ -23,6 +23,23 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 var clean = require('gulp-clean');
+var sequence = require('gulp-sequence');
+
+/**
+ * Stream error handler generator
+ *
+ * @param {String} task Task name
+ * @return {Function} Error handler
+ */
+function errorHandler(task) {
+    return function (err) {
+        if (err) {
+            gutil.log(gutil.colors.red('ERROR in task "' + task + '"'));
+            gutil.log(err.message);
+            this.emit('end', new gutil.PluginError(task, err));
+        }
+    }
+}
 
 var src = './source/' + project.key + '/';
 var dist = './web/fileadmin/' + project.key + '/';
@@ -50,7 +67,7 @@ var processors = [
 gulp.task('css', function () {
     return gulp.src(src + 'css/*.css')
         .pipe(sourcemaps.init()) // Initialize sourcemaps
-        .pipe(postcss(processors)) // Run PostCSS processors
+        .pipe(postcss(processors).on('error', errorHandler('css / postcss'))) // Run PostCSS processors
         .pipe(rename(function (path) { // Rename to minified file
             path.basename += '.min';
         }))
@@ -70,7 +87,7 @@ gulp.task('js', function (cb) {
     pump([
             gulp.src(src + 'js/**/*.js'),
             sort(),
-            concatFlatten(src + 'js', 'js'),
+            concatFlatten(src + 'js', 'js').on('error', errorHandler('js / concatFlatten')),
             rename(function (path) { // Rename to minified file
                 if (path.dirname !== '.') {
                     path.basename = path.dirname.split('/').shift();
@@ -78,7 +95,7 @@ gulp.task('js', function (cb) {
                 }
                 path.basename += '.min';
             }),
-            uglify(),
+            uglify().on('error', errorHandler('js / uglify')),
             gulp.dest(dist + 'js')
         ],
         cb
@@ -125,19 +142,21 @@ watch.push([src + 'icons/**/*.svg', ['iconizr']]);
 
 /* CACHE BUSTING
  ===================================================================================================================== */
+var cacheBustMeta = require('gulp-cache-bust-meta');
+var templates = {};
+templates[src + 'tmpl/60_page_dynamic.t3s'] = '.source/ts/page/60_page_dynamic.t3s';
 gulp.task('cachebust:clean', function () {
     return gulp.src(['js/*.min.*.js', 'css/*.min.*.css'], {cwd: dist, read: false})
         .pipe(clean());
 });
-var cacheBustMeta = require('gulp-cache-bust-meta');
-var templates = {};
-templates[src + 'tmpl/60_page_dynamic.t3s'] = '.source/ts/page/60_page_dynamic.t3s';
 gulp.task('cachebust', function () {
     return gulp.src(['js/*.min.js', 'css/*.min.css'], {cwd: dist, base: dist})
         .pipe(cacheBustMeta(templates))
         .pipe(gulp.dest(dist));
 });
-watch.push([[dist + 'js/*.min.js', dist + 'css/*.min.css'], ['cachebust:clean', 'cachebust']]);
+watch.push([[dist + 'js/*.min.js', dist + 'css/*.min.css'], function () {
+    sequence('cachebust:clean', 'cachebust')(errorHandler('cachebust / sequence'))
+}]);
 
 
 /* FAVICONS
