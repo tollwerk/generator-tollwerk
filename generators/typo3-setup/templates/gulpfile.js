@@ -23,6 +23,7 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 var clean = require('gulp-clean');
+var concat = require('gulp-concat');
 var sequence = require('gulp-sequence');
 
 /**
@@ -43,38 +44,69 @@ function errorHandler(task) {
 
 var src = './source/' + project.key + '/';
 var dist = './web/fileadmin/' + project.key + '/';
+var extDist = './web/typo3conf/ext/';
 var watch = [];
 
 
 /* POSTCSS + PLUGINS
  ===================================================================================================================== */
-var postcss = require('gulp-postcss');
-var sourcemaps = require('gulp-sourcemaps');
-var cssnano = require('cssnano');
-var cssnext = require('postcss-cssnext');
-var partialImport = require('postcss-partial-import');
-var mqPacker = require('css-mqpacker');
-var critical = require('postcss-critical-css');
-var processors = [
-    partialImport(),
-    cssnext({
-        autoprefixer: {browsers: ['IE >= 10']}
-    }),
-    critical({outputPath: dist + 'css'}),
-    mqPacker(),
-    cssnano({autoprefixer: false})
-];
 gulp.task('css', function () {
-    return gulp.src(src + 'css/*.css')
+    var postcss = require('gulp-postcss');
+    var sourcemaps = require('gulp-sourcemaps');
+    var cssnano = require('cssnano');
+    var cssnext = require('postcss-cssnext');
+    var partialImport = require('postcss-partial-import');
+    var mqPacker = require('css-mqpacker');
+    var critical = require('postcss-critical-css');
+
+    // Concatenable CSS resources
+    gulp.src(['*/Resources/Private/Css/*.css', '!*/Resources/Private/Css/_*.css'], {cwd: extDist})
         .pipe(sourcemaps.init()) // Initialize sourcemaps
-        .pipe(postcss(processors).on('error', errorHandler('css / postcss'))) // Run PostCSS processors
+        .pipe(postcss([
+            partialImport(),
+            cssnext({autoprefixer: {browsers: ['IE >= 10']}}),
+            critical({
+                outputPath: dist + 'css',
+                outputDest: project.key + '-critical.css',
+                preserve: true,
+                minify: false
+            }),
+            mqPacker(),
+            cssnano({autoprefixer: false})
+        ]).on('error', errorHandler('css:concat / postcss'))) // Run PostCSS processors
         .pipe(rename(function (path) { // Rename to minified file
+            path.dirname = path.dirname.split('/Private/').join('/Public/');
             path.basename += '.min';
         }))
+        .pipe(gulp.dest(extDist)) // Write single CSS to extension destination directory
+        .pipe(concat(project.key + '.min.css'))
         .pipe(sourcemaps.write('.')) // Write out sourcemaps
-        .pipe(gulp.dest(dist + 'css')); // Write to destination directory
+        .pipe(gulp.dest(dist + 'css')); // Write combined CSS to destination directory
+
+    // Non-Concatenable CSS resources
+    gulp.src('*/Resources/Private/Css/_*.css', {cwd: extDist})
+        .pipe(sourcemaps.init()) // Initialize sourcemaps
+        .pipe(postcss([
+            partialImport(),
+            cssnext({autoprefixer: {browsers: ['IE >= 10']}}),
+            mqPacker(),
+            cssnano({autoprefixer: false})
+        ]).on('error', errorHandler('css:noconcat / postcss'))) // Run PostCSS processors
+        .pipe(rename(function (path) { // Rename to minified file
+            path.dirname = path.dirname.split('/Private/').join('/Public/');
+            path.basename = path.basename.substr(1) + '.min';
+        }))
+        .pipe(gulp.dest(extDist)) // Write single CSS to extension destination directory
+        .pipe(rename(function (path) { // Prefix with project key
+            path.dirname = '.';
+            path.basename = project.key + '-' + path.basename;
+        }))
+        .pipe(sourcemaps.write('.')) // Write out sourcemaps
+        .pipe(gulp.dest(dist + 'css')); // Write combined CSS to destination directory
+
+    return;
 });
-watch.push([src + 'css/**/*.css', ['css']]);
+watch.push([extDist + '*/Resources/Private/Css/**/*.css', ['css']]);
 
 
 /* JAVASCRIPT

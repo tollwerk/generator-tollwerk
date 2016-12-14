@@ -214,6 +214,7 @@ module.exports = generators.Base.extend({
                 'gulp',
                 'gulp-cache-bust-meta',
                 'gulp-clean',
+                'gulp-concat',
                 'gulp-concat-flatten',
                 'gulp-download',
                 'gulp-favicons',
