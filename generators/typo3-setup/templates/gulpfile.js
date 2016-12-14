@@ -25,6 +25,7 @@ var rename = require('gulp-rename');
 var clean = require('gulp-clean');
 var concat = require('gulp-concat');
 var sequence = require('gulp-sequence');
+var sourcemaps = require('gulp-sourcemaps');
 
 /**
  * Stream error handler generator
@@ -52,7 +53,6 @@ var watch = [];
  ===================================================================================================================== */
 gulp.task('css', function () {
     var postcss = require('gulp-postcss');
-    var sourcemaps = require('gulp-sourcemaps');
     var cssnano = require('cssnano');
     var cssnext = require('postcss-cssnext');
     var partialImport = require('postcss-partial-import');
@@ -115,25 +115,67 @@ var uglify = require('gulp-uglify');
 var concatFlatten = require('gulp-concat-flatten');
 var sort = require('gulp-sort');
 var pump = require('pump');
-gulp.task('js', function (cb) {
+
+// Concatenable JS resources
+gulp.task('js:concat', function (cb) {
     pump([
-            gulp.src(src + 'js/**/*.js'),
+            gulp.src([
+                '*/Resources/Private/Javascript/**/*.js',
+                '!*/Resources/Private/Javascript/_*',
+                '!*/Resources/Private/Javascript/_*/**/*.js'
+            ], {cwd: extDist}),
+            sourcemaps.init(),
             sort(),
-            concatFlatten(src + 'js', 'js').on('error', errorHandler('js / concatFlatten')),
+            concatFlatten(extDist + '*/Resources/Private/Javascript', 'js').on('error', errorHandler('js:concat / concatFlatten')),
             rename(function (path) { // Rename to minified file
-                if (path.dirname !== '.') {
-                    path.basename = path.dirname.split('/').shift();
-                    path.dirname = '.';
-                }
+                path.dirname = path.dirname.split('/Private/').join('/Public/');
                 path.basename += '.min';
             }),
-            uglify().on('error', errorHandler('js / uglify')),
-            gulp.dest(dist + 'js')
+            uglify().on('error', errorHandler('js:concat / uglify')),
+            gulp.dest(extDist), // Write single JavaScript files to extension destination directory
+            concat(project.key + '.min.js'),
+            sourcemaps.write('.'), // Write out sourcemaps
+            gulp.dest(dist + 'js') // Write combined JavaScript file to destination directory
         ],
         cb
     );
 });
-watch.push([src + 'js/**/*.js', ['js']]);
+watch.push([
+    [
+        extDist + '*/Resources/Private/Javascript/**/*.js',
+        '!' + extDist + '*/Resources/Private/Javascript/_*',
+        '!' + extDist + '*/Resources/Private/Javascript/_*/**/*.js'
+    ],
+    ['js:concat']
+]);
+
+// Non-concatenable JS resources
+gulp.task('js:noconcat', function (cb) {
+    pump([
+            gulp.src(['*/Resources/Private/Javascript/_*.js', '*/Resources/Private/Javascript/_*/**/*.js'], {cwd: extDist}),
+            sourcemaps.init(),
+            sort(),
+            concatFlatten(extDist + '*/Resources/Private/Javascript', 'js').on('error', errorHandler('js:noconcat / concatFlatten')),
+            rename(function (path) { // Rename to minified file
+                path.dirname = path.dirname.split('/Private/').join('/Public/');
+                path.basename = path.basename.substr(1) + '.min';
+            }),
+            uglify().on('error', errorHandler('js:noconcat / uglify')),
+            gulp.dest(extDist), // Write single JavaScript files to extension destination directory
+            rename(function (path) { // Prefix with project key
+                path.dirname = '.';
+                path.basename = project.key + '-' + path.basename;
+            }),
+            sourcemaps.write('.'), // Write out sourcemaps
+            gulp.dest(dist + 'js') // Write single JavaScript files to destination directory
+        ],
+        cb
+    );
+});
+watch.push([
+    [extDist + '*/Resources/Private/Javascript/_*.js', extDist + '*/Resources/Private/Javascript/_*/**/*.js'],
+    ['js:noconcat']
+]);
 
 
 /* ICONS
