@@ -34,28 +34,33 @@ module.exports = generators.Base.extend({
             var prompts = [{
                 type: 'confirm',
                 name: 't3x_fluid_content',
-                message: 'Would you like to install »fluid_content«?',
+                message: 'Would you like to install the TYPO3 extension »fluid_content«?',
                 'default': true
             }, {
                 type: 'confirm',
                 name: 't3x_fluid_pages',
-                message: 'Would you like to install »fluid_pages«?',
+                message: 'Would you like to install the TYPO3 extension »fluid_pages«?',
                 'default': false
             }, {
                 type: 'confirm',
                 name: 't3x_vhs',
-                message: 'Would you like to install »vhs«?',
+                message: 'Would you like to install the TYPO3 extension »vhs«?',
                 'default': true
             }, {
                 type: 'confirm',
                 name: 't3x_tw_googleanalytics',
-                message: 'Would you like to install »tw_googleanalytics«?',
+                message: 'Would you like to install the TYPO3 extension »tw_googleanalytics«?',
                 'default': true
             }, {
                 type: 'confirm',
                 name: 't3x_squeezr',
-                message: 'Would you like to install »squeezr«?',
+                message: 'Would you like to install the TYPO3 extension »squeezr«?',
                 'default': false
+            }, {
+                type: 'confirm',
+                name: 't3x_tw_componentlibrary',
+                message: 'Would you like to maintain a component library?',
+                'default': true
             }, {
                 name: 'url',
                 message: 'What\'s the URL for this project?'
@@ -95,6 +100,9 @@ module.exports = generators.Base.extend({
                 }
                 if (props.t3x_squeezr) {
                     this.typo3Extensions['squeezr'] = 'jkphl/squeezr';
+                }
+                if (props.t3x_tw_componentlibrary) {
+                    this.typo3Extensions['tw_componentlibrary'] = 'tollwerk/tw-componentlibrary';
                 }
 
                 done();
