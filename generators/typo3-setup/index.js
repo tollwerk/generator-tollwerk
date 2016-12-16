@@ -177,6 +177,25 @@ module.exports = generators.Base.extend({
             }
             this.copy(typo3DbInit, 'web/typo3conf/init.sql');
         },
+
+        /**
+         * Prepare the Fractal installation
+         *
+         * @return {void}
+         */
+        prepareFractal: function() {
+            if (this.typo3Extensions['tw_componentlibrary']) {
+
+                // Create the source directory structure
+                mkdirp.sync('fractal/build');
+                mkdirp.sync('fractal/components');
+                mkdirp.sync('fractal/docs');
+                mkdirp.sync('fractal/public');
+
+                // Fractal configuration
+                this.template('fractal.js', 'fractal.js');
+            }
+        }
     },
 
     /**
@@ -215,7 +234,7 @@ module.exports = generators.Base.extend({
          */
         installNPM: function () {
             var that = this;
-            this.npmInstall([
+            var packages = [
                 'autoprefixer',
                 'css-mqpacker',
                 'cssnano',
@@ -243,7 +262,15 @@ module.exports = generators.Base.extend({
                 'pump',
                 'through2',
                 'vinyl-request'
-            ], {'save': true}, function () {
+            ];
+
+            // Add Fractal & Fractal-TYPO3-Bridge upon request
+            if (this.typo3Extensions['tw_componentlibrary']) {
+                packages.push('@frctl/fractal');
+                packages.push('tollwerk/fractal-typo3');
+            }
+
+            this.npmInstall(packages, {'save': true}, function () {
                 exec('which paxctl', function (error, stdout, stderr) {
                     if (error) {
                         that.log.error('Cannot set PhantomJS PAX headers. Skipping ...');
@@ -254,8 +281,7 @@ module.exports = generators.Base.extend({
                             'node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'
                         ].forEach(function (phamtomJS) {
                             that.spawnCommandSync(paxctl, ['-cm', phamtomJS]);
-                        })
-                        ;
+                        });
                     }
                 });
 
