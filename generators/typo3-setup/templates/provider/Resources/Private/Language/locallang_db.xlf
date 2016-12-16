@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2016-12-08T10:17:19Z"
+          product-name="<%= typo3ProviderExtension.extkey %>">
+        <header/>
+        <body>
+            <trans-unit id="file" xml:space="preserve">
+				<source>Files &amp; directories</source>
+			</trans-unit>
+			<trans-unit id="file.templateRootPath" xml:space="preserve">
+				<source>Path to template files (FE)</source>
+			</trans-unit>
+			<trans-unit id="file.partialRootPath" xml:space="preserve">
+				<source>Path to template partials (FE)</source>
+			</trans-unit>
+			<trans-unit id="file.layoutRootPath" xml:space="preserve">
+				<source>Path to template layouts (FE)</source>
+			</trans-unit>
+            <trans-unit id="common" xml:space="preserve">
+				<source>Common settings</source>
+			</trans-unit>
+			<trans-unit id="common.enable" xml:space="preserve">
+				<source>Enable this extension</source>
+			</trans-unit>
+        </body>
+    </file>
+</xliff>

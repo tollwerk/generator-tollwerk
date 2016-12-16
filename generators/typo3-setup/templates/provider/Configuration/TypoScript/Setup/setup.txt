@@ -1,0 +1,23 @@
+plugin.<%= typo3ProviderExtension.compressed %> = USER
+plugin.<%= typo3ProviderExtension.compressed %> {
+    view {
+        templateRootPath = {$plugin.<%= typo3ProviderExtension.compressed %>.view.templateRootPath}
+        partialRootPath = {$plugin.<%= typo3ProviderExtension.compressed %>.view.partialRootPath}
+        layoutRootPath = {$plugin.<%= typo3ProviderExtension.compressed %>.view.layoutRootPath}
+        templateRootPaths {
+            10 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Templates/
+            20 = {$plugin.<%= typo3ProviderExtension.compressed %>.view.templateRootPath}
+        }
+        partialRootPaths {
+            10 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Partials/
+            20 = {$plugin.<%= typo3ProviderExtension.compressed %>.view.partialRootPath}
+        }
+        layoutRootPaths {
+            10 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Layouts/
+            20 = {$plugin.<%= typo3ProviderExtension.compressed %>.view.layoutRootPath}
+        }
+    }
+    settings {
+        enable = {$plugin.<%= typo3ProviderExtension.compressed %>.settings.enable}
+    }
+}

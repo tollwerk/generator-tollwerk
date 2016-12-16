@@ -105,6 +105,16 @@ module.exports = generators.Base.extend({
                     this.typo3Extensions['tw_componentlibrary'] = 'tollwerk/tw-componentlibrary';
                 }
 
+                // Prepare the provider extension identifiers
+                this.typo3ProviderExtension = {
+                    extkey: 'tw_' + config.project,
+                    dashed: 'tw-' + config.project.split('_').join('-'),
+                    compressed: 'tx_' + config.project.split('_').join('').toLowerCase(),
+                    upperCamelCase: 'Tw' + config.project.split('_').map(function (word) {
+                        return word.substr(0, 1).toUpperCase() + word.substr(1).toLowerCase();
+                    }).join('')
+                };
+
                 done();
             }.bind(this));
         }
@@ -137,6 +147,26 @@ module.exports = generators.Base.extend({
             this.copy('gitattributes', '.gitattributes');
             this.copy('robots.txt', 'web/robots.txt');
             this.template('gulpfile.js', 'gulpfile.js');
+        },
+
+        /**
+         * Configure the composer autoload entries
+         *
+         * @return {void}
+         */
+        autoload: function() {
+            var composer = require(path.join(this.destinationRoot(), 'composer.json'));
+            composer.autoload = composer.autoload || {};
+            composer.autoload['psr-4'] = composer.autoload['psr-4'] || {};
+            composer.autoload['psr-4']['Tollwerk\\' + this.typo3ProviderExtension.upperCamelCase + '\\'] = 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/';
+            composer.autoload['psr-4']['Tollwerk\\' + this.typo3ProviderExtension.upperCamelCase + '\\Component\\'] = 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Components/';
+
+            // If a component library will be maintained
+            if (this.typo3Extensions['tw_componentlibrary']) {
+                composer.autoload['psr-4']['Tollwerk\\TwComponentlibrary\\'] = 'web/typo3conf/ext/tw_componentlibrary/Classes/';
+            }
+
+            fs.writeFileSync(path.join(this.destinationRoot(), 'composer.json'), JSON.stringify(composer, null, 4));
         }
     },
 
@@ -179,11 +209,20 @@ module.exports = generators.Base.extend({
         },
 
         /**
+         * Prepare a project specific provider extension
+         */
+        prepareProviderExtension: function () {
+
+            // Create the provider extension directory structure
+            this.directory('provider', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey);
+        },
+
+        /**
          * Prepare the Fractal installation
          *
          * @return {void}
          */
-        prepareFractal: function() {
+        prepareFractal: function () {
             if (this.typo3Extensions['tw_componentlibrary']) {
 
                 // Create the source directory structure

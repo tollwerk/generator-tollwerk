@@ -1,0 +1,41 @@
+{
+  "name": "tollwerk/<%= typo3ProviderExtension.dashed %>",
+  "type": "typo3-cms-extension",
+  "description": "Custom features for <%= title %>",
+  "homepage": "<%= url %>",
+  "license": "GPL-2.0+",
+  "version": "1.0",
+  "require": {
+    "typo3/cms": "~7.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tollwerk\\<%= typo3ProviderExtension.upperCamelCase %>\\": "Classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tollwerk\\<%= typo3ProviderExtension.upperCamelCase %>\\Tests\\": "Tests/",
+      "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/"
+    }
+  },
+  "replace": {
+    "<%= typo3ProviderExtension.extkey %>": "self.version",
+    "typo3-ter/<%= typo3ProviderExtension.extkey %>": "self.version"
+  },
+  "authors": [
+    {
+      "name": "tollwerk GmbH",
+      "email": "info@tollwerk.de"
+    }
+  ],
+  "extra": {
+    "branch-alias": {
+      "dev-master": "master"
+    },
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
+  }
+}
