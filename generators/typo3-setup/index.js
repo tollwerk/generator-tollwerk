@@ -218,12 +218,14 @@ module.exports = generators.Base.extend({
 
             // If fluidcontent was requested
             if (this.typo3Extensions.fluidcontent) {
-                mkdirp.sync('web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Content');
+                this.directory('fluidtypo3/Content', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Content');
+                this.template('fluidtypo3/Controller/ContentController.php', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/Controller/ContentController.php');
             }
 
             // If fluidpages was requested
             if (this.typo3Extensions.fluidpages) {
-                mkdirp.sync('web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Page');
+                this.directory('fluidtypo3/Page', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Page');
+                this.template('fluidtypo3/Controller/PageController.php', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/Controller/PageController.php');
             }
         },
 
@@ -365,6 +367,14 @@ module.exports = generators.Base.extend({
                     extKey
                 ]);
             }
+
+            // Install the provider extension
+            this.spawnCommandSync('php', [
+                './web/typo3/cli_dispatch.phpsh',
+                'extbase',
+                'extension:install',
+                this.typo3ProviderExtension.extkey
+            ]);
         },
 
         /**
