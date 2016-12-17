@@ -215,6 +215,16 @@ module.exports = generators.Base.extend({
 
             // Create the provider extension directory structure
             this.directory('provider', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey);
+
+            // If fluidcontent was requested
+            if (this.typo3Extensions.fluidcontent) {
+                mkdirp.sync('web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Content');
+            }
+
+            // If fluidpages was requested
+            if (this.typo3Extensions.fluidpages) {
+                mkdirp.sync('web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Page');
+            }
         },
 
         /**
