@@ -1,0 +1,34 @@
+# TYPO3 CMS 6.2+ syntax: Include all TypoScript resources inside the `lib` subdirectory (recursive)
+<INCLUDE_TYPOSCRIPT: source="DIR:./Lib" extensions="t3s">
+
+# For TYPO3 CMS versions < 6.2 you will need to include single files instead of the whole directory
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Lib/10_header.t3s">
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Lib/20_fluid.t3s">
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Lib/30_footer.t3s">
+# ...
+
+# TYPO3 CMS 6.2+ syntax: Include all TypoScript resources inside the `lang` subdirectory (recursive)
+<INCLUDE_TYPOSCRIPT: source="DIR:./Page" extensions="t3s">
+
+# For TYPO3 CMS versions < 6.2 you will need to include single files instead of the whole directory
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Page/10_page_config.t3s">
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Page/20_page_templating.t3s">
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Page/30_page_head.t3s">
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Page/40_page_rendering.t3s">
+# ...
+
+# TYPO3 CMS 6.2+ syntax: Include all TypoScript resources inside the `lang` subdirectory (recursive)
+<INCLUDE_TYPOSCRIPT: source="DIR:./Lang" extensions="t3s">
+
+# For TYPO3 CMS versions < 6.2 you will need to include single files instead of the whole directory
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Lang/10_en.t3s">
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Lang/20_de.t3s">
+# ...
+
+# TYPO3 CMS 6.2+ syntax: Include all TypoScript resources inside the `plugins` subdirectory (recursive)
+<INCLUDE_TYPOSCRIPT: source="DIR:./Plugins" extensions="t3s">
+
+# For TYPO3 CMS versions < 6.2 you will need to include single files instead of the whole directory
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Plugins/10_plugin_foo.t3s">
+# <INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/Plugins/20_plugin_bar.t3s">
+# ...

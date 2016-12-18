@@ -43,9 +43,9 @@ function errorHandler(task) {
     }
 }
 
-var src = './source/' + project.key + '/';
 var dist = './web/fileadmin/' + project.key + '/';
 var extDist = './web/typo3conf/ext/';
+var providerExt = extDist + '<%= typo3ProviderExtension.extkey %>/';
 var watch = [];
 
 
@@ -182,7 +182,7 @@ watch.push([
  ===================================================================================================================== */
 var iconizr = require('gulp-iconizr');
 gulp.task('iconizr', function () {
-    return gulp.src('**/*.svg', {cwd: src + 'icons'})
+    return gulp.src('**/*.svg', {cwd: providerExt + 'Resources/Private/Icons'})
         .pipe(iconizr({
             dest: '/fileadmin/' + project.key + '/',
             log: 'verbose',
@@ -211,14 +211,14 @@ gulp.task('iconizr', function () {
         }))
         .pipe(gulp.dest(dist));
 });
-watch.push([src + 'icons/**/*.svg', ['iconizr']]);
+watch.push([providerExt + 'Resources/Private/Icons/**/*.svg', ['iconizr']]);
 
 
 /* CACHE BUSTING
  ===================================================================================================================== */
 var cacheBustMeta = require('gulp-cache-bust-meta');
 var templates = {};
-templates[src + 'tmpl/60_page_dynamic.t3s'] = '.source/ts/page/60_page_dynamic.t3s';
+templates[providerExt + 'Resources/Private/TypoScript/60_page_dynamic.t3s'] = providerExt + 'Configuration/TypoScript/Main/Page/60_page_dynamic.t3s';
 gulp.task('cachebust:clean', function () {
     return gulp.src(['js/*.min.*.js', 'css/*.min.*.css'], {cwd: dist, read: false})
         .pipe(clean());
@@ -240,7 +240,7 @@ var filter = require('gulp-filter');
 var replace = require('gulp-string-replace');
 var ico = filter(['**/favicon.ico'], {restore: true});
 gulp.task('favicons', function () {
-    return gulp.src(src + 'favicon/favicon.png').pipe(favicons({
+    return gulp.src(providerExt + 'Resources/Private/Favicon/favicon.png').pipe(favicons({
         appName: project.author.name,
         appDescription: project.description,
         developerName: project.developer.name,

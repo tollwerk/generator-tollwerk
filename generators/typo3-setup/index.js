@@ -184,16 +184,10 @@ module.exports = generators.Base.extend({
          */
         prepareBaseResources: function () {
 
-            // Create the source directory structure
-            this.directory('source', 'source/' + this.project);
-
             // Create the fileadmin directory structure
             this.directory('fileadmin', 'web/fileadmin/' + this.project);
 
-            // Page configuration
-            this.template('source/ts/page/30_page_head.t3s', 'source/' + this.project + '/ts/page/30_page_head.t3s');
-
-            // // Create the database init script
+            // Create the database init script
             mkdirp.sync('web/typo3conf');
             this.copy('typo3conf/init.php', 'web/typo3conf/init.php');
             var typo3DbInit = 'typo3conf/init.sql';
@@ -255,29 +249,6 @@ module.exports = generators.Base.extend({
      * @return {void}
      */
     install: {
-        /**
-         * Source symlinks
-         *
-         * @return {void}
-         */
-        installSymlinks: function () {
-            var symlinks = {};
-            symlinks['../../../../source/' + this.project + '/html'] = 'web/fileadmin/' + this.project + '/.source/html';
-            symlinks['../../../../source/' + this.project + '/lang'] = 'web/fileadmin/' + this.project + '/.source/lang';
-            symlinks['../../../../source/' + this.project + '/ts'] = 'web/fileadmin/' + this.project + '/.source/ts';
-
-            for (var target in symlinks) {
-                try {
-                    if (fs.lstatSync(symlinks[target]).isSymbolicLink()) {
-                        continue;
-                    }
-                    fs.unlinkSync(symlinks[target]);
-                } catch (e) {
-                }
-                fs.symlinkSync(target, symlinks[target]);
-            }
-        },
-
         /**
          * Install NPM dependencies
          *
