@@ -307,6 +307,11 @@ module.exports = generators.Base.extend({
                     }
                 });
 
+                // Adjust file permissions
+                that.log('Adjusting file & directory permissions ...');
+                that.spawnCommandSync('find', ['-type', 'f', '-exec', 'chmod', '664', '{}', '\;']);
+                that.spawnCommandSync('find', ['-type', 'd', '-exec', 'chmod', '775', '{}', '\;']);
+
                 that.log();
                 that.log(chalk.green.bold('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'));
                 that.log(chalk.green.bold('Congratulations - the tollwerk project kickstarter finished successfully!'));
