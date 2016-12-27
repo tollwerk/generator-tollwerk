@@ -7,6 +7,7 @@ var path = require('path');
 var chalk = require('chalk');
 var request = require('request');
 var typo3versionsURL = 'https://get.typo3.org/json';
+var semver = require('semver');
 
 module.exports = class extends Generator {
     /**
@@ -31,12 +32,14 @@ module.exports = class extends Generator {
                     for (var majorminor in typo3versions) {
                         if (typo3versions[majorminor].active) {
                             for (var release in typo3versions[majorminor].releases) {
-                                choices.push({
-                                    name: typo3versions[majorminor].releases[release].version,
-                                    value: typo3versions[majorminor].releases[release].version + '|' +
-                                    typo3versions[majorminor].releases[release].url.tar + '|' +
-                                    typo3versions[majorminor].releases[release].checksums.tar.sha1
-                                });
+                                if (semver.valid(typo3versions[majorminor].releases[release].version)) {
+                                    choices.push({
+                                        name: typo3versions[majorminor].releases[release].version,
+                                        value: typo3versions[majorminor].releases[release].version + '|' +
+                                        typo3versions[majorminor].releases[release].url.tar + '|' +
+                                        typo3versions[majorminor].releases[release].checksums.tar.sha1
+                                    });
+                                }
                             }
                         }
                     }
@@ -61,9 +64,7 @@ module.exports = class extends Generator {
                         type: 'list',
                         name: 'version',
                         message: 'Which TYPO3 version should I use?',
-                        choices: choices.sort(function (t3a, t3b) {
-                            return (t3a.name > t3b.name) ? -1 : 1;
-                        })
+                        choices: choices.sort((v1, v2) => semver.rcompare(v1.name, v2.name))
                     }];
 
                     return that.prompt(prompts).then(function (props) {
