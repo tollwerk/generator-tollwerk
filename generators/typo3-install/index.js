@@ -100,6 +100,27 @@ module.exports = class extends Generator {
     };
 
     /**
+     * Validate and refine a list of PSR4 autoload entries
+     *
+     * @param {Object} psr4 PSR4 autoload entries
+     * @param {Object} Refined PSR4 autoload entries
+     * @private
+     */
+    _refinePSR4(psr4) {
+        const psr4Refined = {};
+        for (var ns in psr4) {
+            const classesDir = path.join('web', psr4[ns]);
+            try {
+                if (fs.statSync(path.join(this.destinationRoot(), classesDir)).isDirectory()) {
+                    psr4Refined[ns] = classesDir;
+                }
+            } catch (e) {
+            }
+        }
+        return psr4Refined;
+    };
+
+    /**
      * Installing routines
      *
      * @type {Object}
@@ -114,12 +135,17 @@ module.exports = class extends Generator {
         // Prepare the installation for running tests
         var composer = require(path.join(this.destinationRoot(), 'composer.json'));
         composer['autoload-dev'] = require(path.join(this.destinationRoot(), 'vendor/typo3/cms/composer.json'))['autoload-dev'];
-        for (var ns in composer['autoload-dev']['psr-4']) {
-            composer['autoload-dev']['psr-4'][ns] = path.join('web', composer['autoload-dev']['psr-4'][ns]);
-        }
+        composer['autoload-dev']['psr-4'] = this._refinePSR4(composer['autoload-dev']['psr-4']);
         composer['autoload-dev'].classmap = composer['autoload-dev'].classmap.map(function (classmapPath) {
-            return path.join('web', classmapPath);
-        })
+            try {
+                const classesDir = path.join('web', classmapPath);
+                if (fs.statSync(path.join(this.destinationRoot(), classesDir)).isDirectory()) {
+                    return classesDir;
+                }
+            } catch (e) {
+            }
+            return null;
+        }).filter(d => !!d);
         fs.writeFileSync(path.join(this.destinationRoot(), 'composer.json'), JSON.stringify(composer, null, 4));
 
         // Trigger the installation wizard
