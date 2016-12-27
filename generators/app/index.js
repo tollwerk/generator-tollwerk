@@ -1,17 +1,17 @@
 'use strict';
 
-var generators = require('yeoman-generator');
+var Generator = require('yeoman-generator');
 var yosay = require('yosay');
 var fs = require('fs');
 var path = require('path');
 var chalk = require('chalk');
 
-module.exports = generators.Base.extend({
+module.exports = class extends Generator {
 
     /**
      * Main method
      */
-    main: function () {
+    main() {
         if (!this.options.nested) {
             this.log(yosay('WELCOME! You\'re using the fantastic tollwerk TYPO3 project kickstarter.'));
         }
@@ -43,4 +43,4 @@ module.exports = generators.Base.extend({
             this.composeWith('tollwerk:typo3-setup');
         }
     }
-});
+};

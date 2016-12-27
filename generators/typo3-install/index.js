@@ -1,6 +1,6 @@
 'use strict';
 
-var generators = require('yeoman-generator');
+var Generator = require('../../lib/TollwerkGenerator.js');
 var yosay = require('yosay');
 var fs = require('fs');
 var path = require('path');
@@ -8,185 +8,139 @@ var chalk = require('chalk');
 var request = require('request');
 var typo3versionsURL = 'https://get.typo3.org/json';
 
-module.exports = generators.Base.extend({
+module.exports = class extends Generator {
     /**
      * Prompting methods
      *
      * @type {Object}
      */
-    prompting: {
+    prompting() {
 
-        /**
-         * Main dialog
-         *
-         * @return {void}
-         */
-        askFor: function () {
+        // Welcome greeting
+        if (!this.options.nested) {
+            this.log(yosay('You\'re about installing a TYPO3 instance.'));
+        }
 
-            // Welcome greeting
-            if (!this.options.nested) {
-                this.log(yosay('You\'re about installing a TYPO3 instance.'));
-            }
-
-            var that = this;
-            var done = that.async();
-            request(typo3versionsURL, function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    var typo3versions = JSON.parse(body);
-                    if (typo3versions && (typo3versions.constructor === Object)) {
-                        var choices = [];
-                        for (var majorminor in typo3versions) {
-                            if (typo3versions[majorminor].active) {
-                                for (var release in typo3versions[majorminor].releases) {
-                                    choices.push({
-                                        name: typo3versions[majorminor].releases[release].version,
-                                        value: typo3versions[majorminor].releases[release].version + '|' +
-                                        typo3versions[majorminor].releases[release].url.tar + '|' +
-                                        typo3versions[majorminor].releases[release].checksums.tar.sha1
-                                    });
-                                }
+        var that = this;
+        var done = that.async();
+        request(typo3versionsURL, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                var typo3versions = JSON.parse(body);
+                if (typo3versions && (typo3versions.constructor === Object)) {
+                    var choices = [];
+                    for (var majorminor in typo3versions) {
+                        if (typo3versions[majorminor].active) {
+                            for (var release in typo3versions[majorminor].releases) {
+                                choices.push({
+                                    name: typo3versions[majorminor].releases[release].version,
+                                    value: typo3versions[majorminor].releases[release].version + '|' +
+                                    typo3versions[majorminor].releases[release].url.tar + '|' +
+                                    typo3versions[majorminor].releases[release].checksums.tar.sha1
+                                });
                             }
                         }
-
-                        // Ask for project key, author and TYPO3 version
-                        var prompts = [{
-                            name: 'project',
-                            message: 'What is the project key?',
-                            validate: function (name) {
-                                return ('' + name).length ? true : 'The project key cannot be empty!';
-                            }
-                        }, {
-                            name: 'title',
-                            message: 'What is the project title?',
-                            validate: function (name) {
-                                return ('' + name).length ? true : 'The project title cannot be empty!';
-                            }
-                        }, {
-                            name: 'author',
-                            message: 'What is the site author\'s name?'
-                        }, {
-                            type: 'list',
-                            name: 'version',
-                            message: 'Which TYPO3 version should I use?',
-                            choices: choices.sort(function (t3a, t3b) {
-                                return (t3a.name > t3b.name) ? -1 : 1;
-                            })
-                        }];
-
-                        return that.prompt(prompts).then(function (props) {
-                            var t3versionUrlChecksum = props.version.split('|');
-                            this.config.set('project', props.project.toLowerCase());
-                            this.config.set('title', props.title);
-                            this.config.set('author', props.author);
-                            this.config.set('t3version', t3versionUrlChecksum[0]);
-                            this.config.set('t3url', t3versionUrlChecksum[1]);
-                            this.config.set('t3sha1', t3versionUrlChecksum[2]);
-                            done();
-                        }.bind(that));
-
-                    } else {
-                        that.log.error('Couldn\t fetch the list of available TYPO3 versions. Please try again later!');
-                        done();
                     }
+
+                    // Ask for project key, author and TYPO3 version
+                    var prompts = [{
+                        name: 'project',
+                        message: 'What is the project key?',
+                        validate: function (name) {
+                            return ('' + name).length ? true : 'The project key cannot be empty!';
+                        }
+                    }, {
+                        name: 'title',
+                        message: 'What is the project title?',
+                        validate: function (name) {
+                            return ('' + name).length ? true : 'The project title cannot be empty!';
+                        }
+                    }, {
+                        name: 'author',
+                        message: 'What is the site author\'s name?'
+                    }, {
+                        type: 'list',
+                        name: 'version',
+                        message: 'Which TYPO3 version should I use?',
+                        choices: choices.sort(function (t3a, t3b) {
+                            return (t3a.name > t3b.name) ? -1 : 1;
+                        })
+                    }];
+
+                    return that.prompt(prompts).then(function (props) {
+                        var t3versionUrlChecksum = props.version.split('|');
+                        this.config.set('project', props.project.toLowerCase());
+                        this.config.set('title', props.title);
+                        this.config.set('author', props.author);
+                        this.config.set('t3version', t3versionUrlChecksum[0]);
+                        this.config.set('t3url', t3versionUrlChecksum[1]);
+                        this.config.set('t3sha1', t3versionUrlChecksum[2]);
+                        done();
+                    }.bind(that));
+
                 } else {
                     that.log.error('Couldn\t fetch the list of available TYPO3 versions. Please try again later!');
                     done();
                 }
-            });
-        }
-    },
+            } else {
+                that.log.error('Couldn\t fetch the list of available TYPO3 versions. Please try again later!');
+                done();
+            }
+        });
+    };
 
     /**
      * Configuration preparations
      *
      * @type {Object}
      */
-    configuring: {
-
-        /**
-         * Composer preparation
-         *
-         * @return {void}
-         */
-        prepareComposer: function () {
-            this.template('_composer.json', 'composer.json', this.config.getAll());
-        }
-    },
+    configuring() {
+        // Composer preparation
+        this._template('_composer.json', 'composer.json', this.config.getAll());
+    };
 
     /**
      * Installing routines
      *
      * @type {Object}
      */
-    install: {
-        /**
-         * TYPO3 source installation
-         *
-         * @return {void}
-         */
-        sources: function () {
-            this.log.info(chalk.yellow('Please be patient while composer downloads and installs the TYPO3 sources ...'));
-            this.log();
-            this.spawnCommandSync('composer', ['install']);
-            this.log();
-        },
+    install() {
+        // TYPO3 source installation
+        this.log.info(chalk.yellow('Please be patient while composer downloads and installs the TYPO3 sources ...'));
+        this.log();
+        this.spawnCommandSync('composer', ['install']);
+        this.log();
 
-        /**
-         * Prepare the installation for running tests
-         *
-         * @return {void}
-         */
-        autoloadDev: function() {
-            var composer = require(path.join(this.destinationRoot(), 'composer.json'));
-            composer['autoload-dev'] = require(path.join(this.destinationRoot(), 'vendor/typo3/cms/composer.json'))['autoload-dev'];
-            for (var ns in composer['autoload-dev']['psr-4']) {
-                composer['autoload-dev']['psr-4'][ns] = path.join('web', composer['autoload-dev']['psr-4'][ns]);
-            }
-            composer['autoload-dev'].classmap = composer['autoload-dev'].classmap.map(function (classmapPath) {
-                return path.join('web', classmapPath);
-            })
-            fs.writeFileSync(path.join(this.destinationRoot(), 'composer.json'), JSON.stringify(composer, null, 4));
-        },
-
-        /**
-         * Trigger the installation wizard
-         *
-         * @return {void}
-         */
-        firstInstall: function () {
-            fs.openSync(path.join(this.destinationRoot(), 'web/FIRST_INSTALL'), 'w');
-            this.log();
-        },
-
-        /**
-         * Static data installation
-         *
-         * @return {void}
-         */
-        staticdata: function () {
-            var staticSQL = path.join(this.destinationRoot(), 'web/typo3/sysext/extbase/ext_tables_static+adt.sql');
-            if (fs.existsSync(staticSQL)) {
-                fs.unlinkSync(staticSQL);
-            }
-            this.copy('cli_lowlevel.sql', 'web/typo3/sysext/extbase/ext_tables_static+adt.sql');
+        // Prepare the installation for running tests
+        var composer = require(path.join(this.destinationRoot(), 'composer.json'));
+        composer['autoload-dev'] = require(path.join(this.destinationRoot(), 'vendor/typo3/cms/composer.json'))['autoload-dev'];
+        for (var ns in composer['autoload-dev']['psr-4']) {
+            composer['autoload-dev']['psr-4'][ns] = path.join('web', composer['autoload-dev']['psr-4'][ns]);
         }
-    },
+        composer['autoload-dev'].classmap = composer['autoload-dev'].classmap.map(function (classmapPath) {
+            return path.join('web', classmapPath);
+        })
+        fs.writeFileSync(path.join(this.destinationRoot(), 'composer.json'), JSON.stringify(composer, null, 4));
+
+        // Trigger the installation wizard
+        fs.openSync(path.join(this.destinationRoot(), 'web/FIRST_INSTALL'), 'w');
+        this.log();
+
+        // Static data installation
+        var staticSQL = path.join(this.destinationRoot(), 'web/typo3/sysext/extbase/ext_tables_static+adt.sql');
+        if (fs.existsSync(staticSQL)) {
+            fs.unlinkSync(staticSQL);
+        }
+        this._copy('cli_lowlevel.sql', 'web/typo3/sysext/extbase/ext_tables_static+adt.sql');
+    };
 
     /**
      * Finalizing
      *
      * @type {Object}
      */
-    end: {
-        /**
-         * End
-         *
-         * @return {void}
-         */
-        finalize: function () {
-            this.log();
-            this.log(chalk.green('Great! The TYPO3 sources have been prepared successfully! Let\'s move on ...'));
-            this.composeWith('tollwerk:typo3-check');
-        }
+    end() {
+        this.log();
+        this.log(chalk.green('Great! The TYPO3 sources have been prepared successfully! Let\'s move on ...'));
+        this.composeWith('tollwerk:typo3-check');
     }
-});
+};
