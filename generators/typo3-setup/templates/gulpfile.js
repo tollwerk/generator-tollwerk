@@ -254,7 +254,7 @@ gulp.task('favicons', function () {
         version: 1.0,
         logging: false,
         online: false,
-        html: 'index.html',
+        html: 'favicons.html',
         pipeHTML: true,
         replace: true
     }))
@@ -263,7 +263,7 @@ gulp.task('favicons', function () {
         .pipe(ico)
         .pipe(gulp.dest('./web/'))
         .pipe(ico.restore)
-        .pipe(filter(['**/index.html']))
+        .pipe(filter(['**/favicons.html']))
         .pipe(
             replace(
                 '<link rel="shortcut icon" href="/fileadmin/' + project.key + '/favicons/favicon.ico">',
