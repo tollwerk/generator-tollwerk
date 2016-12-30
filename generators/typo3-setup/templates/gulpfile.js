@@ -1,8 +1,6 @@
-'use strict';
-
 /* PROJECT CONFIGURATION
- ===================================================================================================================== */
-var project = {
+ ================================================================================================ */
+const project = {
     key: '<%= project %>',
     description: '<%= title %>',
     author: {
@@ -18,14 +16,15 @@ var project = {
 
 
 /* GENERAL SETUP
- ===================================================================================================================== */
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var rename = require('gulp-rename');
-var clean = require('gulp-clean');
-var concat = require('gulp-concat');
-var sequence = require('gulp-sequence');
-var sourcemaps = require('gulp-sourcemaps');
+ ================================================================================================ */
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const rename = require('gulp-rename');
+const clean = require('gulp-clean');
+const concat = require('gulp-concat');
+const sequence = require('gulp-sequence');
+const sourcemaps = require('gulp-sourcemaps');
+const filter = require('gulp-filter');
 
 /**
  * Stream error handler generator
@@ -43,28 +42,29 @@ function errorHandler(task) {
     }
 }
 
-var dist = './web/fileadmin/' + project.key + '/';
-var extDist = './web/typo3conf/ext/';
-var providerExt = extDist + '<%= typo3ProviderExtension.extkey %>/';
-var watch = [];
+const dist = './web/fileadmin/' + project.key + '/';
+const extDist = './web/typo3conf/ext/';
+const providerExt = extDist + '<%= typo3ProviderExtension.extkey %>/';
+const watch = [];
 
 
 /* POSTCSS + PLUGINS
- ===================================================================================================================== */
+ ================================================================================================ */
+const postcss = require('gulp-postcss');
+const cssnano = require('cssnano');
+const cssnext = require('postcss-cssnext');
+const partialImport = require('postcss-partial-import');
+const mqPacker = require('css-mqpacker');
+const critical = require('postcss-critical-css');
+
 gulp.task('css', function () {
-    var postcss = require('gulp-postcss');
-    var cssnano = require('cssnano');
-    var cssnext = require('postcss-cssnext');
-    var partialImport = require('postcss-partial-import');
-    var mqPacker = require('css-mqpacker');
-    var critical = require('postcss-critical-css');
 
     // Concatenable CSS resources
-    gulp.src(['*/Resources/Private/Css/*.css', '!*/Resources/Private/Css/_*.css'], {cwd: extDist})
+    gulp.src(['*/Resources/Private/Css/*.css', '!*/Resources/Private/Css/_*.css'], { cwd: extDist })
         .pipe(sourcemaps.init()) // Initialize sourcemaps
         .pipe(postcss([
             partialImport(),
-            cssnext({autoprefixer: {browsers: ['IE >= 10']}}),
+            cssnext({ autoprefixer: { browsers: ['IE >= 10'] } }),
             critical({
                 outputPath: dist + 'css',
                 outputDest: project.key + '-critical.css',
@@ -72,7 +72,7 @@ gulp.task('css', function () {
                 minify: false
             }),
             mqPacker(),
-            cssnano({autoprefixer: false})
+            cssnano({ autoprefixer: false })
         ]).on('error', errorHandler('css:concat / postcss'))) // Run PostCSS processors
         .pipe(rename(function (path) { // Rename to minified file
             path.dirname = path.dirname.split('/Private/').join('/Public/');
@@ -84,13 +84,13 @@ gulp.task('css', function () {
         .pipe(gulp.dest(dist + 'css')); // Write combined CSS to destination directory
 
     // Non-Concatenable CSS resources
-    gulp.src('*/Resources/Private/Css/_*.css', {cwd: extDist})
+    gulp.src('*/Resources/Private/Css/_*.css', { cwd: extDist })
         .pipe(sourcemaps.init()) // Initialize sourcemaps
         .pipe(postcss([
             partialImport(),
-            cssnext({autoprefixer: {browsers: ['IE >= 10']}}),
+            cssnext({ autoprefixer: { browsers: ['IE >= 10'] } }),
             mqPacker(),
-            cssnano({autoprefixer: false})
+            cssnano({ autoprefixer: false })
         ]).on('error', errorHandler('css:noconcat / postcss'))) // Run PostCSS processors
         .pipe(rename(function (path) { // Rename to minified file
             path.dirname = path.dirname.split('/Private/').join('/Public/');
@@ -110,11 +110,11 @@ watch.push([extDist + '*/Resources/Private/Css/**/*.css', ['css']]);
 
 
 /* JAVASCRIPT
- ===================================================================================================================== */
-var uglify = require('gulp-uglify');
-var concatFlatten = require('gulp-concat-flatten');
-var sort = require('gulp-sort');
-var pump = require('pump');
+ ================================================================================================ */
+const uglify = require('gulp-uglify');
+const concatFlatten = require('gulp-concat-flatten');
+const sort = require('gulp-sort');
+const pump = require('pump');
 
 // Concatenable JS resources
 gulp.task('js:concat', function (cb) {
@@ -123,7 +123,7 @@ gulp.task('js:concat', function (cb) {
                 '*/Resources/Private/Javascript/**/*.js',
                 '!*/Resources/Private/Javascript/_*',
                 '!*/Resources/Private/Javascript/_*/**/*.js'
-            ], {cwd: extDist}),
+            ], { cwd: extDist }),
             sourcemaps.init(),
             sort(),
             concatFlatten(extDist + '*/Resources/Private/Javascript', 'js').on('error', errorHandler('js:concat / concatFlatten')),
@@ -152,7 +152,7 @@ watch.push([
 // Non-concatenable JS resources
 gulp.task('js:noconcat', function (cb) {
     pump([
-            gulp.src(['*/Resources/Private/Javascript/_*.js', '*/Resources/Private/Javascript/_*/**/*.js'], {cwd: extDist}),
+            gulp.src(['*/Resources/Private/Javascript/_*.js', '*/Resources/Private/Javascript/_*/**/*.js'], { cwd: extDist }),
             sourcemaps.init(),
             sort(),
             concatFlatten(extDist + '*/Resources/Private/Javascript', 'js').on('error', errorHandler('js:noconcat / concatFlatten')),
@@ -179,10 +179,11 @@ watch.push([
 
 
 /* ICONS
- ===================================================================================================================== */
-var iconizr = require('gulp-iconizr');
+ ================================================================================================ */
+const iconizr = require('gulp-iconizr');
+
 gulp.task('iconizr', function () {
-    return gulp.src('**/*.svg', {cwd: providerExt + 'Resources/Private/Icons'})
+    return gulp.src('**/*.svg', { cwd: providerExt + 'Resources/Private/Icons' })
         .pipe(iconizr({
             dest: '/fileadmin/' + project.key + '/',
             log: 'verbose',
@@ -214,19 +215,44 @@ gulp.task('iconizr', function () {
 watch.push([providerExt + 'Resources/Private/Icons/**/*.svg', ['iconizr']]);
 
 
-/* CACHE BUSTING
- ===================================================================================================================== */
-var cacheBustMeta = require('gulp-cache-bust-meta');
-var templates = {};
-templates[providerExt + 'Resources/Private/TypoScript/60_page_dynamic.t3s'] = providerExt + 'Configuration/TypoScript/Main/Page/60_page_dynamic.t3s';
+/* CACHE BUSTING & RESOURCE LOADING
+ ================================================================================================ */
+const hash = require('gulp-hash-filename');
+const addsrc = require('gulp-add-src');
+const shortbread = require('shortbread').stream;
+const vinyl = require('vinyl-file');
+const template = require('gulp-template');
+
 gulp.task('cachebust:clean', function () {
-    return gulp.src(['js/*.min.*.js', 'css/*.min.*.css'], {cwd: dist, read: false})
+    return gulp.src(['js/*.min.*.js', 'css/*.min.*.css'], { cwd: dist, read: false })
         .pipe(clean());
 });
 gulp.task('cachebust', function () {
-    return gulp.src(['js/*.min.js', 'css/*.min.css'], {cwd: dist, base: dist})
-        .pipe(cacheBustMeta(templates))
-        .pipe(gulp.dest(dist));
+    let criticalCSS = null;
+    try {
+        criticalCSS = vinyl.readSync(dist + 'css/' + project.key + '-critical.css');
+    } catch (e) {
+    }
+    const tmpl = filter(['**/*.t3s'], { restore: true });
+
+    return gulp.src([dist + 'js/*.min.js', dist + 'css/*.min.css'], {base: 'web'})
+        .pipe(hash({ format: '{name}.{hash:8}{ext}' }))
+        .pipe(gulp.dest(dist))
+        .pipe(addsrc(providerExt + 'Resources/Private/TypoScript/35_page_resources.t3s'))
+        .pipe(rename(function (path) { // Rename to minified file
+            if (path.extname === '.t3s') {
+                path.dirname = 'Configuration/TypoScript/Main/Page';
+            }
+        }))
+        .pipe(shortbread(criticalCSS, null, null, {
+            initial: 'Resources/Private/Fragments/Initial.html',
+            subsequent: 'Resources/Private/Fragments/Subsequent.html',
+            prefix: '/',
+        }))
+        .pipe(tmpl)
+        .pipe(template({}, { interpolate: /\{\{(.+?)\}\}/g }))
+        .pipe(tmpl.restore)
+        .pipe(gulp.dest(providerExt));
 });
 watch.push([[dist + 'js/*.min.js', dist + 'css/*.min.css'], function () {
     sequence('cachebust:clean', 'cachebust')(errorHandler('cachebust / sequence'))
@@ -234,11 +260,10 @@ watch.push([[dist + 'js/*.min.js', dist + 'css/*.min.css'], function () {
 
 
 /* FAVICONS
- ===================================================================================================================== */
-var favicons = require('gulp-favicons');
-var filter = require('gulp-filter');
-var replace = require('gulp-string-replace');
-var ico = filter(['**/favicon.ico'], {restore: true});
+ ================================================================================================ */
+const favicons = require('gulp-favicons');
+const replace = require('gulp-string-replace');
+const ico = filter(['**/favicon.ico'], { restore: true });
 gulp.task('favicons', function () {
     return gulp.src(providerExt + 'Resources/Private/Favicon/favicon.png').pipe(favicons({
         appName: project.author.name,
@@ -274,10 +299,10 @@ gulp.task('favicons', function () {
 
 
 /* W3C VALIDATION
- ===================================================================================================================== */
-var w3cjs = require('gulp-w3cjs');
-var download = require('gulp-download');
-var through2 = require('through2');
+ ================================================================================================ */
+const w3cjs = require('gulp-w3cjs');
+const download = require('gulp-download');
+const through2 = require('through2');
 gulp.task('validate', function () {
     download(project.validate)
         .pipe(w3cjs())
@@ -291,7 +316,7 @@ gulp.task('validate', function () {
 
 
 /* WATCH
- ===================================================================================================================== */
+ ================================================================================================ */
 gulp.task('watch', function () {
     watch.forEach(function (args) {
         gulp.watch(args[0], args[1]);
@@ -300,7 +325,7 @@ gulp.task('watch', function () {
 
 
 /* DEFAULT TASK
- ===================================================================================================================== */
+ ================================================================================================ */
 gulp.task('default', function () {
     // place code for your default task here
 });

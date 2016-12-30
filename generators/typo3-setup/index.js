@@ -213,7 +213,7 @@ module.exports = class extends Generator {
             'css-mqpacker',
             'cssnano',
             'gulp',
-            'gulp-cache-bust-meta',
+            'gulp-add-src',
             'gulp-clean',
             'gulp-concat',
             'gulp-concat-flatten',
@@ -221,12 +221,14 @@ module.exports = class extends Generator {
             'gulp-favicons',
             'gulp-filter',
             'jkphl/gulp-iconizr',
+            'gulp-hash-filename',
             'gulp-postcss',
             'gulp-rename',
             'gulp-sequence',
             'gulp-sort',
             'gulp-sourcemaps',
             'gulp-string-replace',
+            'gulp-template',
             'gulp-uglify',
             'gulp-w3cjs',
             'gulp-watch',
@@ -234,7 +236,9 @@ module.exports = class extends Generator {
             'postcss-cssnext',
             'postcss-partial-import',
             'pump',
+            'shortbread',
             'through2',
+            'vinyl-file',
             'vinyl-request'
         ];
 

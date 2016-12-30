@@ -1,0 +1,11 @@
+# Include the initial page load resources fragment
+page.headTag.cObject = FILE
+page.headTag.cObject {
+	file = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Fragments/Initial.html
+	stdWrap.wrap = <head>|
+}
+
+# If this is a subsequent page load
+[globalString = _COOKIE|{{cookie}} = {{hash}}]
+	page.headTag.cObject.file = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Fragments/Subsequent.html
+[global]
