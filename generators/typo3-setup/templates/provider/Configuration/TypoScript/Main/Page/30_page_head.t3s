@@ -50,4 +50,4 @@ page.includeJSFooter {
 config.removeDefaultJS = external<% if(t3x_tw_googleanalytics) { %>
 
 # GOOGLE ANALYTICS TRACKING CODE PLUGIN
-page.headerData.9999 =< plugin.tx_twgoogleanalytics<% } %>
+page.footerData.9999 =< plugin.tx_twgoogleanalytics<% } %>
