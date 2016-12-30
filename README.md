@@ -47,57 +47,88 @@ The generator will then
 ## Project structure (simplified)
 
 ```
-|-- composer.json                            # Composer configuration
-|-- gulpfile.js                              # Gulp file
-|-- package.json                             # NPM configuration
-|-- source                                   # External source files
-|   `-- <project>                            # Project specific source files
-|       |-- css                              # PostCSS resources
-|       |-- favicon                          # Favicon / touch icon source image
-|       |-- html                             # HTML Fluid templates
-|       |-- icons                            # SVG icons for iconizr
-|       |-- js                               # JavaScript resources
-|       |-- lang                             # XLIFF localization resources
-|       |-- tmpl                             # Miscellaneous templates
-|       |   `-- 60_page_dynamic.t3s          # Cache busting TypoScript template
-|       `-- ts                               # TypoScript resources
-|           |-- 10_main.t3s                  # Main TypoScript template for inclusion
-|           |-- TSconfig
-|           |   |-- page.t3s                 # Page TSConfig for inclusion
-|           |   `-- user.t3s                 # User TSConfig for incluion
-|           |-- lang
-|           |   |-- 10_en.t3s                # English language settings
-|           |   `-- 20_de.t3s                # German language settings (etc.)
-|           |-- lib
-|           |   |-- 10_header.t3s            # Header libraries
-|           |   |-- 20_fluid.t3s             # FLUIDTEMPLATE libraries
-|           |   `-- 30_footer.t3s            # Footer libraries
-|           |-- page
-|           |   |-- 10_page_config.t3s       # Page configuration
-|           |   |-- 20_page_templating.t3s   # Layouts, templates & variables
-|           |   |-- 30_page_head.t3s         # <head> configuration
-|           |   `-- 40_page_rendering.t3s    # Content rendering settings
-|           `-- plugins
+|-- composer.json                           # Composer configuration
+|-- fractal                                 # Fractal component library
+|   |-- build                               # Static HTML export
+|   |-- components                          # Components (extracted from TYPO3)
+|   |-- docs                                # Documentation
+|   `-- public
+|-- fractal.js                              # Fractal configuration
+|-- gulpfile.js                             # Gulp file
+|-- package.json                            # NPM configuration
 `-- web
-    |-- .htaccess                            # Apache .htaccess
+    |-- .htaccess                           # Apache .htaccess
     |-- fileadmin
     |   `-- <project>
-    |       |-- .source
-    |       |   |-- html -> ../../../../source/<project>/html/
-    |       |   |-- lang -> ../../../../source/<project>/lang/
-    |       |   `-- ts -> ../../../../source/<project>/ts/
-    |       |-- css                          # Processed CSS resources
+    |       |-- css                         # Processed CSS resources
     |       |   |-- fonts
     |       |   `-- img
-    |       |-- icons                        # Optimized single SVG icons
+    |       |-- icons                       # Optimized single SVG icons
     |       |-- img
-    |       `-- js                           # Processed JavaScript resources
+    |       `-- js                          # Processed JavaScript resources
     |-- index.php
-    |-- robots.txt                           # Restrictive robots.txt for dev purposes
+    |-- robots.txt                          # Restrictive robots.txt for dev purposes
     |-- typo3
     |-- typo3conf
+    |   `-- ext
+    |       |-- tw_<project>                # Project provider extension
+    |       |-- tw_componentlibrary         # Component library          
+    |       `-- ...                         # Additional extensions selected during setup
     |-- typo3temp
     `-- uploads
+```
+
+As of the v2.0.0 release, all custom code goes into the project specific provider extension `tw_<project>`, which is layouted like this (simplified):
+
+```
+tw_<project>                                # Test configuration
+|-- Build                                   
+|-- Classes                                 # Extbase stuff & other classes
+|   |-- Controller
+|   `-- Domain
+|-- Components                              # Components
+|-- Configuration
+|   |-- TCA                                 # TCA definitions
+|   `-- TypoScript
+|       |-- Main                            # Site specific TypoScript
+|       |   |-- 10_main.t3s                 # Main TypoScript template for inclusion
+|       |   |-- Lang
+|       |   |   |-- 10_en.t3s               # English language settings
+|       |   |   `-- 20_de.t3s               # German language settings (etc.)
+|       |   |-- Lib
+|       |   |   |-- 10_header.t3s           # Header libraries
+|       |   |   |-- 20_fluid.t3s            # FLUIDTEMPLATE libraries
+|       |   |   `-- 30_footer.t3s           # Footer libraries
+|       |   |-- Page
+|       |   |   |-- 10_page_config.t3s      # Page configuration
+|       |   |   |-- 20_page_templating.t3s  # Layouts, templates & variables
+|       |   |   |-- 30_page_head.t3s        # <head> configuration
+|       |   |   `-- 40_page_rendering.t3s   # Content rendering settings
+|       |   |-- Plugins
+|       |   `-- TSconfig
+|       |       |-- page.t3s                # Page TSConfig for inclusion
+|       |       `-- user.t3s                # User TSConfig for inclusion
+|       `-- Setup
+|           |-- constants.txt               # Extension constants
+|           `-- setup.txt                   # Extension TypoScript
+|-- Resources
+|   |-- Private
+|   |   |-- Css                             # (Unprocessed) PostCSS resources
+|   |   |-- Favicon                         # Favicon template
+|   |   |-- Fragments                       # Non-Fluid templates (e.g. shortbread resource loading fragments)
+|   |   |-- Icons                           # SVG icons
+|   |   |-- Javascript                      # (Unprocessed) JavaScript resources
+|   |   |-- Language                        # XLIFF localization resources
+|   |   |-- Layouts                         # Fluid layouts
+|   |   |-- Partials                        # Fluid partials
+|   |   |-- Templates                       # Fluid templates
+|   |   `-- TypoScript                     
+|   |       `-- 35_page_resources.t3s       # Resource loading TypoScript template 
+|   `-- Public
+|       |-- Css                             # Processed CSS resources
+|       |-- Icons                           # Extension icons
+|       `-- Javascript                      # Processed JavaScript resources
+`-- Tests
 ```
 
 ## Changelog
