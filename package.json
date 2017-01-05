@@ -23,7 +23,7 @@
     "generators/app",
     "generators/typo3-check",
     "generators/typo3-install",
-    "generators/typo3-setup"
+    "generators/typo3-setup",
     "lib"
   ],
   "dependencies": {
