@@ -45,7 +45,7 @@ module.exports = class extends Generator {
             'default': true
         }, {
             type: 'confirm',
-            name: 't3x_squeezr',
+            name: 't3x_tw_squeezr',
             message: 'Would you like to install the TYPO3 extension »tw_squeezr«?',
             'default': false
         }, {
@@ -93,7 +93,7 @@ module.exports = class extends Generator {
             if (props.t3x_tw_googleanalytics) {
                 this.typo3Extensions['tw_googleanalytics'] = 'tollwerk/tw-googleanalytics';
             }
-            if (props.t3x_squeezr) {
+            if (props.t3x_tw_squeezr) {
                 this.typo3Extensions['tw_squeezr'] = 'tollwerk/tw-squeezr';
             }
             if (props.t3x_tw_componentlibrary) {
@@ -273,7 +273,7 @@ module.exports = class extends Generator {
             that.log(chalk.green.bold('Congratulations - the tollwerk project kickstarter finished successfully!'));
             that.log(chalk.green.bold('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'));
 
-            if (that.t3x_squeezr) {
+            if (that.t3x_tw_squeezr) {
                 that.log();
                 that.log(chalk.red.bold('Please remember to follow these steps to activate the squeezr extension:'));
                 that.log(chalk.yellow('1.) Visit the TYPO3 extension manager (EM) and run the squeezr update script. Repeat this each time you modify the extension\'s configuration.'));
@@ -330,11 +330,11 @@ module.exports = class extends Generator {
         var htaccess = [];
 
         // Get .htaccess base including caching headers
-        if (this.t3x_squeezr) {
+        if (this.t3x_tw_squeezr) {
             htaccess.push(
                 this._read(
-                    path.join(this.destinationRoot(), 'web/typo3conf/ext/tw_squeezr/Resources/Private/Squeezr/.htaccess')
-                ).split('squeezr/cache').join('web/typo3temp/squeezr/cache')
+                    path.join(this.destinationRoot(), 'vendor/jkphl/squeezr/.htaccess')
+                ).split('RewriteRule').join('RewriteCond %{REQUEST_URI} !^/typo3/\n    RewriteRule')
             );
         } else {
             htaccess.push(this._read(path.join(this.sourceRoot(), 'htaccess/01_deflate_expires')));
