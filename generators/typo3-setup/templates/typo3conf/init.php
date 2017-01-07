@@ -33,5 +33,5 @@ if ($db instanceof \PDO) {
 }
 
 @unlink(__FILE__);
-@unlink(__DIR__.DIRECTORY_SEPARATOR.'init.sql');
+//@unlink(__DIR__.DIRECTORY_SEPARATOR.'init.sql');
 exit($error);
