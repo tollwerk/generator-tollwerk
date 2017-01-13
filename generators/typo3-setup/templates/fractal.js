@@ -7,7 +7,7 @@ const typo3 = require('fractal-typo3');
 fractal.set('project.title', '<%= title %>');
 fractal.components.set('path', path.join(__dirname, 'fractal', 'components'));
 fractal.docs.set('path', path.join(__dirname, 'fractal', 'docs'));
-fractal.web.set('static.path', path.join(__dirname, 'fractal', 'public'));
+fractal.web.set('static.path', path.join(__dirname, 'web'));
 fractal.web.set('builder.dest', path.join(__dirname, 'fractal', 'build'));
 
 typo3.configure('web');
