@@ -6,11 +6,12 @@
 !/.yo-rc.json
 !/composer.json
 !/composer.lock
+!/fractal.js
 !/package.json
 !/gulpfile.js
 
-!/source
-!/source/**
+!/test
+!/test/**
 
 !/web
 !/web/.htaccess
