@@ -57,6 +57,7 @@ const watch = [];
 const postcss = require('gulp-postcss');
 const cssnano = require('cssnano');
 const cssnext = require('postcss-cssnext');
+const extend = require('postcss-extend');
 const partialImport = require('postcss-partial-import');
 const mqPacker = require('css-mqpacker');
 const critical = require('postcss-critical-css');
@@ -67,6 +68,7 @@ gulp.task('css', () => {
         .pipe(sourcemaps.init()) // Initialize sourcemaps
         .pipe(postcss([
             partialImport(),
+            extend(),
             cssnext({ autoprefixer: { browsers: ['IE >= 10'] } }),
             critical({
                 outputPath: `${dist}css`,
@@ -75,7 +77,7 @@ gulp.task('css', () => {
                 minify: false,
             }),
             mqPacker(),
-            cssnano({ autoprefixer: false }),
+            cssnano({ autoprefixer: false, zindex: false }),
         ]).on('error', errorHandler('css:concat / postcss'))) // Run PostCSS processors
         .pipe(rename((path) => { // Rename to minified file
             path.dirname = path.dirname.split('/Private/').join('/Public/');
@@ -91,9 +93,10 @@ gulp.task('css', () => {
         .pipe(sourcemaps.init()) // Initialize sourcemaps
         .pipe(postcss([
             partialImport(),
+            extend(),
             cssnext({ autoprefixer: { browsers: ['IE >= 10'] } }),
             mqPacker(),
-            cssnano({ autoprefixer: false }),
+            cssnano({ autoprefixer: false, zindex: false }),
         ]).on('error', errorHandler('css:noconcat / postcss'))) // Run PostCSS processors
         .pipe(rename((path) => { // Rename to minified file
             path.dirname = path.dirname.split('/Private/').join('/Public/');

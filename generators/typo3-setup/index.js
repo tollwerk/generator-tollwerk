@@ -234,6 +234,7 @@ module.exports = class extends Generator {
             'gulp-watch',
             'postcss-critical-css',
             'postcss-cssnext',
+            'postcss-extend',
             'postcss-partial-import',
             'pump',
             'shortbread',
