@@ -234,7 +234,7 @@ gulp.task('cachebust', () => {
 
     return gulp.src([`${dist}js/*.min.js`, `${dist}css/*.min.css`], { base: 'web' })
         .pipe(hash({ format: '{name}.{hash:8}{ext}' }))
-        .pipe(gulp.dest(dist))
+        .pipe(gulp.dest('web'))
         .pipe(addsrc(`${providerExt}Resources/Private/TypoScript/35_page_resources.t3s`))
         .pipe(rename((path) => { // Rename to minified file
             if (path.extname === '.t3s') {
