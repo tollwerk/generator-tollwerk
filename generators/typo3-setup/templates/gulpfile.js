@@ -58,9 +58,12 @@ const postcss = require('gulp-postcss');
 const cssnano = require('cssnano');
 const cssnext = require('postcss-cssnext');
 const extend = require('postcss-extend');
+const mixins = require('postcss-mixins');
+const calc = require('postcss-calc');
 const partialImport = require('postcss-partial-import');
 const mqPacker = require('css-mqpacker');
 const critical = require('postcss-critical-css');
+const comments = require('postcss-discard-comments');
 
 gulp.task('css', () => {
     // Concatenable CSS resources
@@ -69,6 +72,9 @@ gulp.task('css', () => {
         .pipe(postcss([
             partialImport(),
             extend(),
+            mixins(),
+            calc(),
+            comments(),
             cssnext({ autoprefixer: { browsers: ['IE >= 10'] } }),
             critical({
                 outputPath: `${dist}css`,
