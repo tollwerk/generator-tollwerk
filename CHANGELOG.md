@@ -1,7 +1,8 @@
-## v2.0.2 Maintenance release (unreleased)
-### Enhancements
+## v2.0.2 Bugfix release (2017-09-25)
+### Bugfixes
 * Fixed faulty functional test configuration
 * Removed dev branch request for FluidTYPO3 extensions
+* Fixed faulty database initialization
 
 ## v2.0.1 Maintenance release (2017-01-05)
 ### Enhancements

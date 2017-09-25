@@ -1,6 +1,6 @@
 {
   "name": "generator-tollwerk",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Yeoman generator for tollwerk TYPO3 projects",
   "main": "app/index.js",
   "scripts": {

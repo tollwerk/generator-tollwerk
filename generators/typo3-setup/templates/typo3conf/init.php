@@ -19,11 +19,11 @@ $dbParams   = $config['DB'];
 // >= TYPO3 8
 if (!empty($dbParams['Connections']) && !empty($dbParams['Connections']['Default'])) {
     $dbParams = $dbParams['Connections']['Default'];
-    $db			= new \PDO('mysql:'.$dbParams['host'].'=localhost;dbname='.$dbParams['dbname'], $dbParams['user'], $dbParams['password']);
+    $db			= new \PDO('mysql:host='.$dbParams['host'].';dbname='.$dbParams['dbname'], $dbParams['user'], $dbParams['password']);
 
 // < TYPO3 8
 } else {
-    $db			= new \PDO('mysql:'.$dbParams['host'].'=localhost;dbname='.$dbParams['database'], $dbParams['username'], $dbParams['password']);
+    $db			= new \PDO('mysql:host='.$dbParams['host'].';dbname='.$dbParams['database'], $dbParams['username'], $dbParams['password']);
 }
 
 if ($db instanceof \PDO) {
