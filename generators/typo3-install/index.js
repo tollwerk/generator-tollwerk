@@ -131,7 +131,14 @@ module.exports = class extends Generator {
         this.log();
         this.spawnCommandSync('composer', ['install']);
         this.log();
+    };
 
+    /**
+     * Finalizing
+     *
+     * @type {Object}
+     */
+    end() {
         // Prepare the installation for running tests
         var composer = require(path.join(this.destinationRoot(), 'composer.json'));
         composer['autoload-dev'] = require(path.join(this.destinationRoot(), 'vendor/typo3/cms/composer.json'))['autoload-dev'];
@@ -158,14 +165,7 @@ module.exports = class extends Generator {
             fs.unlinkSync(staticSQL);
         }
         this._copy('cli_lowlevel.sql', 'web/typo3/sysext/extbase/ext_tables_static+adt.sql');
-    };
 
-    /**
-     * Finalizing
-     *
-     * @type {Object}
-     */
-    end() {
         this.log();
         this.log(chalk.green('Great! The TYPO3 sources have been prepared successfully! Let\'s move on ...'));
         this.composeWith('tollwerk:typo3-check');
