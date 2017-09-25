@@ -75,20 +75,19 @@ module.exports = class extends Generator {
             }
 
             const typo3MajorVersion = parseInt(this.t3version.split('.').shift(), 10);
-            const ft3Branch = (typo3MajorVersion >= 8) ? ':dev-master' : '';
 
             // Build a list of TYPO3 extensions to install
             this.typo3Extensions = {};
             if (props.t3x_fluid_content) {
-                this.typo3Extensions['flux'] = 'fluidtypo3/flux' + ft3Branch;
-                this.typo3Extensions['fluidcontent'] = 'fluidtypo3/fluidcontent' + ft3Branch;
+                this.typo3Extensions['flux'] = 'fluidtypo3/flux';
+                this.typo3Extensions['fluidcontent'] = 'fluidtypo3/fluidcontent';
             }
             if (props.t3x_fluid_pages) {
-                this.typo3Extensions['flux'] = 'fluidtypo3/flux' + ft3Branch;
-                this.typo3Extensions['fluidpages'] = 'fluidtypo3/fluidpages' + ft3Branch;
+                this.typo3Extensions['flux'] = 'fluidtypo3/flux';
+                this.typo3Extensions['fluidpages'] = 'fluidtypo3/fluidpages';
             }
             if (props.t3x_vhs) {
-                this.typo3Extensions['vhs'] = 'fluidtypo3/vhs' + ft3Branch;
+                this.typo3Extensions['vhs'] = 'fluidtypo3/vhs';
             }
             if (props.t3x_tw_googleanalytics) {
                 this.typo3Extensions['tw_googleanalytics'] = 'tollwerk/tw-googleanalytics';
