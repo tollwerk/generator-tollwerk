@@ -2,6 +2,8 @@
 # Stuff for improving your website's delivery performance
 #############################################################################################################
 
+AddType font/woff2 .woff2
+
 # Deflating for text files (not required for squeezr, but recommended anyway)
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css text/javascript text/json text/x-json text/x-json-stream application/x-javascript application/json application/x-json application/x-json-stream application/.*xml.* multipart/x-json-stream multipart/x-mixed-replace image/svg+xml
@@ -10,14 +12,19 @@
 # Various expiration headers for proper file caching
 <IfModule mod_expires.c>
     ExpiresActive on
-    
+
+    # Fonts
+    ExpiresByType font/woff "access plus 35 days"
+    ExpiresByType font/woff2 "access plus 35 days"
+    ExpiresByType application/x-font-woff "access plus 35 days"
+
     # Images
     ExpiresByType image/gif "access plus 35 days"
     ExpiresByType image/png "access plus 35 days"
     ExpiresByType image/jpg "access plus 35 days"
     ExpiresByType image/jpeg "access plus 35 days"
     ExpiresByType image/svg+xml "access plus 35 days"
-    
+
     # Text based files
     ExpiresByType text/css "access plus 35 days"
     ExpiresByType text/xml "access plus 35 days"
@@ -25,8 +32,7 @@
     ExpiresByType application/javascript  "access plus 35 days"
     ExpiresByType application/x-javascript  "access plus 35 days"
     ExpiresByType application/x-shockwave-flash "access plus 35 days"
-    
+
     # Default expiration
     ExpiresDefault "access plus 1 days"
-
 </IfModule>
