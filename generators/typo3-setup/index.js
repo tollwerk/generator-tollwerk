@@ -74,7 +74,7 @@ module.exports = class extends Generator {
                 this[name] = config[name];
             }
 
-            const typo3MajorVersion = parseInt(this.t3version.split('.').shift(), 10);
+            this.typo3MajorVersion = parseInt(this.t3version.split('.').shift(), 10);
 
             // Build a list of TYPO3 extensions to install
             this.typo3Extensions = {};
@@ -126,19 +126,19 @@ module.exports = class extends Generator {
         this._copy('editorconfig', '.editorconfig');
         this._copy('jshintrc', '.jshintrc');
         this._copy('gitattributes', '.gitattributes');
-        this._copy('robots.txt', 'web/robots.txt');
+        this._copy('robots.txt', 'public/robots.txt');
         this._template('gulpfile.js', 'gulpfile.js');
 
         // Configure the composer autoload entries
         var composer = require(path.join(this.destinationRoot(), 'composer.json'));
         composer.autoload = composer.autoload || {};
         composer.autoload['psr-4'] = composer.autoload['psr-4'] || {};
-        composer.autoload['psr-4']['Tollwerk\\' + this.typo3ProviderExtension.upperCamelCase + '\\'] = 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/';
-        composer.autoload['psr-4']['Tollwerk\\' + this.typo3ProviderExtension.upperCamelCase + '\\Component\\'] = 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Components/';
+        composer.autoload['psr-4']['Tollwerk\\' + this.typo3ProviderExtension.upperCamelCase + '\\'] = 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/';
+        composer.autoload['psr-4']['Tollwerk\\' + this.typo3ProviderExtension.upperCamelCase + '\\Component\\'] = 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Components/';
 
         // If a component library will be maintained
         if (this.typo3Extensions['tw_componentlibrary']) {
-            composer.autoload['psr-4']['Tollwerk\\TwComponentlibrary\\'] = 'web/typo3conf/ext/tw_componentlibrary/Classes/';
+            composer.autoload['psr-4']['Tollwerk\\TwComponentlibrary\\'] = 'public/typo3conf/ext/tw_componentlibrary/Classes/';
         }
 
         fs.writeFileSync(path.join(this.destinationRoot(), 'composer.json'), JSON.stringify(composer, null, 4));
@@ -153,11 +153,11 @@ module.exports = class extends Generator {
 
         // Base resource installation
         // Create the fileadmin directory structure
-        this._templateDirectory('fileadmin', 'web/fileadmin/' + this.project);
+        this._templateDirectory('fileadmin', 'public/fileadmin/' + this.project);
 
         // Create the database init script
-        this._mkdirp('web/typo3conf');
-        this._copy('typo3conf/init.php', 'web/typo3conf/init.php');
+        this._mkdirp('public/typo3conf');
+        this._copy('typo3conf/init.php', 'public/typo3conf/init.php');
         var typo3DbInit = 'typo3conf/init.sql';
         var typo3Version = this.config.get('t3version').split('.');
         while (typo3Version.length) {
@@ -167,22 +167,22 @@ module.exports = class extends Generator {
             }
             typo3Version.pop();
         }
-        this._template(typo3DbInit, 'web/typo3conf/init.sql');
+        this._template(typo3DbInit, 'public/typo3conf/init.sql');
 
         // Prepare a project specific provider extension
         // Create the provider extension directory structure
-        this._templateDirectory('provider', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey);
+        this._templateDirectory('provider', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey);
 
         // If fluidcontent was requested
         if (this.typo3Extensions.fluidcontent) {
-            this._templateDirectory('fluidtypo3/Content', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Content');
-            this._template('fluidtypo3/Controller/ContentController.php', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/Controller/ContentController.php');
+            this._templateDirectory('fluidtypo3/Content', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Content');
+            this._template('fluidtypo3/Controller/ContentController.php', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/Controller/ContentController.php');
         }
 
         // If fluidpages was requested
         if (this.typo3Extensions.fluidpages) {
-            this._templateDirectory('fluidtypo3/Page', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Page');
-            this._template('fluidtypo3/Controller/PageController.php', 'web/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/Controller/PageController.php');
+            this._templateDirectory('fluidtypo3/Page', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Page');
+            this._template('fluidtypo3/Controller/PageController.php', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/Controller/PageController.php');
         }
 
         // Prepare the Fractal installation
@@ -251,7 +251,7 @@ module.exports = class extends Generator {
             packages.push('tollwerk/fractal-typo3');
         }
 
-        this.npmInstall(packages, {'save': true}, function () {
+        this.npmInstall(packages, { 'save': true }, function () {
             exec('which paxctl', function (error, stdout, stderr) {
                 if (error) {
                     that.log.error('Cannot set PhantomJS PAX headers. Skipping ...');
@@ -289,8 +289,12 @@ module.exports = class extends Generator {
             this.log();
             this.log('Installing TYPO3 extension »' + extKey + '« ...');
             this.spawnCommandSync('composer', ['require', this.typo3Extensions[extKey]]);
-            this.spawnCommandSync('php', [
-                './web/typo3/cli_dispatch.phpsh',
+            this.spawnCommandSync('php', (this.typo3MajorVersion >= 9) ? [
+                './vendor/bin/typo3',
+                'extension:install',
+                extKey
+            ] : [
+                './public/typo3/cli_dispatch.phpsh',
                 'extbase',
                 'extension:install',
                 extKey
@@ -298,8 +302,12 @@ module.exports = class extends Generator {
         }
 
         // Install the provider extension
-        this.spawnCommandSync('php', [
-            './web/typo3/cli_dispatch.phpsh',
+        this.spawnCommandSync('php', (this.typo3MajorVersion >= 9) ? [
+            './vendor/bin/typo3',
+            'extension:install',
+            this.typo3ProviderExtension.extkey
+        ] : [
+            './public/typo3/cli_dispatch.phpsh',
             'extbase',
             'extension:install',
             this.typo3ProviderExtension.extkey
@@ -308,7 +316,7 @@ module.exports = class extends Generator {
         // Additional database setup
         var that = this;
         var done = this.async();
-        exec('`which php` ./web/typo3conf/init.php', function (error, stdout, stderr) {
+        exec('`which php` ./public/typo3conf/init.php', function (error, stdout, stderr) {
             if (error) {
                 switch (error.code) {
                     case 1:
@@ -349,7 +357,7 @@ module.exports = class extends Generator {
         // Add TYPO3 specifics
         htaccess.push(this._read(path.join(this.sourceRoot(), 'htaccess/03_typo3')));
 
-        this._write(path.join(this.destinationRoot(), 'web/.htaccess'), htaccess.join('\n\n'));
+        this._write(path.join(this.destinationRoot(), 'public/.htaccess'), htaccess.join('\n\n'));
 
         // Initialize a git repository
         if (this.git) {

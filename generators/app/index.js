@@ -7,7 +7,6 @@ var path = require('path');
 var chalk = require('chalk');
 
 module.exports = class extends Generator {
-
     /**
      * Main method
      */
@@ -21,9 +20,9 @@ module.exports = class extends Generator {
         var src = false;
         var typo3conf = false;
         try {
-            var web = fs.lstatSync('web').isDirectory();
-            src = web && fs.lstatSync('web/index.php').isSymbolicLink();
-            typo3conf = web && fs.lstatSync('web/typo3conf').isDirectory();
+            var webdir = fs.lstatSync('public').isDirectory();
+            src = webdir && fs.lstatSync('public/index.php').isFile();
+            typo3conf = webdir && fs.lstatSync('public/typo3conf').isDirectory();
         } catch (e) {
         }
 

@@ -46,8 +46,8 @@ function errorHandler(task) {
     };
 }
 
-const dist = `./web/fileadmin/${project.key}/`;
-const extDist = './web/typo3conf/ext/';
+const dist = `./public/fileadmin/${project.key}/`;
+const extDist = './public/typo3conf/ext/';
 const providerExt = `${extDist}<%= typo3ProviderExtension.extkey %>/`;
 const watch = [];
 
@@ -238,9 +238,9 @@ gulp.task('cachebust', () => {
     }
     const tmpl = filter(['**/*.t3s'], { restore: true });
 
-    return gulp.src([`${dist}js/*.min.js`, `${dist}css/*.min.css`], { base: 'web' })
+    return gulp.src([`${dist}js/*.min.js`, `${dist}css/*.min.css`], { base: 'public' })
         .pipe(hash({ format: '{name}.{hash:8}{ext}' }))
-        .pipe(gulp.dest('web'))
+        .pipe(gulp.dest('public'))
         .pipe(addsrc(`${providerExt}Resources/Private/TypoScript/35_page_resources.t3s`))
         .pipe(rename((path) => { // Rename to minified file
             if (path.extname === '.t3s') {
@@ -291,7 +291,7 @@ gulp.task('favicons', () => {
         }).on('error', gutil.log))
         .pipe(gulp.dest(`${dist}favicons`))
         .pipe(ico)
-        .pipe(gulp.dest('./web/'))
+        .pipe(gulp.dest('./public/'))
         .pipe(ico.restore)
         .pipe(filter(['**/favicons.html']))
         .pipe(replace(

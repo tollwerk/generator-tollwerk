@@ -31,9 +31,9 @@ module.exports = class extends Generator {
             this.installed = false;
             if (this.installer) {
                 try {
-                    var web = fs.lstatSync('web').isDirectory();
-                    var src = web && fs.lstatSync('web/index.php').isSymbolicLink();
-                    var typo3conf = web && fs.lstatSync('web/typo3conf').isDirectory();
+                    var webdir = fs.lstatSync('public').isDirectory();
+                    var src = webdir && fs.lstatSync('public/index.php').isSymbolicLink();
+                    var typo3conf = webdir && fs.lstatSync('public/typo3conf').isDirectory();
                     this.installed = src && typo3conf;
                 } catch (e) {
                 }

@@ -1,3 +1,7 @@
+## v2.1.0 Feature release (unreleased)
+### Enhancements
+* Add TYPO3 9.x support (incomplete)
+
 ## v2.0.2 Bugfix release (2017-09-25)
 ### Bugfixes
 * Fixed faulty functional test configuration

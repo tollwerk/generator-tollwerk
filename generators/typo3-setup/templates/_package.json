@@ -2,7 +2,7 @@
   "name": "<%= project %>",
   "version": "1.0.0",
   "description": "<%= title %>",
-  "main": "web/index.php",
+  "main": "public/index.php",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

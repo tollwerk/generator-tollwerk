@@ -6,12 +6,12 @@
   "description" : "<%= title %>",
   "license": "GPL-2.0+",
   "require": {
-    "typo3/cms": "<%= t3version %>"
+    "typo3/minimal": "<%= t3version %>"
   },
   "extra": {
     "typo3/cms": {
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "web-dir": "web"
+      "web-dir": "public"
     }
   }
 }

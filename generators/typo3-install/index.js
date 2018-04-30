@@ -109,7 +109,7 @@ module.exports = class extends Generator {
     _refinePSR4(psr4) {
         const psr4Refined = {};
         for (var ns in psr4) {
-            const classesDir = path.join('web', psr4[ns]);
+            const classesDir = path.join('public', psr4[ns]);
             try {
                 if (fs.statSync(path.join(this.destinationRoot(), classesDir)).isDirectory()) {
                     psr4Refined[ns] = classesDir;
@@ -145,7 +145,7 @@ module.exports = class extends Generator {
         composer['autoload-dev']['psr-4'] = this._refinePSR4(composer['autoload-dev']['psr-4']);
         composer['autoload-dev'].classmap = composer['autoload-dev'].classmap.map(function (classmapPath) {
             try {
-                const classesDir = path.join('web', classmapPath);
+                const classesDir = path.join('public', classmapPath);
                 if (fs.statSync(path.join(this.destinationRoot(), classesDir)).isDirectory()) {
                     return classesDir;
                 }
@@ -156,15 +156,15 @@ module.exports = class extends Generator {
         fs.writeFileSync(path.join(this.destinationRoot(), 'composer.json'), JSON.stringify(composer, null, 4));
 
         // Trigger the installation wizard
-        fs.openSync(path.join(this.destinationRoot(), 'web/FIRST_INSTALL'), 'w');
+        fs.openSync(path.join(this.destinationRoot(), 'public/FIRST_INSTALL'), 'w');
         this.log();
 
         // Static data installation
-        var staticSQL = path.join(this.destinationRoot(), 'web/typo3/sysext/extbase/ext_tables_static+adt.sql');
+        var staticSQL = path.join(this.destinationRoot(), 'public/typo3/sysext/extbase/ext_tables_static+adt.sql');
         if (fs.existsSync(staticSQL)) {
             fs.unlinkSync(staticSQL);
         }
-        this._copy('cli_lowlevel.sql', 'web/typo3/sysext/extbase/ext_tables_static+adt.sql');
+        this._copy('cli_lowlevel.sql', 'public/typo3/sysext/extbase/ext_tables_static+adt.sql');
 
         this.log();
         this.log(chalk.green('Great! The TYPO3 sources have been prepared successfully! Let\'s move on ...'));

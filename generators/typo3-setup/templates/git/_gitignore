@@ -13,21 +13,21 @@
 !/test
 !/test/**
 
-!/web
-!/web/.htaccess
-!/web/google*.html
-!/web/robots.txt
-!/web/favicon.ico
+!/public
+!/public/.htaccess
+!/public/google*.html
+!/public/robots.txt
+!/public/favicon.ico
 
-!/web/fileadmin
-!/web/fileadmin/<%= project %>/
-!/web/fileadmin/<%= project %>/**
+!/public/fileadmin
+!/public/fileadmin/<%= project %>/
+!/public/fileadmin/<%= project %>/**
 
-!/web/typo3conf
-!/web/typo3conf/ext
-!/web/typo3conf/ext/tw_<%= project %>/
-!/web/typo3conf/ext/tw_<%= project %>/**
+!/public/typo3conf
+!/public/typo3conf/ext
+!/public/typo3conf/ext/tw_<%= project %>/
+!/public/typo3conf/ext/tw_<%= project %>/**
 
-!/web/typo3conf/CoolUriConf.xml
-!/web/typo3conf/LocalConfiguration.php
-!/web/typo3conf/PackageStates.php
+!/public/typo3conf/CoolUriConf.xml
+!/public/typo3conf/LocalConfiguration.php
+!/public/typo3conf/PackageStates.php
