@@ -29,7 +29,7 @@ module.exports = class extends Generator {
         // If TYPO3 is not yet installed
         if (!src) {
             this.log(chalk.green('OK, we\'ll begin with installing TYPO3 ...'));
-            this.composeWith('tollwerk:typo3-install', {options: {nested: true}});
+            this.composeWith('tollwerk:typo3-install', { options: { nested: true } });
 
             // Else: If the TYPO3 install tool has not been run yet
         } else if (!typo3conf) {

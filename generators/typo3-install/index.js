@@ -28,21 +28,21 @@ module.exports = class extends Generator {
             if (!error && response.statusCode === 200) {
                 var typo3versions = JSON.parse(body);
                 if (typo3versions && (typo3versions.constructor === Object)) {
-                    var choices = [];
-                    for (var majorminor in typo3versions) {
-                        if (typo3versions[majorminor].active) {
-                            for (var release in typo3versions[majorminor].releases) {
-                                if (semver.valid(typo3versions[majorminor].releases[release].version)) {
-                                    choices.push({
-                                        name: typo3versions[majorminor].releases[release].version,
-                                        value: typo3versions[majorminor].releases[release].version + '|' +
-                                        typo3versions[majorminor].releases[release].url.tar + '|' +
-                                        typo3versions[majorminor].releases[release].checksums.tar.sha1
-                                    });
+                    let choices = {};
+                    for (var major in typo3versions) {
+                        if (typo3versions[major].active) {
+                            for (var release in typo3versions[major].releases) {
+                                const version = typo3versions[major].releases[release].version;
+                                if (semver.valid(version) && (semver.major(version) >= 9)) {
+                                    const majorminor = `${semver.major(version)}.${semver.minor(version)}`;
+                                    if (!(majorminor in choices)) {
+                                        choices[majorminor] = { name: majorminor, version, value: `^${majorminor}` };
+                                    }
                                 }
                             }
                         }
                     }
+                    choices = Object.values(choices);
 
                     // Ask for project key, author and TYPO3 version
                     var prompts = [{
@@ -64,17 +64,15 @@ module.exports = class extends Generator {
                         type: 'list',
                         name: 'version',
                         message: 'Which TYPO3 version should I use?',
-                        choices: choices.sort((v1, v2) => semver.rcompare(v1.name, v2.name))
+                        choices: choices.sort((v1, v2) => semver.rcompare(v1.version, v2.version))
                     }];
 
                     return that.prompt(prompts).then(function (props) {
-                        var t3versionUrlChecksum = props.version.split('|');
+                        console.log(props.version);
                         this.config.set('project', props.project.toLowerCase());
                         this.config.set('title', props.title);
                         this.config.set('author', props.author);
-                        this.config.set('t3version', t3versionUrlChecksum[0]);
-                        this.config.set('t3url', t3versionUrlChecksum[1]);
-                        this.config.set('t3sha1', t3versionUrlChecksum[2]);
+                        this.config.set('t3version', props.version);
                         done();
                     }.bind(that));
 
@@ -140,6 +138,7 @@ module.exports = class extends Generator {
      */
     end() {
         // Prepare the installation for running tests
+        /*
         var composer = require(path.join(this.destinationRoot(), 'composer.json'));
         composer['autoload-dev'] = require(path.join(this.destinationRoot(), 'vendor/typo3/cms/composer.json'))['autoload-dev'];
         composer['autoload-dev']['psr-4'] = this._refinePSR4(composer['autoload-dev']['psr-4']);
@@ -154,6 +153,7 @@ module.exports = class extends Generator {
             return null;
         }).filter(d => !!d);
         fs.writeFileSync(path.join(this.destinationRoot(), 'composer.json'), JSON.stringify(composer, null, 4));
+        */
 
         // Trigger the installation wizard
         fs.openSync(path.join(this.destinationRoot(), 'public/FIRST_INSTALL'), 'w');

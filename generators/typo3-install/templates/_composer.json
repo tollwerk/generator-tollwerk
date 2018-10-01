@@ -1,15 +1,37 @@
 {
   "repositories": [
-    { "type": "composer", "url": "https://composer.typo3.org/" }
+    {
+      "type": "composer",
+      "url": "https://composer.typo3.org/"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:tollwerk/TYPO3-ext-tw_base.git",
+      "reference": "master"
+    }
   ],
   "name": "tollwerk/<%= project %>",
-  "description" : "<%= title %>",
+  "description": "<%= title %>",
   "license": "GPL-2.0+",
   "require": {
-    "typo3/minimal": "<%= t3version %>"
+    "typo3/minimal": "<%= t3version %>",
+    "typo3/cms-form": "<%= t3version %>",
+    "typo3/cms-linkvalidator": "<%= t3version %>",
+    "typo3/cms-tstemplate": "<%= t3version %>",
+    "typo3/cms-fluid-styled-content": "<%= t3version %>",
+    "typo3/cms-rte-ckeditor": "<%= t3version %>",
+    "typo3/cms-install": "<%= t3version %>",
+    "typo3/cms-beuser": "<%= t3version %>",
+    "typo3/cms-lowlevel": "<%= t3version %>",
+    "typo3/cms-setup": "<%= t3version %>",
+    "typo3/cms-scheduler": "<%= t3version %>",
+    "typo3/cms-redirects": "<%= t3version %>",
+    "typo3/cms-reports": "<%= t3version %>",
+    "typo3/cms-belog": "<%= t3version %>",
+    "tollwerk/tw-base": "@dev"
   },
   "extra": {
-    "typo3/cms": {
+    "typo3/minimal": {
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": "public"
     }
