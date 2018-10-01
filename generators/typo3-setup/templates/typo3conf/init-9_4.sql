@@ -1,4 +1,4 @@
--- TYPO3 CMS 9.x
+-- TYPO3 CMS 9.4.x
 
 INSERT INTO `pages` (`pid`, `tstamp`, `sorting`, `perms_userid`, `perms_groupid`, `perms_user`, `perms_group`, `perms_everybody`, `crdate`, `cruser_id`, `title`, `doktype`, `TSconfig`, `is_siteroot`, `shortcut`, `shortcut_mode`, `fe_group`, `media`, `SYS_LASTCHANGED`) VALUES
 	(0, UNIX_TIMESTAMP(), 256, 2, 0, 31, 27, 0, UNIX_TIMESTAMP(), 2, 'Start', 1, '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:<%= typo3ProviderExtension.extkey %>/Configuration/TypoScript/Main/TSconfig/page.t3s">', 1, 0, 0, '', '0', UNIX_TIMESTAMP());

@@ -25,14 +25,9 @@ module.exports = class extends Generator {
         var done = this.async();
         var prompts = [{
             type: 'confirm',
-            name: 't3x_fluid_content',
-            message: 'Would you like to install the TYPO3 extension »fluid_content«?',
+            name: 't3x_flux',
+            message: 'Would you like to install the TYPO3 extension »flux«?',
             'default': true
-        }, {
-            type: 'confirm',
-            name: 't3x_fluid_pages',
-            message: 'Would you like to install the TYPO3 extension »fluid_pages«?',
-            'default': false
         }, {
             type: 'confirm',
             name: 't3x_vhs',
@@ -42,11 +37,6 @@ module.exports = class extends Generator {
             type: 'confirm',
             name: 't3x_tw_googleanalytics',
             message: 'Would you like to install the TYPO3 extension »tw_googleanalytics«?',
-            'default': true
-        }, {
-            type: 'confirm',
-            name: 't3x_tw_squeezr',
-            message: 'Would you like to install the TYPO3 extension »tw_squeezr«?',
             'default': false
         }, {
             type: 'confirm',
@@ -74,26 +64,16 @@ module.exports = class extends Generator {
                 this[name] = config[name];
             }
 
-            this.typo3MajorVersion = parseInt(this.t3version.split('.').shift(), 10);
-
             // Build a list of TYPO3 extensions to install
             this.typo3Extensions = {};
-            if (props.t3x_fluid_content) {
+            if (props.t3x_flux) {
                 this.typo3Extensions['flux'] = 'fluidtypo3/flux';
-                this.typo3Extensions['fluidcontent'] = 'fluidtypo3/fluidcontent';
-            }
-            if (props.t3x_fluid_pages) {
-                this.typo3Extensions['flux'] = 'fluidtypo3/flux';
-                this.typo3Extensions['fluidpages'] = 'fluidtypo3/fluidpages';
             }
             if (props.t3x_vhs) {
                 this.typo3Extensions['vhs'] = 'fluidtypo3/vhs';
             }
             if (props.t3x_tw_googleanalytics) {
                 this.typo3Extensions['tw_googleanalytics'] = 'tollwerk/tw-googleanalytics';
-            }
-            if (props.t3x_tw_squeezr) {
-                this.typo3Extensions['tw_squeezr'] = 'tollwerk/tw-squeezr';
             }
             if (props.t3x_tw_componentlibrary) {
                 this.typo3Extensions['tw_componentlibrary'] = 'tollwerk/tw-componentlibrary';
@@ -119,7 +99,7 @@ module.exports = class extends Generator {
      * @type {Object}
      */
     configuring() {
-        // NPM & Bower file installation
+        // NPM file installation
         this._template('_package.json', 'package.json', this.config.getAll());
 
         // Project & Gruntfile installation
@@ -159,7 +139,7 @@ module.exports = class extends Generator {
         this._mkdirp('public/typo3conf');
         this._copy('typo3conf/init.php', 'public/typo3conf/init.php');
         var typo3DbInit = 'typo3conf/init.sql';
-        var typo3Version = this.config.get('t3version').split('.');
+        var typo3Version = this.config.get('t3version').split('^').pop().split('.');
         while (typo3Version.length) {
             if (fs.existsSync(this.templatePath('typo3conf/init-' + typo3Version.join('_') + '.sql'))) {
                 typo3DbInit = 'typo3conf/init-' + typo3Version.join('_') + '.sql';
@@ -172,18 +152,6 @@ module.exports = class extends Generator {
         // Prepare a project specific provider extension
         // Create the provider extension directory structure
         this._templateDirectory('provider', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey);
-
-        // If fluidcontent was requested
-        if (this.typo3Extensions.fluidcontent) {
-            this._templateDirectory('fluidtypo3/Content', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Content');
-            this._template('fluidtypo3/Controller/ContentController.php', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/Controller/ContentController.php');
-        }
-
-        // If fluidpages was requested
-        if (this.typo3Extensions.fluidpages) {
-            this._templateDirectory('fluidtypo3/Page', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Resources/Private/Templates/Page');
-            this._template('fluidtypo3/Controller/PageController.php', 'public/typo3conf/ext/' + this.typo3ProviderExtension.extkey + '/Classes/Controller/PageController.php');
-        }
 
         // Prepare the Fractal installation
         if (this.typo3Extensions['tw_componentlibrary']) {
@@ -208,6 +176,7 @@ module.exports = class extends Generator {
         // Install NPM dependencies
         var that = this;
         var packages = [
+            'async',
             'autoprefixer',
             'css-mqpacker',
             'cssnano',
@@ -216,31 +185,42 @@ module.exports = class extends Generator {
             'gulp-clean',
             'gulp-concat',
             'gulp-concat-flatten',
+            'gulp-copy',
             'gulp-download',
             'gulp-favicons',
             'gulp-filter',
-            'jkphl/gulp-iconizr',
             'gulp-hash-filename',
+            'gulp-insert',
+            'gulp-intercept',
             'gulp-postcss',
             'gulp-rename',
             'gulp-sequence',
             'gulp-sort',
             'gulp-sourcemaps',
             'gulp-string-replace',
+            'gulp-svg-sprite',
             'gulp-template',
+            'gulp-typescript',
             'gulp-uglify',
             'gulp-w3cjs',
             'gulp-watch',
+            'postcss-assets',
+            'postcss-at-rules-variables',
             'postcss-calc',
             'postcss-critical-css',
             'postcss-cssnext',
             'postcss-discard-comments',
+            'postcss-each',
             'postcss-extend',
+            'postcss-extend-rule',
+            'postcss-for',
             'postcss-mixins',
+            'postcss-nested',
             'postcss-partial-import',
             'pump',
             'shortbread',
             'through2',
+            'typescript',
             'vinyl-file',
             'vinyl-request'
         ];
@@ -249,6 +229,7 @@ module.exports = class extends Generator {
         if (this.typo3Extensions['tw_componentlibrary']) {
             packages.push('@frctl/fractal');
             packages.push('tollwerk/fractal-typo3');
+            packages.push('fractal-tenon');
         }
 
         this.npmInstall(packages, { 'save': true }, function () {
@@ -257,10 +238,7 @@ module.exports = class extends Generator {
                     that.log.error('Cannot set PhantomJS PAX headers. Skipping ...');
                 } else {
                     var paxctl = stdout.trim();
-                    [
-                        'node_modules/iconizr/node_modules/phantomjs/lib/phantom/bin/phantomjs',
-                        'node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'
-                    ].forEach(function (phamtomJS) {
+                    ['node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'].forEach(function (phamtomJS) {
                         that.spawnCommandSync(paxctl, ['-cm', phamtomJS]);
                     });
                 }
@@ -289,29 +267,11 @@ module.exports = class extends Generator {
             this.log();
             this.log('Installing TYPO3 extension »' + extKey + '« ...');
             this.spawnCommandSync('composer', ['require', this.typo3Extensions[extKey]]);
-            this.spawnCommandSync('php', (this.typo3MajorVersion >= 9) ? [
-                './vendor/bin/typo3',
-                'extension:install',
-                extKey
-            ] : [
-                './public/typo3/cli_dispatch.phpsh',
-                'extbase',
-                'extension:install',
-                extKey
-            ]);
+            this.spawnCommandSync('php', ['./vendor/bin/typo3', 'extension:install', extKey]);
         }
 
         // Install the provider extension
-        this.spawnCommandSync('php', (this.typo3MajorVersion >= 9) ? [
-            './vendor/bin/typo3',
-            'extension:install',
-            this.typo3ProviderExtension.extkey
-        ] : [
-            './public/typo3/cli_dispatch.phpsh',
-            'extbase',
-            'extension:install',
-            this.typo3ProviderExtension.extkey
-        ]);
+        this.spawnCommandSync('php', ['./vendor/bin/typo3', 'extension:install', this.typo3ProviderExtension.extkey]);
 
         // Additional database setup
         var that = this;

@@ -36,6 +36,7 @@ module.exports = class extends Generator {
                     var typo3conf = webdir && fs.lstatSync('public/typo3conf').isDirectory();
                     this.installed = src && typo3conf;
                 } catch (e) {
+                    console.log(e);
                 }
             }
         }.bind(this));
@@ -50,13 +51,13 @@ module.exports = class extends Generator {
         this.log();
         if (!this.installer) {
             this.log(chalk.red('Listen! Please follow my advise and you\'ll be finished shortly ...'));
-            this.composeWith('tollwerk:typo3-check', {options: {nested: true}});
+            this.composeWith('tollwerk:typo3-check', { options: { nested: true } });
         } else if (this.installed) {
             this.log(chalk.green('Perfect! Let\'s move on configuring your project ...'));
             this.composeWith('tollwerk:typo3-setup');
         } else {
             this.log(chalk.red('Are your really sure? Please double-check and try again ...'));
-            this.composeWith('tollwerk:typo3-check', {options: {nested: true}});
+            this.composeWith('tollwerk:typo3-check', { options: { nested: true } });
         }
     };
 }

@@ -19,7 +19,7 @@ AddEncoding x-gzip .gz
 
 # Security headers (see https://securityheaders.io)
 <IfModule mod_headers.c>
-        Header append Content-Security-Policy "default-src https: data: 'unsafe-inline'"
+        # Header append Content-Security-Policy "default-src https: data: 'unsafe-inline'"
         Header append X-Frame-Options "SAMEORIGIN"
         Header append X-XSS-Protection "1; mode=block"
         Header append X-Content-Type-Options "nosniff"
