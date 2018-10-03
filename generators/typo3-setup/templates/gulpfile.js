@@ -76,7 +76,7 @@ const glob = require('glob');
 
 gulp.task('css', () => {
     // Find a list of CSS resources to be imported for ALL compilations
-    const autoIncludes = glob.sync(fspath.resolve(`${providerExt}/Resources/Private/Partials/Styles/_Config/**/*.css`), { cwd: '/' });
+    const autoIncludes = glob.sync(fspath.resolve(`${providerExt}/Configuration/Css/**/*.css`), { cwd: '/' });
 
     gulp.src(['*/Resources/Private/Partials/**/*.css', '!*/Resources/Private/Partials/*/_*/**/*.css'], { cwd: extDist })
 
