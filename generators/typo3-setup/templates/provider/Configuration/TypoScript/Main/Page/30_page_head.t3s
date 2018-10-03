@@ -1,53 +1,25 @@
-# ICONIZR
-page.headerData.100 = FILE
-page.headerData.100.file = fileadmin/<%= project %>/css/icon-loader-fragment.html
+# FAVICON, MANIFEST & BASIC META DATA
+page.headerData.200 = TEXT
+page.headerData.200.value (
+    <link rel="apple-touch-icon" sizes="180x180" href="/typo3conf/ext/<%= typo3ProviderExtension.extkey %>/Resources/Public/Icons/App/apple-touch-icon.png">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="manifest" href="/typo3conf/ext/tw_ndf/Resources/Public/manifest.json">
+    <link rel="mask-icon" href="/typo3conf/ext/tw_ndf/Resources/Public/Icons/App/safari-pinned-tab.svg" color="#000000">
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="theme-color" content="#000000">
+    <meta name="author" content="<%= author %>" />
+    <meta name="robots" content="index,follow" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+)
 
-# FAVICON / TOUCH ICONS
-page.headerData.200 = FILE
-page.headerData.200.file = fileadmin/<%= project %>/favicons/favicons.html
+# CANONICAL
+page.headerData.300 < lib.canonical
+page.headerData.300.wrap = <link rel="canonical" href="|"/>
 
-# META
-page.meta.author = <%= author %>
-page.meta.robots = index,follow
-
-# CSS
-page.includeCSS {
-    # fonts = http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Serif:400,700,400italic
-    # fonts.external = 1
-}
+# SERVICEWORKER
+page.headerData.400 = TEXT
+page.headerData.400.value = <link rel="serviceworker" href="/serviceworker.js"/>
 
 page.CSS_inlineStyle >
 config.inlineStyle2TempFile = 1
-
-# [browser = msie] && [version= <9]
-# page.includeCSS.ie8 = fileadmin/css/ie8.css
-# [global]
-
-# JAVASCRIPT
-page.includeJS {
-    html5 = https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js
-    html5 {
-        allWrap = <!--[if lt IE 9]>|<![endif]-->
-        external = 1
-        disableCompression = 1
-        forceOnTop = 1
-        excludeFromConcatenation = 1
-    }
-}
-
-page.includeJSFooter {
-    jquery = https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js
-    jquery {
-        external = 1
-        forceOnTop = 1
-        disableCompression = 1
-        excludeFromConcatenation = 1
-    }
-
-    jquery >
-}
-
-config.removeDefaultJS = external<% if(t3x_tw_googleanalytics) { %>
-
-# GOOGLE ANALYTICS TRACKING CODE PLUGIN
-page.footerData.9999 =< plugin.tx_twgoogleanalytics<% } %>
+config.removeDefaultJS = external

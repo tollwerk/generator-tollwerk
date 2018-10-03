@@ -1,0 +1,18 @@
+# CANONICAL URL
+lib.canonical = TEXT
+lib.canonical.typolink {
+    parameter.data = TSFE:id
+
+    # Not needed until we have more than one language
+    # additionalParams = L={TSFE:sys_language_uid}
+    # additionalParams.insertData = 1
+
+    returnLast = url
+    useCacheHash = 0
+    forceAbsoluteUrl = 1
+    addQueryString = 1
+    addQueryString {
+        method = GET,POST
+        exclude = id
+    }
+}

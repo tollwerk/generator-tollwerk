@@ -1,0 +1,6 @@
+options {
+    # Hide 'file upload' and 'create folder' in link- and element browser
+    folderTree.uploadFieldsInLinkBrowser = 0
+    folderTree.hideCreateFolder = 1
+    createFoldersInEB = 1
+}

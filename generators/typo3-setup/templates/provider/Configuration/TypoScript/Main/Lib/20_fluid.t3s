@@ -1,0 +1,13 @@
+lib.fluidContent {
+    templateRootPaths {
+        20 = EXT:tw_base/Resources/Private/Templates/
+        30 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Templates/
+    }
+    partialRootPaths {
+        20 = EXT:tw_base/Resources/Private/Partials/
+        30 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Partials/
+    }
+    settings.media.popup.linkParams {
+        ATagParams.dataWrap = class="{$styles.content.textmedia.linkWrap.lightboxCssClass}" rel="{$styles.content.textmedia.linkWrap" data-caption="{field:description}" target="_blank"
+    }
+}

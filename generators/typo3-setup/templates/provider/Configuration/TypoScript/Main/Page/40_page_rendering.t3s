@@ -4,6 +4,9 @@ lib.stdheader.stdWrap.dataWrap = |
 lib.stdheader.stdWrap.dataWrap.override = |
 lib.stdheader.stdWrap.prefixComment >
 
+# DELETE DEFAULT ATTRIBUTES (z.B. class="bodytext")
+lib.parseFunc_RTE.nonTypoTagStdWrap.encapsLines.addAttributes >
+
 tt_content {
     stdWrap {
         innerWrap.cObject.default >
@@ -32,6 +35,3 @@ tt_content {
     list.20.stdWrap.prefixComment >
     stdWrap.prepend.dataWrap >
 }
-
-# DELETE DEFAULT ATTRIBUTES (z.B. class="bodytext")
-lib.parseFunc_RTE.nonTypoTagStdWrap.encapsLines.addAttributes >

@@ -1,1 +1,41 @@
 # LAYOUTS, TEMPLATES & VARIABLES
+page = PAGE
+page {
+    10 = FLUIDTEMPLATE
+    10 {
+        layoutRootPaths {
+            10 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Layouts/Page
+        }
+
+        templateRootPaths {
+            10 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Templates/Page
+        }
+
+        partialRootPaths {
+            10 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Partials
+            20 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Public
+        }
+
+        settings < plugin.<%= typo3ProviderExtension.compressed %>.settings
+
+        # Smart, dynamic mapping of backend layouts without the need to configure new ones
+        # individually in typoscript, see https://usetypo3.com/backend-layouts.html and
+        # https://www.youtube.com/watch?time_continue=1&v=RoHaeo4fq34
+        templateName = TEXT
+        templateName {
+            cObject = TEXT
+            cObject {
+                data = pagelayout
+                required = 1
+                case = uppercamelcase
+                split {
+                    token = pagets__
+                    cObjNum = 1
+                    1.current = 1
+                }
+            }
+
+            ifEmpty = Default
+        }
+    }
+}

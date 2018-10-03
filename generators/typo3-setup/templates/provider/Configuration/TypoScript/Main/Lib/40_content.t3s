@@ -1,0 +1,17 @@
+lib.contentElement {
+    templateRootPaths.20 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Templates
+    templateRootPaths.99 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Templates/ContentElements/
+
+    layoutRootPaths.20 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Layouts/
+    layoutRootPaths.99 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Layouts/ContentElements/
+
+    partialRootPaths.20 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Partials/
+    partialRootPaths.30 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Public/
+    partialRootPaths.99 = EXT:<%= typo3ProviderExtension.extkey %>/Resources/Private/Partials/ContentElements/
+
+    settings.media {
+        popup.linkParams {
+            ATagParams.dataWrap = class="{$styles.content.textmedia.linkWrap.lightboxCssClass}" rel="{$styles.content.textmedia.linkWrap" data-caption="{field:description}" target="_blank"
+        }
+    }
+}

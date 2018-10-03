@@ -1,3 +1,7 @@
+# TODO: Remove this after development
+config.no_cache = 0
+config.contentObjectExceptionHandler = 0
+
 # XHTML 5
 config.xhtml_cleaning = all
 config.doctype = html5
@@ -9,10 +13,6 @@ config.renderCharset = utf-8
 # URLS
 config.absRefPrefix = /
 config.simulateStaticDocuments = 0
-config.tx_realurl_enable = 0
-config.tx_cooluri_enable = 0
-config.redirectOldLinksToNew = 0
-config.jumpurl_enable = 0
 
 # LINK VARIABLES & LOCALIZATION
 config.linkVars = L
