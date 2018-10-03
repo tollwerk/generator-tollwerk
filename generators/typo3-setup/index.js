@@ -83,7 +83,7 @@ module.exports = class extends Generator {
             this.typo3ProviderExtension = {
                 extkey: 'tw_' + config.project,
                 dashed: 'tw-' + config.project.split('_').join('-'),
-                compressed: 'tx_' + config.project.split('_').join('').toLowerCase(),
+                compressed: 'tx_tw' + config.project.split('_').join('').toLowerCase(),
                 upperCamelCase: 'Tw' + config.project.split('_').map(function (word) {
                     return word.substr(0, 1).toUpperCase() + word.substr(1).toLowerCase();
                 }).join('')
