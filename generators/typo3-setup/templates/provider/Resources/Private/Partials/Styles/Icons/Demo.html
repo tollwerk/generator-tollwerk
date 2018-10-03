@@ -1,0 +1,13 @@
+<f:comment><!--
+
+    No parameters
+
+--></f:comment>
+<html xmlns:f="https://xsd.helhum.io/ns/typo3/cms-fluid/master/ViewHelpers" data-namespace-typo3-fluid="true">
+    <f:for each="{icons}" as="icon" key="iconFile">
+        <div class="svg-wrapper">
+            <span>{icon}</span>
+            <f:render partial="Icons/{iconFile}"></f:render>
+        </div>
+    </f:for>
+</html>

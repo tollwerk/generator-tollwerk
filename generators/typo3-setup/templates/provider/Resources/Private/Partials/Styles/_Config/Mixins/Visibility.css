@@ -1,0 +1,22 @@
+@define-mixin hide-content {
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-indent: 300% !important;
+}
+
+@define-mixin unhide-content {
+	white-space: inherit !important;
+	overflow: inherit !important;
+	text-indent: 0 !important;
+}
+
+@define-mixin hide-element {
+	position: absolute !important;
+	overflow: hidden !important;
+	clip: rect(0 0 0 0) !important;
+	height: 1px !important;
+	width: 1px !important;
+	margin: -1px !important;
+	padding: 0 !important;
+	border: 0 !important;
+}

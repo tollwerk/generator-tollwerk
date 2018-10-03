@@ -1,0 +1,5 @@
+@define-mixin flex-basis $basis {
+	flex-basis: $basis;
+	/* Hack for IE 11 who ignores the padding for width calculation */
+	max-width: $basis;
+}

@@ -1,0 +1,124 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	outline-color: var(--color-outline);
+}
+
+html, body, button, input, select, textarea {
+	font: var(--font-weight) var(--font-size--uno)/var(--line-height) var(--font-family);
+	letter-spacing: var(--letter-spacing);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html {
+	position: relative;
+	z-index: 0;
+
+	&.webfonts {
+		&, & button, & input, & select, & textarea {
+			font-family: var(--font-family);
+		}
+	}
+}
+
+@media (--breakpoint--micro) {
+	html {
+		z-index: 100;
+	}
+}
+
+@media (--breakpoint--milli) {
+	html {
+		z-index: 200;
+	}
+}
+
+@media (--breakpoint--uno) {
+	html {
+		z-index: 300;
+	}
+}
+
+@media (--breakpoint--kilo) {
+	html {
+		z-index: 400;
+	}
+}
+
+@media (--breakpoint--mega) {
+	html {
+		z-index: 500;
+	}
+}
+
+body {
+	margin: 0;
+	background-color: var(--bgcolor-body);
+}
+
+main, aside, header, footer, figure, details, summary {
+	display: block;
+}
+
+figure {
+	margin: 0;
+}
+
+img, object, video, audio {
+	max-width: 100%;
+	height: auto;
+}
+
+iframe {
+	max-width: 100%;
+}
+
+::selection {
+	/* background-color: #123456; */
+}
+
+template {
+	display: none;
+}
+
+address {
+	font-style: normal;
+}
+
+button {
+	vertical-align: middle;
+}
+
+time {
+	white-space: nowrap;
+}
+
+.hide {
+	display: none;
+}
+
+.hide-content {
+	@add-mixin hide-content;
+}
+
+.hide-element {
+	@add-mixin hide-element;
+}
+
+[hidden] {
+	display: none !important;
+}
+
+.clearfix:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.wrap {
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	hyphens: auto;
+}

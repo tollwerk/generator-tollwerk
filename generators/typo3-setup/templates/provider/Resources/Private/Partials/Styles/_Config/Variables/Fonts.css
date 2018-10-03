@@ -1,0 +1,50 @@
+:root {
+	/* Font family */
+	--font-family: 'Source Sans Pro';
+
+	/* Base font size */
+	--font-size--base: 1.1875em;
+
+	/* Font sizes (Copy)*/
+	--font-typographic-scale: 1.125;
+	--font-size--uno: var(--font-size--base);
+	--font-size--micro: calc(var(--font-size--uno) / var(--font-typographic-scale));
+	--font-size--milli: calc(var(--font-size--micro) / var(--font-typographic-scale));
+	--font-size--kilo: calc(var(--font-size--uno) * var(--font-typographic-scale));
+	--font-size--mega: calc(var(--font-size--kilo) * var(--font-typographic-scale));
+	--font-size--giga: calc(var(--font-size--mega) * var(--font-typographic-scale));
+	--font-size--tera: calc(var(--font-size--giga) * var(--font-typographic-scale));
+	--font-size--peta: calc(var(--font-size--tera) * var(--font-typographic-scale));
+
+	/* Font sizes (Headlines) */
+	--heading-typographic-scale: 1.2;
+	--heading-size--uno: var(--font-size--uno);
+	--heading-size--milli: calc(var(--heading-size--uno) / var(--heading-typographic-scale));
+	--heading-size--kilo: calc(var(--heading-size--uno) * var(--heading-typographic-scale));
+	--heading-size--mega: calc(var(--heading-size--kilo) * var(--heading-typographic-scale));
+	--heading-size--giga: calc(var(--heading-size--mega) * var(--heading-typographic-scale));
+	--heading-size--tera: calc(var(--heading-size--giga) * var(--heading-typographic-scale));
+
+	/* Font weights */
+	--font-weight--light: 200;
+	--font-weight: 400;
+	--font-weight--bold: 600;
+	--font-weight--extra-bold: 800;
+
+	/* Line Heights */
+	--line-height--bigger: 1.8;
+	--line-height--big: 1.6;
+	--line-height: 1.5;
+	--line-height--small: 1.25;
+	--line-height--capital: 1.1;
+	--line-height--headings: 1.08333;
+
+	/*	Letter & word spacing */
+	--letter-spacing: 0rem;
+
+	/*  Character widths */
+	--character-width--space: .25em;
+
+	/* Font styles */
+	--font-style-figcaption: italic;
+}

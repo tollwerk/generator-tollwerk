@@ -1,0 +1,31 @@
+.Heading {
+	line-height: var(--line-height--headings);
+}
+
+.Heading--x-small {
+	font-size: var(--heading-size--milli);
+}
+
+.Heading--small {
+	font-size: var(--heading-size--uno);
+}
+
+.Heading--medium {
+	font-size: var(--heading-size--kilo);
+}
+
+.Heading--large {
+	font-size: var(--heading-size--mega);
+}
+
+.Heading--x-large {
+	font-size: var(--heading-size--giga);
+}
+
+.Heading--xx-large {
+	font-size: var(--heading-size--tera);
+}
+
+.Heading--hidden {
+	@add-mixin hide-element;
+}

@@ -1,0 +1,16 @@
+:root {
+  --breakpoint--micro: 25rem;
+  --breakpoint--milli: 32rem;
+  --breakpoint--uno: 42rem;
+  --breakpoint--kilo: 52rem;
+  --breakpoint--mega: 75rem;
+}
+
+@custom-media --breakpoint--micro-max (max-width: 25rem);
+@custom-media --breakpoint--micro (min-width: 25.0625rem);
+@custom-media --breakpoint--milli (min-width: 32.0625rem);
+@custom-media --breakpoint--uno-max (max-width: 42rem);
+@custom-media --breakpoint--uno (min-width: 42.0625rem);
+@custom-media --breakpoint--kilo (min-width: 52.0625rem);
+@custom-media --breakpoint--kilo-mega (min-width: 52rem) and (max-width: 75rem);
+@custom-media --breakpoint--mega (min-width: 75.0625rem);

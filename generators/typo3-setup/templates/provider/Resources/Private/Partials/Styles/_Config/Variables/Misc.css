@@ -1,0 +1,6 @@
+:root {
+	--z-bottom: 0;
+	--z-mid: 10;
+	--z-top: 20;
+	--z-overlay: 99999;
+}

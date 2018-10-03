@@ -1,0 +1,31 @@
+.font-size--micro {
+	font-size: var(--font-size--micro);
+}
+
+.font-size--milli, small {
+	font-size: var(--font-size--milli);
+}
+
+.font-size--uno {
+	font-size: var(--font-size--uno);
+}
+
+.font-size--kilo {
+	font-size: var(--font-size--kilo);
+}
+
+.font-size--mega {
+	font-size: var(--font-size--mega);
+}
+
+.font-size--giga {
+	font-size: var(--font-size--giga);
+}
+
+.font-size--tera {
+	font-size: var(--font-size--tera);
+}
+
+.font-size--peta {
+	font-size: var(--font-size--peta);
+}

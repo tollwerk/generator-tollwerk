@@ -1,0 +1,11 @@
+a {
+	color: var(--color-link);
+
+	&:hover {
+		color: var(--color-link--hover);
+	}
+
+	&:focus {
+		color: var(--color-link--focus);
+	}
+}

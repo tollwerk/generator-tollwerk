@@ -1,0 +1,9 @@
+const fallbackImage = `{{ providerExt }}Resources/Public/Images/fallback.gif`;
+const resources = Array.prototype.concat.apply(
+    {{ JSON.stringify(Object.values(resources)) }},
+    [[
+        fallbackImage,
+        // Add additional resources here that should be cached automatically
+        // when the serviceworker gets installed
+    ]]
+);

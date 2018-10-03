@@ -1,0 +1,27 @@
+:root {
+  /* Spacing */
+  --layout-spacing--pico: calc(var(--layout-spacing--uno) / 4); /* 6.25px */
+  --layout-spacing--nano: calc(var(--layout-spacing--uno) / 3); /* 8.3px */
+  --layout-spacing--micro: calc(var(--layout-spacing--uno) / 2); /* 12.5px */
+  --layout-spacing--milli: calc(var(--layout-spacing--uno) / 1.5); /* 16.7px */
+  --layout-spacing--uno: calc(1.1875rem * 25 / 19); /* 25px */
+  --layout-spacing--kilo: calc(var(--layout-spacing--uno) * 1.5); /* 37.5px */
+  --layout-spacing--mega: calc(var(--layout-spacing--uno) * 2); /* 50px */
+  --layout-spacing--giga: calc(var(--layout-spacing--uno) * 2.5); /* 62.5px */
+  --layout-spacing--tera: calc(var(--layout-spacing--uno) * 5); /* 125px */
+
+  /* Font spacing */
+  --font-spacing--pico: calc(var(--font-spacing--uno) / 6);
+  --font-spacing--nano: calc(var(--font-spacing--uno) / 4);
+  --font-spacing--micro: calc(var(--font-spacing--uno) / 3);
+  --font-spacing--milli: calc(var(--font-spacing--uno) / 2);
+  --font-spacing--uno: 1rem;
+  --font-spacing--kilo: calc(var(--font-spacing--uno) * 2);
+  --heading-spacing: .5rem;
+
+  /* Layout */
+  --layout-width--max-1: 92rem;
+  --layout-width--max-2: 76rem;
+  --layout-width--max-3: 48rem;
+  --layout-width--banner: 48em;
+}

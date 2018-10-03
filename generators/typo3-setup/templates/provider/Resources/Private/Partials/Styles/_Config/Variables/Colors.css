@@ -1,0 +1,107 @@
+:root {
+	/* Primary Colors */
+	--color-black: #000;
+	--color-white: #fff;
+	--color-blue: #00f;
+	--color-red: #f00;
+
+	/**************************************************/
+
+	/* Color Aliases */
+	--color-primary: var(--color-black);
+	--color-link: var(--color-blue);
+	--color-link--hover: var(--color-red);
+	--color-link--focus: var(--color-red);
+
+	--bgcolor-body: var(--color-white);
+
+	/*
+	--bgcolor-body: var(--color-yellow-500);
+	--bgcolor-nav-primary: var(--color-petrol-600);
+	--bgcolor-nav-primary-link--1-desktop-hover: var(--color-white);
+	--bgcolor-nav-special--hover: var(--color-white);
+	--bgcolor-quicklink-default: var(--color-white);
+	--bgcolor-body-inverse: var(--color-white);
+
+
+
+	--color-nav-primary-link: var(--color-petrol-100);
+	--color-nav-primary-link--focus: var(--color-link--focus);
+	--color-nav-primary-link--hover: var(--color-blue-light-500);
+	--color-nav-primary-link--active: var(--color-petrol-400);
+	--color-nav-primary-link--1-desktop: var(--color-black);
+
+	--color-nav-special-link: var(--color-black);
+
+	--color-outline: var(--color-blue-light-500);
+
+	--color-form: var(--color-grey-400);
+	--color-form-border: var(--color-grey-400);
+	--color-form-placeholder: var(--color-grey-300);
+	--color-form-button--hover: var(--color-blue-light-500);
+
+	--color-billboard-text: var(--color-white);
+	--color-billboard-gradient: var(--color-blue-dark-600);
+
+	--color-trackintro-text: var(--color-white);
+
+	--color-contact-title: var(--color-blue-dark-500);
+	--color-contact-portrait-default: var(--color-grey-200);
+
+	--color-tag: var(--color-grey-400);
+	--color-tag-background: transparent;
+	--color-tag--hover: var(--color-blue-light-500);
+	--color-tag-border: var(--color-grey-400);
+	--color-tag-border--hover: var(--color-blue-light-500);
+	--color-tag--tag: var(--color-black);
+	--color-tag--tag-background: var(--color-grey-50);
+	--color-tag--tag-background--hover: var(--color-blue-light-500);
+
+	--color-cta-primary: var(--color-white);
+	--color-cta-primary--hover: var(--color-blue-light-500);
+	--color-cta-primary-background: var(--color-blue-light-500);
+	--color-cta-primary-background--hover: var(--color-white);
+
+	--color-cta-secondary: var(--color-grey-500);
+	--color-cta-secondary--hover: var(--color-blue-light-500);
+	--color-cta-secondary--footer: var(--color-petrol-300);
+	--color-cta-secondary-background: transparent;
+	--color-cta-secondary-background--hover: var(--color-white);
+
+	--color-footer: var(--color-petrol-500);
+	--color-footer--border: var(--color-petrol-300);
+	--color-footer--text: var(--color-white);
+
+	--color-comment--time: var(--color-grey-400);
+	--color-comment--count: var(--color-blue-light-500);
+
+	--color-organizer-logo: var(--color-grey-50);
+
+	--color-sessionlist-border: var(--color-grey-50);
+
+	--color-filter-misc: var(--color-white);
+
+	--color-day-filter-checkbox-color--checked: var(--color-white);
+	--color-day-filter-checkbox-background: var(--color-white);
+	--color-day-filter-checkbox-background--hover: var(--color-blue-light-100);
+	--color-day-filter-checkbox-background--focus: var(--color-blue-light-200);
+	--color-day-filter-checkbox-background--checked: var(--color-blue-light-400);
+
+	--color-category-filter-dropdown--blue: var(--color-blue-light-400);
+	--color-category-filter-dropdown--white: var(--color-white);
+	--color-category-filter-dropdown--selected: var(--color-yellow-100);
+	--color-category-filter-dropdown--selected--hover: var(--color-yellow-50);
+	--color-category-filter-dropdown--hover: var(--color-yellow-100);
+	--color-category-filter-dropdown-background: var(--color-petrol-500);
+	--color-category-filter-dropdown-background--open: var(--color-white);
+	--color-category-filter-dropdown-background--hover: var(--color-petrol-600);
+
+	--color-filter-search: var(--bgcolor-body);
+
+	--color-event-registration--success: var(--color-success--dark);
+	--color-event-registration--error: var(--color-error);
+	--color-event-card-date-length-border: var(--color-grey-100);
+
+	--color-myevents-row-border: var(--color-yellow-500);
+	*/
+}
