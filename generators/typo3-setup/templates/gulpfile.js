@@ -143,7 +143,10 @@ gulp.task('css', () => {
 });
 
 // Watch all CSS resources
-watch.push([[`${extDist}*/Resources/Private/Partials/**/*.css`], ['css']]);
+watch.push([
+    [`${extDist}*/Configuration/Css/**/*.css`, `${extDist}*/Resources/Private/Partials/**/*.css`],
+    ['css']
+]);
 
 
 /* JAVASCRIPT
