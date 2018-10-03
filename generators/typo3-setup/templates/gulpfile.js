@@ -345,6 +345,8 @@ gulp.task('cachebust:compile', () => {
         criticalJS = null;
     }
 
+    const criticalJsCss = (criticalJS || criticalCSS) ? [criticalJS, criticalCSS] : null;
+
     // Source relevant resources (including templates)
     return gulp.src(
         [
@@ -369,7 +371,7 @@ gulp.task('cachebust:compile', () => {
         }))
 
         // Compile shortbread fragments
-        .pipe(shortbread([criticalJS, criticalCSS], null, null, {
+        .pipe(shortbread(criticalJsCss, null, null, {
             initial: `Resources/Private/Fragments/Initial.html`,
             subsequent: `Resources/Private/Fragments/Subsequent.html`,
             prefix: `/`,
