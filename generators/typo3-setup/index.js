@@ -270,6 +270,9 @@ module.exports = class extends Generator {
             this.spawnCommandSync('php', ['./vendor/bin/typo3', 'extension:install', extKey]);
         }
 
+        // Install the base extension
+        this.spawnCommandSync('php', ['./vendor/bin/typo3', 'extension:install', 'tw_base']);
+
         // Install the provider extension
         this.spawnCommandSync('php', ['./vendor/bin/typo3', 'extension:install', this.typo3ProviderExtension.extkey]);
 
